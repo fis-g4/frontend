@@ -26,28 +26,28 @@ services:
     # environment:
     #   NODE_ENV: ${NODE_ENV}
     #   REACT_APP_PAYPAL_CLIENT_ID: ${REACT_APP_PAYPAL_CLIENT_ID}
-    command: sh -c "serve -s build -l 3000 --no-clipboard"
-    expose:
-      - 3000
+    command: sh -c "serve -s build -l 80 --no-clipboard"
+    ports:
+      - 80:80
     networks:
       - frontend
 
-  nginx:
-    restart: always
-    container_name: frontend-nginx
-    image: frontend-nginx:latest
-    build:
-        context: ./nginx
-        dockerfile: ./Dockerfile
-    # volumes:
-    #   - static:/usr/src/app/flatter-backend/static
-    #   - static:/usr/src/app/flatter-backend/media
-    ports:
-      - 80:80
-    depends_on:
-      - frontend
-    networks:
-      - frontend
+  # nginx:
+  #   restart: always
+  #   container_name: frontend-nginx
+  #   image: frontend-nginx:latest
+  #   build:
+  #       context: ./nginx
+  #       dockerfile: ./Dockerfile
+  #   # volumes:
+  #   #   - static:/usr/src/app/flatter-backend/static
+  #   #   - static:/usr/src/app/flatter-backend/media
+  #   ports:
+  #     - 80:80
+  #   depends_on:
+  #     - frontend
+  #   networks:
+  #     - frontend
 
 # volumes:
 #   static:
