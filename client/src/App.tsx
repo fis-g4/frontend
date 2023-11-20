@@ -44,7 +44,7 @@ const App = () => {
     try {
       // make the API call
       const res:User = await getData(
-        `${SAMPLE_MICROSERVICE_API_URL}/login`, email, password
+        `${SAMPLE_MICROSERVICE_API_URL}/users/login`, email, password
       )
       setUser(res);
       resetFormFields()
