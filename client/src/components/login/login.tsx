@@ -16,7 +16,6 @@ import { useRouter } from '../../routes/hooks/useRouter';
 import { bgGradient } from '../../theme/css';
 import Iconify from '../iconify/iconify';
 import Logo from '../logo/logo';
-// ----------------------------------------------------------------------
 
 export default function LoginView() {
   const theme = useTheme();
@@ -32,7 +31,7 @@ export default function LoginView() {
   const renderForm = (
     <>
       <Stack spacing={3}>
-        <TextField name="email" label="Email address" />
+        <TextField name="username" label="Username" />
 
         <TextField
           name="password"
@@ -56,16 +55,6 @@ export default function LoginView() {
         </Link>
       </Stack>
 
-      {/* <LoadingButton
-        fullWidth
-        size="large"
-        type="submit"
-        variant="contained"
-        color="inherit"
-        onClick={handleClick}
-      >
-        Login
-      </LoadingButton> */}
       <Button
         fullWidth
         size="large"
@@ -103,7 +92,7 @@ export default function LoginView() {
             maxWidth: 420,
           }}
         >
-          <Typography variant="h4">Sign in</Typography>
+          <Typography variant="h4">Sign in FIS - G4</Typography>
 
           <Typography variant="body2" sx={{ mt: 2, mb: 5 }}>
             Don’t have an account?

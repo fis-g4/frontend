@@ -10,7 +10,6 @@ import { overrides } from './overrides';
 import { typography } from './typography';
 import { customShadows } from './custom-shadows';
 
-// ----------------------------------------------------------------------
 
 export default function ThemeProvider({ children }: { children: React.ReactNode }) {
   const memoizedValue = useMemo(

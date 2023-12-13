@@ -1,7 +1,6 @@
 import { useMemo } from 'react';
 import { To, useNavigate } from 'react-router';
 
-// ----------------------------------------------------------------------
 
 export function useRouter() {
   const navigate = useNavigate();

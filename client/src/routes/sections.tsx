@@ -9,7 +9,6 @@ export const UserPage = lazy(() => import('../pages/user'));
 export const LoginPage = lazy(() => import('../pages/login'));
 export const Page404 = lazy(() => import('../pages/page-not-found'));
 
-// ----------------------------------------------------------------------
 
 const isAuth = true;
 export default function Router() {

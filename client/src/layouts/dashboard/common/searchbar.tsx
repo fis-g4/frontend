@@ -11,7 +11,6 @@ import ClickAwayListener from '@mui/material/ClickAwayListener';
 import { bgBlur } from '../../../theme/css';
 import Iconify from '../../../components/iconify/iconify';
 
-// ----------------------------------------------------------------------
 
 const HEADER_MOBILE = 64;
 const HEADER_DESKTOP = 92;
@@ -36,7 +35,6 @@ const StyledSearchbar = styled('div')(({ theme }) => ({
   },
 }));
 
-// ----------------------------------------------------------------------
 
 export default function Searchbar() {
   const [open, setOpen] = useState(false);

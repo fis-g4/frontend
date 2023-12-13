@@ -1,11 +1,10 @@
 import PropTypes, { InferProps } from 'prop-types';
-import { memo, forwardRef, ReactNode, RefAttributes } from 'react';
+import { memo, forwardRef, ReactNode } from 'react';
 
 import Box from '@mui/material/Box';
 
 import { StyledScrollbar, StyledRootScrollbar } from './styles';
 
-// ----------------------------------------------------------------------
 
 interface ScrollbarProps {
   children?: ReactNode;

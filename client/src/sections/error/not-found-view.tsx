@@ -6,7 +6,6 @@ import Typography from '@mui/material/Typography';
 import RouterLink from '../../routes/components/router-link';
 import Logo from '../../components/logo/logo';
 
-// ----------------------------------------------------------------------
 
 export default function NotFoundView() {
   const renderHeader = (
