@@ -3,6 +3,9 @@ import { Outlet, Navigate, useRoutes } from 'react-router-dom';
 
 import DashboardLayout from '../layouts/dashboard';
 import LandingPage from '../pages/landing';
+import CoursesPage from '../pages/courses';
+import PlansPage from '../pages/plans';
+import MailboxPage from '../pages/mailbox';
 
 export const MainPage = lazy(() => import('../pages/main'));
 export const UserPage = lazy(() => import('../pages/user'));
@@ -27,6 +30,9 @@ export default function Router() {
       children: [
         { element: <MainPage />, index: true },
         { path: 'user', element: <UserPage /> },
+        { path: 'courses', element: <CoursesPage /> },
+        { path: 'plans', element: <PlansPage />},
+        { path: 'mailbox', element: <MailboxPage />},
       ],
     },
     {

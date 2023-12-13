@@ -5,14 +5,15 @@ import { HelmetProvider } from 'react-helmet-async';
 import reportWebVitals from './reportWebVitals';
 
 import App from './App';
-
+import { CircularProgress } from '@mui/material';
+import LoadingView from './sections/loading/loading';
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 
 root.render(
   <HelmetProvider>
     <BrowserRouter>
-      <Suspense>
+      <Suspense fallback={<LoadingView />}>
         <App />
       </Suspense>
     </BrowserRouter>
