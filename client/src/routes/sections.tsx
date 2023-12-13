@@ -11,7 +11,7 @@ export const Page404 = lazy(() => import('../pages/page-not-found'));
 
 // ----------------------------------------------------------------------
 
-const isAuth = true;
+const isAuth = false;
 export default function Router() {
   const routes = useRoutes([
     {
