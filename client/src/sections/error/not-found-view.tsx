@@ -61,7 +61,7 @@ export default function NotFoundView() {
             }}
           />
 
-          <Button href="/" size="large" variant="contained" component={RouterLink}>
+          <Button href="/" size="large" variant="contained" component={RouterLink} sx={{ cursor: 'pointer' }}>
             Go to Home
           </Button>
         </Box>

@@ -7,7 +7,7 @@ const icon = (name : string) => (
 
 const navConfig = [
   {
-    title: 'main',
+    title: 'home',
     path: '/',
     icon: icon('ic_home'),
   },

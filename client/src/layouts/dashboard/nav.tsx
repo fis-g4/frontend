@@ -19,11 +19,9 @@ import Logo from '../../components/logo/logo';
 import { useResponsive } from '../../hooks/useResponsive';
 import Scrollbar from '../../components/scrollbar/scrollbar';
 import { account } from '../../_mock/account';
-import { useRouter } from '../../routes/hooks/useRouter';
 
 export default function Nav({ openNav, onCloseNav } : { openNav: boolean; onCloseNav: () => void }) {
   const pathname = usePathname();
-  const router = useRouter();
 
   const upLg = useResponsive('up', 'lg');
 
@@ -88,7 +86,8 @@ export default function Nav({ openNav, onCloseNav } : { openNav: boolean; onClos
         <Button
           variant="contained"
           color="inherit"
-          onClick={() => router.push('/plans')}
+          href='/plans'
+          component={RouterLink}
         >
           Upgrade to {account.plan.toLowerCase().trim() === 'free' ? 'Pro' : 'Premium'}
         </Button>

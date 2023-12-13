@@ -16,6 +16,7 @@ import { useRouter } from '../../routes/hooks/useRouter';
 import { bgGradient } from '../../theme/css';
 import Iconify from '../iconify/iconify';
 import Logo from '../logo/logo';
+import RouterLink from '../../routes/components/router-link';
 
 export default function LoginView() {
   const theme = useTheme();
@@ -96,7 +97,7 @@ export default function LoginView() {
 
           <Typography variant="body2" sx={{ mt: 2, mb: 5 }}>
             Don’t have an account?
-            <Link variant="subtitle2" sx={{ ml: 0.5, cursor: 'pointer', }} onClick={() => router.push("/signup")}>
+            <Link variant="subtitle2" sx={{ ml: 0.5, cursor: 'pointer', }} href="/signup" component={RouterLink}>
               Get started
             </Link>
           </Typography>
