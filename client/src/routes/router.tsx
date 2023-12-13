@@ -6,6 +6,7 @@ import LandingPage from '../pages/landing';
 import CoursesPage from '../pages/courses';
 import PlansPage from '../pages/plans';
 import MailboxPage from '../pages/mailbox';
+import SignupPage from '../pages/signup';
 
 export const MainPage = lazy(() => import('../pages/main'));
 export const UserPage = lazy(() => import('../pages/user'));
@@ -42,6 +43,10 @@ export default function Router() {
     {
       path: 'login',
       element: <LoginPage />,
+    },
+    {
+      path: 'signup',
+      element: <SignupPage />,
     },
     {
       path: 'error',
