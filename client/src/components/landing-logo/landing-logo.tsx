@@ -6,17 +6,17 @@ import Link from '@mui/material/Link';
 import RouterLink from '../../routes/components/router-link';
 
 
-type LogoProps = {
+type LandingLogoProps = {
   disabledLink?: boolean;
   sx?: object;
 };
 
-const Logo = forwardRef(({ disabledLink = false, sx, ...other }: InferProps<LogoProps>, _ref) => {
+const LandingLogo = forwardRef(({ disabledLink = false, sx, ...other }: InferProps<LandingLogoProps>, _ref) => {
   const logo = (
     <Box
       component="img"
-      src="./logo.svg"
-      sx={{ width: 150, height: 150, cursor: 'pointer', alignSelf: 'center', margin: '0 !important', ...sx }}
+      src="./assets/logoLanding.svg"
+      sx={{ maxWidth: 150, height: 'inherit', cursor: 'pointer', alignSelf: 'center', margin: '0 !important', ...sx }}
     />
   );
 
@@ -31,9 +31,9 @@ const Logo = forwardRef(({ disabledLink = false, sx, ...other }: InferProps<Logo
   );
 });
 
-Logo.propTypes = {
+LandingLogo.propTypes = {
   disabledLink: PropTypes.bool,
   sx: PropTypes.object,
 };
 
-export default Logo;
+export default LandingLogo;

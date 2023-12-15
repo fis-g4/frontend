@@ -97,7 +97,7 @@ export default function LandingPopularCourses() {
                     fontFamily: 'Verdana',
                 }}
             >
-                POPULAR COURSE CATEGORY
+                POPULAR COURSES
             </Typography>
             <Typography
                 textAlign="center"
@@ -117,7 +117,7 @@ export default function LandingPopularCourses() {
                     container
                     spacing={4}
                     justifyContent="center"
-                    maxWidth="60%"
+                    maxWidth="75%"
                 >
                     {courses.map((course, index) => (
                         <Grid item key={index} width="100%" maxWidth="500px">

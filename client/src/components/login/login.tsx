@@ -17,55 +17,94 @@ import { bgGradient } from '../../theme/css';
 import Iconify from '../iconify/iconify';
 import Logo from '../logo/logo';
 import RouterLink from '../../routes/components/router-link';
+import { useFormik, Form } from 'formik';
+import * as Yup from 'yup';
 
-export default function LoginView() {
+export default function LoginView({ handleLoginClose, handleRegisterOpen } : { handleLoginClose: () => void; handleRegisterOpen: () => void }) {
   const theme = useTheme();
 
   const router = useRouter();
 
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleClick = () => {
-    router.push('/');
-  };
+  const handleGetStarted = () => {
+    handleLoginClose();
+    handleRegisterOpen();
+  }
+
+  const validationSchema = Yup.object({
+    username: Yup.string()
+      .required('El nombre de usuario es requerido')
+      .min(3, 'El nombre de usuario debe tener al menos 3 caracteres')
+      .max(15, 'El nombre de usuario debe tener como máximo 15 caracteres'),
+    password: Yup.string()
+      .required('La contraseña es requerida')
+  });
+
+  const formik = useFormik({
+    initialValues: {
+      username: '',
+      password: '',
+    },
+    validationSchema: validationSchema,
+    onSubmit: (values) => {
+      alert(JSON.stringify(values, null, 2));
+    },
+  });
 
   const renderForm = (
-    <>
-      <Stack spacing={3}>
-        <TextField name="username" label="Username" />
+    <form onSubmit={formik.handleSubmit}>
+        <Stack spacing={3}>
+          <TextField 
+            name="username"
+            label="Username"
+            onChange={formik.handleChange}
+            value={formik.values.username}
+            error={formik.touched.username && Boolean(formik.errors.username)}
+            helperText={formik.touched.username && formik.errors.username}
+            onBlur={formik.handleBlur}
+            required 
+          />
 
-        <TextField
-          name="password"
-          label="Password"
-          type={showPassword ? 'text' : 'password'}
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
-                  <Iconify icon={showPassword ? 'eva:eye-fill' : 'eva:eye-off-fill'} />
-                </IconButton>
-              </InputAdornment>
-            ),
-          }}
-        />
-      </Stack>
+          <TextField
+            name="password"
+            label="Password"
+            type={showPassword ? 'text' : 'password'}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
+                    <Iconify icon={showPassword ? 'eva:eye-fill' : 'eva:eye-off-fill'} />
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+            onChange={formik.handleChange}
+            value={formik.values.password}
+            error={formik.touched.password && Boolean(formik.errors.password)}
+            helperText={formik.touched.password && formik.errors.password}
+            onBlur={formik.handleBlur}
+            required
+           />
+           
+        </Stack>
 
-      <Stack direction="row" alignItems="center" justifyContent="flex-end" sx={{ my: 3 }}>
-        <Link variant="subtitle2" underline="hover" sx={{ cursor: 'pointer' }}>
-          Forgot password?
-        </Link>
-      </Stack>
+        <Stack direction="row" alignItems="center" justifyContent="flex-end" sx={{ my: 3 }}>
+          <Link variant="subtitle2" underline="hover" sx={{ cursor: 'pointer' }}>
+            Forgot password?
+          </Link>
+        </Stack>
 
-      <Button
-        fullWidth
-        size="large"
-        type="submit"
-        variant="contained"
-        color="inherit"
-        onClick={handleClick}
-      > Log In </Button>
-    </>
-  );
+        <Button
+          fullWidth
+          size="large"
+          type="submit"
+          variant="contained"
+          color="inherit"
+          disabled={!formik.isValid}
+        >Iniciar sesión</Button>
+      </form>
+    )
 
   return (
     <Box
@@ -75,6 +114,7 @@ export default function LoginView() {
           imgUrl: '/assets/background/overlay_4.jpg',
         }),
         height: 1,
+        background: 'transparent !important',
       }}
     >
       <Logo
@@ -97,7 +137,7 @@ export default function LoginView() {
 
           <Typography variant="body2" sx={{ mt: 2, mb: 5 }}>
             Don’t have an account?
-            <Link variant="subtitle2" sx={{ ml: 0.5, cursor: 'pointer', }} href="/signup" component={RouterLink}>
+            <Link variant="subtitle2" sx={{ ml: 0.5, cursor: 'pointer', }} onClick={handleGetStarted}>
               Get started
             </Link>
           </Typography>

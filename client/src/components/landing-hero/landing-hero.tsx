@@ -2,7 +2,7 @@ import { Box, Typography, alpha, useTheme } from '@mui/material'
 
 import background from '../../static/images/backgrounds/FondoHero.png'
 
-function LandingHero() {
+function LandingHero({ handleRegisterOpen } : {handleRegisterOpen: () => void}) {
 
     const BIG_LETTERS_FONT_SIZE = '4vw'
     const BIG_LETTERS_FONT_FAMILY = 'Verdana'
@@ -71,8 +71,7 @@ function LandingHero() {
                             fontFamily: BIG_LETTERS_FONT_FAMILY,
                         }}
                     >
-                        Empower Collaborative Learning Anytime, AnyWhere,
-                        Together.
+                        Empower Collaborative Learning Anytime, Anywhere, Together.
                     </Typography>
                     <Box
                         width="8vw"
@@ -84,6 +83,7 @@ function LandingHero() {
                         justifyContent="center"
                         marginTop={5}
                         sx={{cursor: 'pointer', "&:hover": {backgroundColor: alpha(theme.palette.primary.main, 0.8)}}}
+                        onClick={() => handleRegisterOpen()}
                     >
                         <Typography
                             sx={{

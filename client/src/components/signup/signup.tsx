@@ -17,7 +17,7 @@ import Iconify from '../iconify/iconify';
 import Logo from '../logo/logo';
 import RouterLink from '../../routes/components/router-link';
 
-export default function SignupView() {
+export default function SignupView({ handleLoginOpen, handleRegisterClose } : { handleLoginOpen: () => void, handleRegisterClose: () => void }) {
   const theme = useTheme();
 
   const router = useRouter();
@@ -27,6 +27,11 @@ export default function SignupView() {
   const handleClick = () => {
     router.push('/');
   };
+
+  const handleSignIn = () => {
+    handleRegisterClose();
+    handleLoginOpen();
+  }
 
   const renderForm = (
     <>
@@ -66,9 +71,9 @@ export default function SignupView() {
         />
 
         <TextField name="email" label="Email" />
-      </Stack>
 
-      <Stack direction="row" alignItems="center" justifyContent="flex-end" sx={{ my: 3 }} />
+        <Stack direction="row" alignItems="center" justifyContent="flex-end" sx={{ my: 3 }} />
+      </Stack>
 
       <Button
         fullWidth
@@ -89,6 +94,7 @@ export default function SignupView() {
           imgUrl: '/assets/background/overlay_4.jpg',
         }),
         height: 1,
+        background: 'transparent !important',
       }}
     >
       <Logo
@@ -111,7 +117,7 @@ export default function SignupView() {
 
           <Typography variant="body2" sx={{ mt: 2, mb: 5 }}>
             Already have an account?
-            <Link variant="subtitle2" sx={{ ml: 0.5, cursor: 'pointer' }} component={RouterLink} href="/login">
+            <Link variant="subtitle2" sx={{ ml: 0.5, cursor: 'pointer' }} onClick={handleSignIn} >
                 Sign In
             </Link>
           </Typography>

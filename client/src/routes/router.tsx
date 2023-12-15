@@ -3,14 +3,12 @@ import { Outlet, Navigate, useRoutes } from 'react-router-dom';
 
 import DashboardLayout from '../layouts/dashboard';
 import LandingPage from '../pages/landing';
-import CoursesPage from '../pages/courses';
-import PlansPage from '../pages/plans';
-import MailboxPage from '../pages/mailbox';
-import SignupPage from '../pages/signup';
 
 export const MainPage = lazy(() => import('../pages/main'));
 export const UserPage = lazy(() => import('../pages/user'));
-export const LoginPage = lazy(() => import('../pages/login'));
+export const CoursesPage = lazy(() => import('../pages/courses'));
+export const PlansPage = lazy(() => import('../pages/plans'));
+export const MailboxPage = lazy(() => import('../pages/mailbox'));
 export const Page404 = lazy(() => import('../pages/page-not-found'));
 
 
@@ -39,14 +37,6 @@ export default function Router() {
     {
         path: 'welcome',
         element: <LandingPage />,
-    },
-    {
-      path: 'login',
-      element: <LoginPage />,
-    },
-    {
-      path: 'signup',
-      element: <SignupPage />,
     },
     {
       path: 'error',

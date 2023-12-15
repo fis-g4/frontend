@@ -67,7 +67,7 @@ export default function CategorySection() {
                     fontFamily: 'Verdana',
                 }}
             >
-                TRENDING COURSE CATEGORY
+                TRENDING CATEGORIES
             </Typography>
             <Typography
                 textAlign="center"
@@ -80,7 +80,7 @@ export default function CategorySection() {
                     fontFamily: 'Verdana',
                 }}
             >
-                Our Leading Category
+                Our Leading Categories
             </Typography>
             <Box
                 display="flex"
@@ -90,7 +90,7 @@ export default function CategorySection() {
                     container
                     spacing={4}
                     justifyContent="center"
-                    maxWidth="60%"
+                    maxWidth="75%"
                 >
                     {categories.map((category, index) => (
                         <Grid item key={index} width="100%" maxWidth="500px">
