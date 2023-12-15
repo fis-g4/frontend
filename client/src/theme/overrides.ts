@@ -1,7 +1,6 @@
 import { alpha } from '@mui/material/styles';
 import { outlinedInputClasses } from '@mui/material/OutlinedInput';
 
-// ----------------------------------------------------------------------
 
 export function overrides(theme: any) {
   return {

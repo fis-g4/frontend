@@ -7,7 +7,6 @@ import Nav from './nav';
 import Main from './main';
 import Header from './header';
 
-// ----------------------------------------------------------------------
 
 export default function DashboardLayout({ children } : { children?: React.ReactNode }) {
   const [openNav, setOpenNav] = useState(false);

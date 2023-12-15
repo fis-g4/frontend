@@ -3,7 +3,7 @@ import { useState } from 'react';
 import Slide from '@mui/material/Slide';
 import Input from '@mui/material/Input';
 import Button from '@mui/material/Button';
-import { Theme, styled } from '@mui/material/styles';
+import { styled } from '@mui/material/styles';
 import IconButton from '@mui/material/IconButton';
 import InputAdornment from '@mui/material/InputAdornment';
 import ClickAwayListener from '@mui/material/ClickAwayListener';
@@ -11,7 +11,6 @@ import ClickAwayListener from '@mui/material/ClickAwayListener';
 import { bgBlur } from '../../../theme/css';
 import Iconify from '../../../components/iconify/iconify';
 
-// ----------------------------------------------------------------------
 
 const HEADER_MOBILE = 64;
 const HEADER_DESKTOP = 92;
@@ -36,7 +35,6 @@ const StyledSearchbar = styled('div')(({ theme }) => ({
   },
 }));
 
-// ----------------------------------------------------------------------
 
 export default function Searchbar() {
   const [open, setOpen] = useState(false);

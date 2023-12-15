@@ -3,7 +3,6 @@ import { forwardRef, ReactNode } from 'react';
 
 import Box, { BoxProps } from '@mui/material/Box';
 
-// ----------------------------------------------------------------------
 
 type SvgColorProps = {
   src?: string;

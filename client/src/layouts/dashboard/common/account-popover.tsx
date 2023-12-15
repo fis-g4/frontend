@@ -11,7 +11,6 @@ import IconButton from '@mui/material/IconButton';
 
 import { account } from '../../../_mock/account';
 
-// ----------------------------------------------------------------------
 
 const MENU_OPTIONS = [
   {
@@ -28,7 +27,6 @@ const MENU_OPTIONS = [
   },
 ];
 
-// ----------------------------------------------------------------------
 
 export default function AccountPopover() {
   const [open, setOpen] = useState<any>(null);

@@ -20,8 +20,6 @@ import { useResponsive } from '../../hooks/useResponsive';
 import Scrollbar from '../../components/scrollbar/scrollbar';
 import { account } from '../../_mock/account';
 
-// ----------------------------------------------------------------------
-
 export default function Nav({ openNav, onCloseNav } : { openNav: boolean; onCloseNav: () => void }) {
   const pathname = usePathname();
 
@@ -53,7 +51,7 @@ export default function Nav({ openNav, onCloseNav } : { openNav: boolean; onClos
         <Typography variant="subtitle2">{account.displayName}</Typography>
 
         <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-          {account.role}
+          {account.plan} account
         </Typography>
       </Box>
     </Box>
@@ -68,33 +66,34 @@ export default function Nav({ openNav, onCloseNav } : { openNav: boolean; onClos
   );
 
   const renderUpgrade = (
+    account.plan.toLowerCase().trim() !== 'premium' && (
     <Box sx={{ px: 2.5, pb: 3, mt: 10 }}>
       <Stack alignItems="center" spacing={3} sx={{ pt: 5, borderRadius: 2, position: 'relative' }}>
         <Box
           component="img"
-          src="/assets/illustrations/illustration_avatar.png"
+          src="/assets/illustrations/illustration_avatar2.png"
           sx={{ width: 100, position: 'absolute', top: -50 }}
         />
 
         <Box sx={{ textAlign: 'center' }}>
-          <Typography variant="h6">Get more?</Typography>
+          <Typography variant="h6">Want more?</Typography>
 
           <Typography variant="body2" sx={{ color: 'text.secondary', mt: 1 }}>
-            From only $69
+            From only {account.plan.toLowerCase().trim() === 'free' ? '$4.99/month' : '$29.99/month'}
           </Typography>
         </Box>
 
         <Button
-          href="https://material-ui.com/store/items/minimal-dashboard/"
-          target="_blank"
           variant="contained"
           color="inherit"
+          href='/plans'
+          component={RouterLink}
         >
-          Upgrade to Pro
+          Upgrade to {account.plan.toLowerCase().trim() === 'free' ? 'Pro' : 'Premium'}
         </Button>
       </Stack>
     </Box>
-  );
+  ));
 
   const renderContent = (
     <Scrollbar
@@ -159,7 +158,6 @@ Nav.propTypes = {
   onCloseNav: PropTypes.func,
 };
 
-// ----------------------------------------------------------------------
 
 function NavItem({ item } : { item: { path: string; icon: any; title: string }}) {
   const pathname = usePathname();

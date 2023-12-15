@@ -1,7 +1,6 @@
 import { Breakpoint, useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 
-// ----------------------------------------------------------------------
 
 export function useResponsive(query: string, start : Breakpoint, end: Breakpoint = 'md') {
   const theme = useTheme();
@@ -29,7 +28,6 @@ export function useResponsive(query: string, start : Breakpoint, end: Breakpoint
   return mediaOnly;
 }
 
-// ----------------------------------------------------------------------
 
 export function useWidth() {
   const theme = useTheme();

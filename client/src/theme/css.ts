@@ -23,7 +23,6 @@ export function bgGradient(props: { direction?: string; startColor?: string; end
     };
   }
 
-// ----------------------------------------------------------------------
 
 export function bgBlur(props: { color?: string; blur?: number; opacity?: number; imgUrl?: string; }) {
   const color = props?.color || '#000000';

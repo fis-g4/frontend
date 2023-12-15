@@ -21,7 +21,6 @@ import Iconify from '../../../components/iconify/iconify';
 import Scrollbar from '../../../components/scrollbar/scrollbar';
 import { fToNow } from '../../../utils/format-time';
 
-// ----------------------------------------------------------------------
 
 const NOTIFICATIONS = [
   {
@@ -109,11 +108,13 @@ export default function NotificationsPopover() {
         onClose={handleClose}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
         transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-        PaperProps={{
-          sx: {
-            mt: 1.5,
-            ml: 0.75,
-            width: 360,
+        slotProps={{
+          paper: {
+            sx: {
+              mt: 1.5,
+              ml: 0.75,
+              width: 360,
+            },
           },
         }}
       >
@@ -176,7 +177,6 @@ export default function NotificationsPopover() {
   );
 }
 
-// ----------------------------------------------------------------------
 
 type NotificationType = {
   createdAt: Date;
@@ -241,7 +241,6 @@ function NotificationItem({ notification } : NotificationItemProps) {
   );
 }
 
-// ----------------------------------------------------------------------
 
 function renderContent(notification: NotificationType) {
   const title = (

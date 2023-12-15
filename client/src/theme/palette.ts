@@ -1,6 +1,5 @@
 import { alpha } from '@mui/material/styles';
 
-// ----------------------------------------------------------------------
 
 // SETUP COLORS
 
@@ -99,7 +98,6 @@ const base = {
   action,
 };
 
-// ----------------------------------------------------------------------
 
 export function palette() {
   return {

@@ -6,7 +6,6 @@ import Typography from '@mui/material/Typography';
 import RouterLink from '../../routes/components/router-link';
 import Logo from '../../components/logo/logo';
 
-// ----------------------------------------------------------------------
 
 export default function NotFoundView() {
   const renderHeader = (
@@ -62,7 +61,7 @@ export default function NotFoundView() {
             }}
           />
 
-          <Button href="/" size="large" variant="contained" component={RouterLink}>
+          <Button href="/" size="large" variant="contained" component={RouterLink} sx={{ cursor: 'pointer' }}>
             Go to Home
           </Button>
         </Box>

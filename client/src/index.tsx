@@ -1,18 +1,3 @@
-// import React from 'react';
-// import ReactDOM from 'react-dom/client';
-// import './index.css';
-// import App from './App';
-// import reportWebVitals from './reportWebVitals';
-
-// const root = ReactDOM.createRoot(
-//   document.getElementById('root') as HTMLElement
-// );
-// root.render(
-//   <React.StrictMode>
-//     <App />
-//   </React.StrictMode>
-// );
-
 import { Suspense } from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
@@ -20,15 +5,14 @@ import { HelmetProvider } from 'react-helmet-async';
 import reportWebVitals from './reportWebVitals';
 
 import App from './App';
-
-// ----------------------------------------------------------------------
+import LoadingView from './sections/loading/loading';
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 
 root.render(
   <HelmetProvider>
     <BrowserRouter>
-      <Suspense>
+      <Suspense fallback={<LoadingView />}>
         <App />
       </Suspense>
     </BrowserRouter>

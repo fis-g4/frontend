@@ -1,14 +1,14 @@
 import { Helmet } from 'react-helmet-async';
 
 
-export default function UserPage() {
+export default function PlansPage() {
   return (
     <>
       <Helmet>
-        <title> User | FIS G4 </title>
+        <title> Plans | FIS G4 </title>
       </Helmet>
 
-      <div> Users Page </div>
+      <div> Plans Page </div>
     </>
   );
 }

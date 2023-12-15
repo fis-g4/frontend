@@ -1,6 +1,5 @@
-import { faker } from '@faker-js/faker';
-
-// ----------------------------------------------------------------------
+import { randomInt } from "crypto";
+import { subDays } from "date-fns/esm";
 
 const POST_TITLES = [
   'Whiteboard Templates By Industry Leaders',
@@ -30,16 +29,16 @@ const POST_TITLES = [
 ];
 
 export const posts = [...Array(23)].map((_, index) => ({
-  id: faker.string.uuid(),
+  id: index + 1,
   cover: `/assets/images/covers/cover_${index + 1}.jpg`,
   title: POST_TITLES[index + 1],
-  createdAt: faker.date.past(),
-  view: faker.number.int(99999),
-  comment: faker.number.int(99999),
-  share: faker.number.int(99999),
-  favorite: faker.number.int(99999),
+  createdAt: subDays(new Date(), index + 1),
+  view: randomInt(1, 99999),
+  comment: randomInt(1, 99999),
+  share: randomInt(1, 99999),
+  favorite: randomInt(1, 99999),
   author: {
-    name: faker.person.fullName(),
+    name: `Nombre de usuario ${index + 1}`,
     avatarUrl: `/assets/images/avatars/avatar_${index + 1}.jpg`,
   },
 }));

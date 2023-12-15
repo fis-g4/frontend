@@ -5,7 +5,6 @@ import Link from '@mui/material/Link';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
-import Divider from '@mui/material/Divider';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
@@ -18,7 +17,7 @@ import Iconify from '../iconify/iconify';
 import Logo from '../logo/logo';
 import RouterLink from '../../routes/components/router-link';
 
-export default function LoginView() {
+export default function SignupView() {
   const theme = useTheme();
 
   const router = useRouter();
@@ -32,6 +31,8 @@ export default function LoginView() {
   const renderForm = (
     <>
       <Stack spacing={3}>
+        <TextField name="firstName" label="First Name" />
+        <TextField name="lastName" label="Last Name" />
         <TextField name="username" label="Username" />
 
         <TextField
@@ -48,13 +49,26 @@ export default function LoginView() {
             ),
           }}
         />
+
+        <TextField
+          name="passwordConfirm"
+          label="Confirm your password"
+          type={showPassword ? 'text' : 'password'}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
+                  <Iconify icon={showPassword ? 'eva:eye-fill' : 'eva:eye-off-fill'} />
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
+        />
+
+        <TextField name="email" label="Email" />
       </Stack>
 
-      <Stack direction="row" alignItems="center" justifyContent="flex-end" sx={{ my: 3 }}>
-        <Link variant="subtitle2" underline="hover" sx={{ cursor: 'pointer' }}>
-          Forgot password?
-        </Link>
-      </Stack>
+      <Stack direction="row" alignItems="center" justifyContent="flex-end" sx={{ my: 3 }} />
 
       <Button
         fullWidth
@@ -63,7 +77,7 @@ export default function LoginView() {
         variant="contained"
         color="inherit"
         onClick={handleClick}
-      > Log In </Button>
+      > Sign Up </Button>
     </>
   );
 
@@ -93,52 +107,14 @@ export default function LoginView() {
             maxWidth: 420,
           }}
         >
-          <Typography variant="h4">Sign in with your account</Typography>
+          <Typography variant="h4">Create your account</Typography>
 
           <Typography variant="body2" sx={{ mt: 2, mb: 5 }}>
-            Don’t have an account?
-            <Link variant="subtitle2" sx={{ ml: 0.5, cursor: 'pointer', }} href="/signup" component={RouterLink}>
-              Get started
+            Already have an account?
+            <Link variant="subtitle2" sx={{ ml: 0.5, cursor: 'pointer' }} component={RouterLink} href="/login">
+                Sign In
             </Link>
           </Typography>
-
-          <Stack direction="row" spacing={2}>
-            <Button
-              fullWidth
-              size="large"
-              color="inherit"
-              variant="outlined"
-              sx={{ borderColor: alpha(theme.palette.grey[500], 0.16) }}
-            >
-              <Iconify icon="eva:google-fill" color="#DF3E30" />
-            </Button>
-
-            <Button
-              fullWidth
-              size="large"
-              color="inherit"
-              variant="outlined"
-              sx={{ borderColor: alpha(theme.palette.grey[500], 0.16) }}
-            >
-              <Iconify icon="eva:facebook-fill" color="#1877F2" />
-            </Button>
-
-            <Button
-              fullWidth
-              size="large"
-              color="inherit"
-              variant="outlined"
-              sx={{ borderColor: alpha(theme.palette.grey[500], 0.16) }}
-            >
-              <Iconify icon="eva:twitter-fill" color="#1C9CEA" />
-            </Button>
-          </Stack>
-
-          <Divider sx={{ my: 3 }}>
-            <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-              OR
-            </Typography>
-          </Divider>
 
           {renderForm}
         </Card>
