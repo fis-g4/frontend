@@ -27,7 +27,7 @@ export default function TransitionsModal({ open, handleClose, children, sx={}, .
         }}
         >
         <Fade in={open}>
-            <Box sx={{...sx, ...style}} {...other}>
+            <Box sx={{...style, ...sx}} {...other}>
                 {children}
             </Box>
         </Fade>

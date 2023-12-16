@@ -4,7 +4,6 @@ import { Icon } from '@iconify/react';
 
 import Box from '@mui/material/Box';
 
-
 type IconifyProps = {
     icon: ReactElement | string;
     width?: number;

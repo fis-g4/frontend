@@ -19,7 +19,7 @@ type Course = {
     // Agrega aquí más propiedades si es necesario
 }
 
-export default function LandingPopularCourses() {
+export default function LandingPopularCourses({ handleRegisterOpen } : { handleRegisterOpen: () => void}) {
     const theme = useTheme()
 
     const courses: Course[] = [
@@ -142,6 +142,7 @@ export default function LandingPopularCourses() {
                             backgroundColor: alpha(theme.palette.primary.main, 0.8),
                         },
                     }}
+                    onClick={() => handleRegisterOpen()}
                 >
                     <Typography
                         sx={{

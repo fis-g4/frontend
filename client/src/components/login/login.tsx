@@ -11,19 +11,19 @@ import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import { alpha, useTheme } from '@mui/material/styles';
 import InputAdornment from '@mui/material/InputAdornment';
-import { useRouter } from '../../routes/hooks/useRouter';
 
 import { bgGradient } from '../../theme/css';
 import Iconify from '../iconify/iconify';
 import Logo from '../logo/logo';
-import RouterLink from '../../routes/components/router-link';
-import { useFormik, Form } from 'formik';
-import * as Yup from 'yup';
+import { useFormik } from 'formik';
+import { useAuth } from '../../hooks/useAuth';
+import { loginValidationSchema } from '../../utils/schemas';
+import { account } from '../../_mock/account';
 
 export default function LoginView({ handleLoginClose, handleRegisterOpen } : { handleLoginClose: () => void; handleRegisterOpen: () => void }) {
   const theme = useTheme();
 
-  const router = useRouter();
+  const { login } = useAuth();
 
   const [showPassword, setShowPassword] = useState(false);
 
@@ -32,23 +32,14 @@ export default function LoginView({ handleLoginClose, handleRegisterOpen } : { h
     handleRegisterOpen();
   }
 
-  const validationSchema = Yup.object({
-    username: Yup.string()
-      .required('El nombre de usuario es requerido')
-      .min(3, 'El nombre de usuario debe tener al menos 3 caracteres')
-      .max(15, 'El nombre de usuario debe tener como máximo 15 caracteres'),
-    password: Yup.string()
-      .required('La contraseña es requerida')
-  });
-
   const formik = useFormik({
     initialValues: {
       username: '',
       password: '',
     },
-    validationSchema: validationSchema,
+    validationSchema: loginValidationSchema,
     onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
+      login(account, 'exampleToken.')
     },
   });
 

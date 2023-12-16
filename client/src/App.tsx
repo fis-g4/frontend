@@ -1,18 +1,24 @@
 import './global.css';
+import { useState } from 'react';
 
+import { AuthContext } from './context/authContext';
+import { AuthUserContext } from './hooks/useAuth';
 import { useScrollToTop } from './hooks/useScrollToTop';
 
 import Router from './routes/router';
 import ThemeProvider from './theme';
 
 
-
 export default function App() {
   useScrollToTop();
 
+  const [authUser, setAuthUser] = useState<AuthUserContext>({ isAuthenticated: false, user: null, token: "" });
+
   return (
     <ThemeProvider>
-      <Router />
+      <AuthContext.Provider value={{ authUser, setAuthUser }}>
+        <Router />
+      </AuthContext.Provider>
     </ThemeProvider>
   );
 }

@@ -18,12 +18,14 @@ import RouterLink from '../../routes/components/router-link';
 import Logo from '../../components/logo/logo';
 import { useResponsive } from '../../hooks/useResponsive';
 import Scrollbar from '../../components/scrollbar/scrollbar';
-import { account } from '../../_mock/account';
+import { useAuth } from '../../hooks/useAuth';
 
 export default function Nav({ openNav, onCloseNav } : { openNav: boolean; onCloseNav: () => void }) {
   const pathname = usePathname();
 
   const upLg = useResponsive('up', 'lg');
+
+  const { authUser } = useAuth();
 
   useEffect(() => {
     if (openNav) {
@@ -45,13 +47,13 @@ export default function Nav({ openNav, onCloseNav } : { openNav: boolean; onClos
         bgcolor: (theme) => alpha(theme.palette.grey[500], 0.12),
       }}
     >
-      <Avatar src={account.photoURL} alt="photoURL" />
+      <Avatar src={authUser.user?.photoURL} alt="photoURL" />
 
       <Box sx={{ ml: 2 }}>
-        <Typography variant="subtitle2">{account.displayName}</Typography>
+        <Typography variant="subtitle2">{authUser.user?.firstName} {authUser.user?.lastName}</Typography>
 
         <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-          {account.plan} account
+          {authUser.user?.plan} account
         </Typography>
       </Box>
     </Box>
@@ -66,12 +68,12 @@ export default function Nav({ openNav, onCloseNav } : { openNav: boolean; onClos
   );
 
   const renderUpgrade = (
-    account.plan.toLowerCase().trim() !== 'premium' && (
+    authUser.user?.plan.toLowerCase().trim() !== 'premium' && (
     <Box sx={{ px: 2.5, pb: 3, mt: 10 }}>
       <Stack alignItems="center" spacing={3} sx={{ pt: 5, borderRadius: 2, position: 'relative' }}>
         <Box
           component="img"
-          src="/assets/illustrations/illustration_avatar2.png"
+          src="/assets/illustrations/illustration_avatar.png"
           sx={{ width: 100, position: 'absolute', top: -50 }}
         />
 
@@ -79,7 +81,7 @@ export default function Nav({ openNav, onCloseNav } : { openNav: boolean; onClos
           <Typography variant="h6">Want more?</Typography>
 
           <Typography variant="body2" sx={{ color: 'text.secondary', mt: 1 }}>
-            From only {account.plan.toLowerCase().trim() === 'free' ? '$4.99/month' : '$29.99/month'}
+            From only {authUser.user?.plan.toLowerCase().trim() === 'free' ? '$4.99/month' : '$29.99/month'}
           </Typography>
         </Box>
 
@@ -89,7 +91,7 @@ export default function Nav({ openNav, onCloseNav } : { openNav: boolean; onClos
           href='/plans'
           component={RouterLink}
         >
-          Upgrade to {account.plan.toLowerCase().trim() === 'free' ? 'Pro' : 'Premium'}
+          Upgrade to {authUser.user?.plan.toLowerCase().trim() === 'free' ? 'Pro' : 'Premium'}
         </Button>
       </Stack>
     </Box>

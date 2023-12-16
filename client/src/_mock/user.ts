@@ -1,23 +1,12 @@
 import { sample } from 'lodash';
 
-
 export const users = [...Array(24)].map((_, index) => ({
   id: index+1,
-  avatarUrl: `/assets/images/avatars/avatar_${index + 1}.jpg`,
-  name: `Nombre de usuario ${index + 1}`,
-  company: `Nombre de la empresa ${index + 1}`,
-  isVerified: index % 3 === 0,
-  status: sample(['active', 'banned']),
-  role: sample([
-    'Leader',
-    'Hr Manager',
-    'UI Designer',
-    'UX Designer',
-    'UI/UX Designer',
-    'Project Manager',
-    'Backend Developer',
-    'Full Stack Designer',
-    'Front End Developer',
-    'Full Stack Developer',
-  ]),
+  photoUrl: `/assets/images/avatars/avatar_${index + 1}.jpg`,
+  firstName: `Nombre de usuario ${index + 1}`,
+  lastName: `Apellido de usuario ${index + 1}`,
+  username: `username${index + 1}`,
+  email: `username${index + 1}@mail.com`,
+  plan: sample(['Free', 'Pro', 'Premium']),
+  coins: sample([0, 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000]),
 }));

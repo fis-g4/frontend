@@ -9,7 +9,7 @@ import TransitionsModal from '../components/transition-modal/transition-modal'
 import LoginView from '../components/login/login'
 import SignupView from '../components/signup/signup'
 
-const LandingPage: React.FC = () => {
+export default function LandingPage() {
     const [loginOpen, setLoginOpen] = useState(false);
     const handleLoginOpen = () => setLoginOpen(true);
     const handleLoginClose = () => setLoginOpen(false);
@@ -24,7 +24,7 @@ const LandingPage: React.FC = () => {
             <LandingHeader handleLoginOpen={handleLoginOpen} handleRegisterOpen={handleRegisterOpen} />
             <LandingHero handleRegisterOpen={handleRegisterOpen} />
             <LandingTopCategories />
-            <LandingPopularCourses />
+            <LandingPopularCourses handleRegisterOpen={handleRegisterOpen} />
             <Footer/>
             <TransitionsModal open={loginOpen} handleClose={handleLoginClose} sx={{ maxWidth: 500, width: '100%' }}>
                 <LoginView handleLoginClose={handleLoginClose} handleRegisterOpen={handleRegisterOpen} />
@@ -35,5 +35,3 @@ const LandingPage: React.FC = () => {
         </>
     )
 }
-
-export default LandingPage

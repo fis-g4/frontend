@@ -1,4 +1,3 @@
-import React from 'react';
 import { Box, Typography, Card, CardContent, useTheme, alpha } from '@mui/material';
 import MobileIcon from '@mui/icons-material/Smartphone'; // Ejemplo de íconos, reemplaza con los adecuados
 
@@ -10,7 +9,7 @@ interface Category {
 }
 
 // Componente para una tarjeta de categoría individual
-const CategoryCard: React.FC<Category> = ({ title, coursesCount, Icon }) => {
+export default function CategoryCard({ title, coursesCount, Icon }: Category) {
   const theme = useTheme();
 
   return (
@@ -29,5 +28,3 @@ const CategoryCard: React.FC<Category> = ({ title, coursesCount, Icon }) => {
     </Card>
   );
 };
-
-export default CategoryCard;

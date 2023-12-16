@@ -34,7 +34,7 @@ const NOTIFICATIONS = [
   },
   {
     id: "2",
-    title: "Otra",
+    title: "Olga",
     description: 'answered to your comment on the Minimal',
     avatar: '/assets/images/avatars/avatar_2.jpg',
     type: 'friend_interactive',
@@ -61,10 +61,10 @@ const NOTIFICATIONS = [
   },
   {
     id: "5",
-    title: 'Delivery processing',
-    description: 'Your order is being shipped',
+    title: 'Data processing',
+    description: 'Your materials are being uploaded',
     avatar: null,
-    type: 'order_shipped',
+    type: 'data_processing',
     createdAt: sub(new Date(), { days: 3, hours: 3, minutes: 30 }),
     isUnRead: false,
   },
@@ -258,7 +258,7 @@ function renderContent(notification: NotificationType) {
       title,
     };
   }
-  if (notification.type === 'order_shipped') {
+  if (notification.type === 'data_processing') {
     return {
       avatar: <img alt={notification.title} src="/assets/icons/ic_notification_shipping.svg" />,
       title,
