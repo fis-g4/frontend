@@ -1,7 +1,7 @@
 import './global.css';
 import { useState } from 'react';
 
-import { AuthContext } from './context/authContext';
+import { AuthContext } from './contexts/authContext';
 import { AuthUserContext } from './hooks/useAuth';
 import { useScrollToTop } from './hooks/useScrollToTop';
 

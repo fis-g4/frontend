@@ -1,7 +1,7 @@
 import { sample } from 'lodash';
 
 export const users = [...Array(24)].map((_, index) => ({
-  id: index+1,
+  id: (index+1).toString(),
   photoUrl: `/assets/images/avatars/avatar_${index + 1}.jpg`,
   firstName: `Nombre de usuario ${index + 1}`,
   lastName: `Apellido de usuario ${index + 1}`,

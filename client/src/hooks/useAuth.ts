@@ -1,6 +1,6 @@
 import { useContext, useEffect } from "react";
 import { useLocalStorage } from "./useLocalStorage";
-import { AuthContext } from "../context/authContext";
+import { AuthContext } from "../contexts/authContext";
 
 export interface AuthUserContext {
     user: AuthUser | null;
@@ -38,13 +38,10 @@ export const useAuth = () => {
     };
 
     useEffect(() => {
-        // eslint-disable-next-line
         const token = getItem("token");
         if (token) {
             // Habría que llamar a la API para comprobar que el token es válido y obtener los datos del usuario. En este caso, como no tenemos API, lo simulamos con el localStorage (esto significa que el objeto user del local storage debe ser eliminado en versiones futuras).
-            // eslint-disable-next-line
             const user = getItem("user");
-            // eslint-disable-next-line
             if (user) addUser(JSON.parse(user), token);
         }
     }, []);

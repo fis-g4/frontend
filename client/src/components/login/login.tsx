@@ -18,7 +18,7 @@ import Logo from '../logo/logo';
 import { useFormik } from 'formik';
 import { useAuth } from '../../hooks/useAuth';
 import { loginValidationSchema } from '../../utils/schemas';
-import { account } from '../../_mock/account';
+import { account } from '../../_mocks/account';
 
 export default function LoginView({ handleLoginClose, handleRegisterOpen } : { handleLoginClose: () => void; handleRegisterOpen: () => void }) {
   const theme = useTheme();
@@ -102,7 +102,7 @@ export default function LoginView({ handleLoginClose, handleRegisterOpen } : { h
       sx={{
         ...bgGradient({
           color: alpha(theme.palette.background.default, 0.9),
-          imgUrl: '/assets/background/overlay_4.jpg',
+          imgUrl: '/assets/backgrounds/overlay_4.jpg',
         }),
         height: 1,
         background: 'transparent !important',

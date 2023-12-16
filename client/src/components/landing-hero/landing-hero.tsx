@@ -1,6 +1,6 @@
 import { Box, Typography, alpha, useTheme } from '@mui/material'
 
-import background from '../../static/images/backgrounds/FondoHero.png'
+import background from '../../static/backgrounds/fondoHero.png'
 
 function LandingHero({ handleRegisterOpen } : {handleRegisterOpen: () => void}) {
 

@@ -1,7 +1,7 @@
 import { AuthUser } from "../hooks/useAuth";
 
 export const account: AuthUser = {
-  id: '1',
+  id: 'fakeId',
   firstName: 'John',
   lastName: 'Doe',
   username: 'johndoe',
