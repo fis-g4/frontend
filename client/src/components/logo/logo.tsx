@@ -11,12 +11,14 @@ type LogoProps = {
   sx?: object;
 };
 
-const Logo = forwardRef(({ disabledLink = false, sx, ...other }: InferProps<LogoProps>, _ref) => {
+const Logo = forwardRef(({ disabledLink = false, sx, ...other }: InferProps<LogoProps>, ref) => {
   const logo = (
     <Box
       component="img"
       src="./logo.svg"
+      ref={ref}
       sx={{ width: 150, height: 150, cursor: 'pointer', alignSelf: 'center', margin: '0 !important', ...sx }}
+      {...other}
     />
   );
 

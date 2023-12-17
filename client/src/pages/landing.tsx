@@ -5,7 +5,7 @@ import LandingHero from '../components/landing-hero/landing-hero'
 import LandingTopCategories from '../components/landing-top-categories.tsx/landing-top-categories'
 import LandingPopularCourses from '../components/landing-popular-courses/landing-popular-courses'
 import Footer from '../components/footer/footer'
-import TransitionsModal from '../components/transition-modal/transition-modal'
+import TransitionModal from '../components/transition-modal/transition-modal'
 import LoginView from '../components/login/login'
 import SignupView from '../components/signup/signup'
 
@@ -26,12 +26,12 @@ export default function LandingPage() {
             <LandingTopCategories />
             <LandingPopularCourses handleRegisterOpen={handleRegisterOpen} />
             <Footer/>
-            <TransitionsModal open={loginOpen} handleClose={handleLoginClose} sx={{ maxWidth: 500, width: '100%' }}>
+            <TransitionModal open={loginOpen} handleClose={handleLoginClose} sx={{ maxWidth: 500, width: '100%' }}>
                 <LoginView handleLoginClose={handleLoginClose} handleRegisterOpen={handleRegisterOpen} />
-            </TransitionsModal>
-            <TransitionsModal open={registerOpen} handleClose={handleRegisterClose} sx={{ maxWidth: 500, width: '100%' }}>
+            </TransitionModal>
+            <TransitionModal open={registerOpen} handleClose={handleRegisterClose} sx={{ maxWidth: 500, width: '100%' }}>
                 <SignupView handleRegisterClose={handleRegisterClose} handleLoginOpen={handleLoginOpen} />
-            </TransitionsModal>
+            </TransitionModal>
         </>
     )
 }

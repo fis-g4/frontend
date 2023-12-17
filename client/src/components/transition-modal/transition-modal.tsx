@@ -2,16 +2,25 @@ import Backdrop from '@mui/material/Backdrop';
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import Fade from '@mui/material/Fade';
-import PropTypes from 'prop-types';
+import PropTypes, { InferProps } from 'prop-types';
+import { forwardRef } from 'react';
 
-const style = {
-  position: 'absolute' as 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
+type TransitionModalProps = {
+    open: boolean,
+    handleClose: ()=>void,
+    children: React.ReactNode,
+    sx?: object,
 };
 
-export default function TransitionsModal({ open, handleClose, children, sx={}, ...other } : { open: boolean, handleClose: ()=>void, children: React.ReactNode, sx?: object }) {
+const TransitionModal = forwardRef(({ open, handleClose, children, sx={}, ...other } : InferProps<TransitionModalProps>, ref) => {
+  
+  const basicStyle = {
+    position: 'absolute' as 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+  };
+
   return (
     <Modal
         aria-labelledby="transition-modal-title"
@@ -27,17 +36,19 @@ export default function TransitionsModal({ open, handleClose, children, sx={}, .
         }}
         >
         <Fade in={open}>
-            <Box sx={{...style, ...sx}} {...other}>
+            <Box sx={{...basicStyle, ...sx}} ref={ref} {...other}>
                 {children}
             </Box>
         </Fade>
     </Modal>
   );
-}
+});
 
-TransitionsModal.propTypes = {
+TransitionModal.propTypes = {
     open: PropTypes.bool,
     handleClose: PropTypes.func,
     children: PropTypes.node,
     sx: PropTypes.object,
 };
+
+export default TransitionModal;

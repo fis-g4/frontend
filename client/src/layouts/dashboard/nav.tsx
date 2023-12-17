@@ -47,13 +47,16 @@ export default function Nav({ openNav, onCloseNav } : { openNav: boolean; onClos
         bgcolor: (theme) => alpha(theme.palette.grey[500], 0.12),
       }}
     >
-      <Avatar src={authUser.user?.photoURL} alt="photoURL" />
+      <Avatar src={authUser.user?.photoURL || 'assets/images/broken-avatar.svg'} alt="photoURL" />
 
       <Box sx={{ ml: 2 }}>
         <Typography variant="subtitle2">{authUser.user?.firstName} {authUser.user?.lastName}</Typography>
 
         <Typography variant="body2" sx={{ color: 'text.secondary' }}>
           {authUser.user?.plan} account
+        </Typography>
+        <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+          {authUser.user?.coins} coins
         </Typography>
       </Box>
     </Box>

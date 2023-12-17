@@ -9,22 +9,25 @@ import MenuItem from '@mui/material/MenuItem';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 
-import { account } from '../../../_mocks/account';
 import { useAuth } from '../../../hooks/useAuth';
+import { useRouter } from '../../../routes/hooks/useRouter';
 
 
 const MENU_OPTIONS = [
   {
     label: 'Home',
     icon: 'eva:home-fill',
+    href: '/',
   },
   {
     label: 'Profile',
     icon: 'eva:person-fill',
+    href: '/me',
   },
   {
     label: 'Settings',
     icon: 'eva:settings-2-fill',
+    href: '/',
   },
 ];
 
@@ -32,13 +35,15 @@ const MENU_OPTIONS = [
 export default function AccountPopover() {
   const [open, setOpen] = useState<any>(null);
 
-  const { logout } = useAuth();
+  const router = useRouter();
+  const { authUser, logout } = useAuth();
 
   const handleOpen = (event: any) => {
     setOpen(event.currentTarget);
   };
 
-  const handleClose = () => {
+  const handleClose = (href: string) => {
+    router.push(href)
     setOpen(null);
   };
 
@@ -62,22 +67,22 @@ export default function AccountPopover() {
         }}
       >
         <Avatar
-          src={account.photoURL}
-          alt={account.firstName + " " + account.lastName}
+          src={authUser.user?.photoURL || 'assets/images/broken-avatar.svg'}
+          alt={authUser.user?.firstName + " " + authUser.user?.lastName}
           sx={{
             width: 36,
             height: 36,
             border: (theme) => `solid 2px ${theme.palette.background.default}`,
           }}
         >
-          {account.firstName.charAt(0).toUpperCase() + ' ' + account.lastName.charAt(0).toUpperCase()}
+          {authUser.user?.firstName.charAt(0).toUpperCase() + ' ' + authUser.user?.lastName.charAt(0).toUpperCase()}
         </Avatar>
       </IconButton>
 
       <Popover
         open={!!open}
         anchorEl={open}
-        onClose={handleClose}
+        onClose={()=>setOpen(null)}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
         transformOrigin={{ vertical: 'top', horizontal: 'right' }}
         slotProps={{
@@ -93,17 +98,17 @@ export default function AccountPopover() {
       >
         <Box sx={{ my: 1.5, px: 2 }}>
           <Typography variant="subtitle2" noWrap>
-            {account.firstName} {account.lastName}
+            {authUser.user?.firstName} {authUser.user?.lastName}
           </Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-            @{account.username}
+            @{authUser.user?.username}
           </Typography>
         </Box>
 
         <Divider sx={{ borderStyle: 'dashed' }} />
 
         {MENU_OPTIONS.map((option) => (
-          <MenuItem key={option.label} onClick={handleClose}>
+          <MenuItem key={option.label} onClick={() => handleClose(option.href)}>
             {option.label}
           </MenuItem>
         ))}

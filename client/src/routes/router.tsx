@@ -8,7 +8,7 @@ import LandingPage from '../pages/landing';
 import LoadingView from '../sections/loading/loading';
 
 export const MainPage = lazy(() => import('../pages/main'));
-export const UserPage = lazy(() => import('../pages/user'));
+export const ProfilePage = lazy(() => import('../pages/profile'));
 export const CoursesPage = lazy(() => import('../pages/courses'));
 export const PlansPage = lazy(() => import('../pages/plans'));
 export const MailboxPage = lazy(() => import('../pages/mailbox'));
@@ -32,7 +32,7 @@ export default function Router() {
       ),
       children: [
         { element: <MainPage />, index: true },
-        { path: 'user', element: <UserPage /> },
+        { path: 'me', element: <ProfilePage /> },
         { path: 'courses', element: <CoursesPage /> },
         { path: 'plans', element: <PlansPage />},
         { path: 'mailbox', element: <MailboxPage />},
