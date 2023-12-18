@@ -140,7 +140,7 @@ dist
 /coverage
 
 # production
-/build
+client/build
 
 # misc
 .DS_Store
