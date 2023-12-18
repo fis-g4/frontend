@@ -1,6 +1,19 @@
 import { sample } from 'lodash';
 
-export const users = [...Array(24)].map((_, index) => ({
+interface User{
+  id: string;
+  photoUrl: string;
+  firstName: string;
+  lastName: string;
+  username: string;
+  email: string;
+  plan: planEnum;
+  coins: number;
+}
+
+type planEnum = "Free" | "Pro" | "Premium";
+
+export const users: User[] = [...Array(24)].map((_, index) => ({
   id: (index+1).toString(),
   photoUrl: `/assets/images/avatars/avatar_${index + 1}.jpg`,
   firstName: `Nombre de usuario ${index + 1}`,

@@ -27,7 +27,7 @@ const MENU_OPTIONS = [
   {
     label: 'Settings',
     icon: 'eva:settings-2-fill',
-    href: '/',
+    href: '/settings',
   },
 ];
 

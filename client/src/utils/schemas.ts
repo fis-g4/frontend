@@ -84,7 +84,13 @@ export const updateUserValidationSchema = Yup.object().shape({
         typeof value === 'object' ? Yup.mixed()
         .test('fileSize', 'The photo must be less than 5MB', (value) => {
             if (value) {
-                return (value as File).size <= 5;
+                return (value as File).size <= 5000000;
+            }
+            return true;
+        })
+        .test('fileType', 'The photo must be an image', (value) => {
+            if (value) {
+                return (value as File).type.includes('image');
             }
             return true;
         }):

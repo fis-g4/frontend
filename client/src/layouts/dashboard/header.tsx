@@ -34,7 +34,7 @@ export default function Header({ onOpenNav } : { onOpenNav: () => void }) {
       <Box sx={{ flexGrow: 1 }} />
 
       <Stack direction="row" alignItems="center" spacing={1}>
-        <NotificationsPopover />
+        {/* <NotificationsPopover /> */ /* This component is not fully ready. It will be finished by the time the mailbox is done*/}
         <AccountPopover />
       </Stack>
     </>

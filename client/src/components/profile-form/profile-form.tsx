@@ -1,16 +1,17 @@
-import { styled } from '@mui/material/styles';
-import { Typography, Badge, Stack, Box, Button, TextField, alpha, InputAdornment, IconButton } from "@mui/material"
-import background from '../../static/icons/edit.svg'
+import { Typography, Stack, Box, Button, TextField, alpha, InputAdornment, IconButton } from "@mui/material"
 import { useAuth } from '../../hooks/useAuth';
 import { useEffect, useRef, useState } from 'react';
 import Iconify from '../iconify/iconify';
 import { useFormik } from 'formik';
 import { updateUserValidationSchema } from '../../utils/schemas';
 import TransitionSnackbar from '../transition-snackbar/transition-snackbar';
+import { StyledBadge } from "./styles";
+import { useResponsive } from "../../hooks/useResponsive";
 
 export default function ProfileForm() {
     const { authUser } = useAuth();
-    
+    const smUp = useResponsive('up', 'sm');
+
     const fileInput = useRef<HTMLInputElement>(null);
 
     const [showCurrentPassword, setShowCurrentPassword] = useState(false);
@@ -19,43 +20,9 @@ export default function ProfileForm() {
     const [profilePic, setProfilePic] = useState(authUser.user?.photoURL || 'assets/images/broken-avatar.svg');
     const [openSnackbar, setOpenSnackbar] = useState(false);
     const [errorData, setErrorData] = useState('');
+    const responsiveDirection = smUp ? 'row' : 'column';
+    const responsiveAlign = smUp ? 'flex-start' : 'center';
 
-    const StyledBadge = styled(Badge)(({ theme }) => ({
-        '& .MuiBadge-badge': {
-          backgroundColor: `${theme.palette.primary.dark}`,
-          color: `${theme.palette.primary.dark}`,
-          boxShadow: `0 0 0 5px ${theme.palette.background.paper}`,
-          width: '35px',
-          height: '35px',
-          borderRadius: '50%',
-          backgroundImage: `url(${background})`,
-          backgroundSize: '20px',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat',
-          cursor: 'pointer',
-          '&:hover::after': {
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            width: '100%',
-            height: '100%',
-            borderRadius: '50%',
-            animation: 'ripple 1.2s infinite ease-in-out',
-            border: '2px solid currentColor',
-            content: '""',
-          },
-        },
-        '@keyframes ripple': {
-          '0%': {
-            transform: 'scale(.8)',
-            opacity: 1,
-          },
-          '100%': {
-            transform: 'scale(2.4)',
-            opacity: 0,
-          },
-        },
-    }));
 
     const formik = useFormik({
         initialValues: {
@@ -103,8 +70,8 @@ export default function ProfileForm() {
     return (
         <form onSubmit={formik.handleSubmit} onReset={formik.handleReset} style={{ justifySelf: 'center', alignSelf: 'center', width: '100%', paddingLeft: '10%', paddingRight: '10%', marginTop: '50px' }}>
             <Stack direction="column" spacing={5} alignItems="center" justifyContent="center" width='100%'>
-                <Stack direction="row" spacing={5} alignSelf='flex-start'>
-                    <label htmlFor="contained-button-file">
+                <Stack direction={responsiveDirection} spacing={5} alignSelf={responsiveAlign}>
+                    <label htmlFor="contained-button-file" style={{ alignSelf: 'center' }}>
                         <StyledBadge overlap="circular" anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }} variant="dot">
                             <Box component="img" src={profilePic} width="200px" borderRadius={50}/>
                         </StyledBadge>
@@ -117,7 +84,6 @@ export default function ProfileForm() {
                         accept='image/*'
                         onChange={(e) => {
                             if (e.target.files && e.target.files[0]){
-                                console.log('Entra')
                                 let file = e.target.files[0];
                                 let blob = file.slice(0, file.size, file.type);
                                 let newFile = new File([blob], file.name, {type: file.type});
@@ -142,7 +108,7 @@ export default function ProfileForm() {
                                 bgcolor: (theme) => alpha(theme.palette.grey[500], 0.12),
                             }}
                             >
-                            <Box sx={{ ml: 2 }}>
+                            <Box sx={{ mx: 2 }}>
                                 <Typography variant="h4">{authUser.user?.firstName} {authUser.user?.lastName}</Typography>
                                 <Typography variant="h6" sx={{ color: 'text.secondary' }}>
                                     @{authUser.user?.username}
@@ -154,7 +120,7 @@ export default function ProfileForm() {
                         </Box>
                     </Stack>
                 </Stack>
-                <Stack direction="row" spacing={5} width='100%'>
+                <Stack direction={responsiveDirection} spacing={5} width='100%'>
                     <TextField
                         name='firstName'
                         label="First Name"
@@ -178,7 +144,7 @@ export default function ProfileForm() {
                         required
                     />
                 </Stack>
-                <Stack direction="row" spacing={5} width='100%'>
+                <Stack direction={responsiveDirection} spacing={5} width='100%'>
                     <TextField
                         name='email'
                         label="Email"
@@ -212,7 +178,7 @@ export default function ProfileForm() {
                         onBlur={formik.handleBlur}
                     />
                 </Stack>
-                <Stack direction="row" spacing={5} width='100%'>
+                <Stack direction={responsiveDirection} spacing={5} width='100%'>
                     <TextField
                         name="newPassword"
                         label="New password"
@@ -254,7 +220,7 @@ export default function ProfileForm() {
                         onBlur={formik.handleBlur}
                     />
                 </Stack>
-                <Stack direction="row" spacing={5} width='100%' >
+                <Stack direction={responsiveDirection} spacing={5} width='100%' >
                     <Button 
                         fullWidth
                         size="large"

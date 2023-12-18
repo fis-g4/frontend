@@ -4,57 +4,11 @@ import {
     Grid,
     useTheme,
 } from '@mui/material'
-import MobileIcon from '@mui/icons-material/Smartphone' // Ejemplo de íconos, reemplaza con los adecuados
-import DataIcon from '@mui/icons-material/BarChart'
-import AiIcon from '@mui/icons-material/Adb'
-import SoftwareIcon from '@mui/icons-material/Code'
-import NetworkIcon from '@mui/icons-material/DeviceHub'
-import SecurityIcon from '@mui/icons-material/Security'
 import CategoryCard from './category-card'
-
-// Definición de la estructura de datos de la categoría
-interface Category {
-    title: string
-    coursesCount: number
-    Icon: typeof MobileIcon // Utiliza el tipo de tus íconos aquí
-}
+import { categories } from '../../_mocks/categories'
 
 export default function CategorySection() {
     const theme = useTheme()
-
-    // Datos de ejemplo para las categorías, reemplaza con tus datos reales
-    const categories: Category[] = [
-        {
-            title: 'Mobile App Development',
-            coursesCount: 242,
-            Icon: MobileIcon,
-        },
-        {
-            title: 'Data Science & Analytics',
-            coursesCount: 242,
-            Icon: DataIcon,
-        },
-        {
-            title: 'AI & Machine Learning',
-            coursesCount: 242,
-            Icon: AiIcon,
-        },
-        {
-            title: 'Software Engineering',
-            coursesCount: 242,
-            Icon: SoftwareIcon,
-        },
-        {
-            title: 'Network Administration',
-            coursesCount: 242,
-            Icon: NetworkIcon,
-        },
-        {
-            title: 'Cybersecurity Essentials',
-            coursesCount: 242,
-            Icon: SecurityIcon,
-        },
-    ]
 
     return (
         <Box sx={{marginBottom: "100px"}}>
