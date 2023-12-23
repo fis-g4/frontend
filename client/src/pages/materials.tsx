@@ -39,10 +39,20 @@ export default function MaterialsPage() {
             const titleMatch = material.title
                 .toLowerCase()
                 .includes(filter.title.toLowerCase())
-            const priceMatch =
-                material.price >= filter.lowerPrice &&
-                material.price <= filter.upperPrice
-            return titleMatch && priceMatch
+            if (filter.lowerPrice && !filter.upperPrice) {
+                const priceMatch = material.price >= filter.lowerPrice
+                return titleMatch && priceMatch
+            } else if (!filter.lowerPrice && filter.upperPrice) {
+                const priceMatch = material.price <= filter.upperPrice
+                return titleMatch && priceMatch
+            } else if (!filter.lowerPrice && !filter.upperPrice) {
+                return titleMatch
+            } else {
+                const priceMatch =
+                    material.price >= filter.lowerPrice &&
+                    material.price <= filter.upperPrice
+                return titleMatch && priceMatch
+            }
         })
 
         setFilteredMaterials(filtered)
