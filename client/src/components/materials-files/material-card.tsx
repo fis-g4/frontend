@@ -1,6 +1,5 @@
 import { Card, CardContent, Typography, useTheme, alpha, IconButton, Stack } from '@mui/material';
 import { Download, Edit, Delete } from '@mui/icons-material';
-import { useResponsive } from "../../hooks/useResponsive";
 
 interface Material {
   title: string;
@@ -14,6 +13,7 @@ interface Material {
 interface MaterialCardProps extends Material {
   onEdit: () => void;
   onDelete: () => void;
+  smUp: boolean;
 }
 
 export default function MaterialCard({
@@ -25,10 +25,10 @@ export default function MaterialCard({
   type,
   onEdit,
   onDelete,
-}: MaterialCardProps) {
+  smUp,
+}: Readonly<MaterialCardProps>) {
   const theme = useTheme();
   const currencySymbol = currency === 'USD' ? '$' : '€';
-  const smUp = useResponsive('up', 'sm');
 
   const responsiveDirection = smUp ? 'row' : 'column';
   
