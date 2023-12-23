@@ -2,23 +2,34 @@ import React from 'react'
 import { useResponsive } from '../../hooks/useResponsive'
 import { Box, Grid, Button } from '@mui/material'
 import MaterialCard from './material-card'
-import { materials } from '../../_mocks/materials'
+import { Material } from '../../_mocks/materials'
 import { UploadFile } from '@mui/icons-material'
 
 export default function MaterialsFiles({
+    materials,
+    setUserMaterials,
     handleNewMaterialOpen,
+    handleUpdateMaterialOpen,
 }: Readonly<{
+    materials: Material[]
+    setUserMaterials: (materials: Material[]) => void
     handleNewMaterialOpen: () => void
+    handleUpdateMaterialOpen: (material: Material) => void
 }>) {
     const smUp = useResponsive('up', 'sm')
 
     const responsiveAlignItems = smUp ? 'flex-end' : 'center'
 
-    const handleEdit = () => {
+    const handleEdit = (id: string) => {
+        const material = materials.find((material) => material.id === id)
+        if (!material) return //TODO: REVIEW
+        handleUpdateMaterialOpen(material)
         console.log('Edit material')
     }
 
-    const handleDelete = () => {
+    const handleDelete = (id: string) => {
+        const newMaterials = materials.filter((material) => material.id !== id)
+        setUserMaterials(newMaterials)
         console.log('Delete material')
     }
 

@@ -1,14 +1,37 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Helmet } from 'react-helmet-async'
 import { Typography } from '@mui/material'
 import MaterialsFiles from '../components/materials-files/materials-files'
 import TransitionModal from '../components/transition-modal/transition-modal'
-import NewMaterialView from '../components/materials-form/materials-form'
+import MaterialView from '../components/materials-form/materials-form'
+import { Material, materials } from '../_mocks/materials'
+import { useAuth } from '../hooks/useAuth'
 
 export default function MaterialsPage() {
+    const [material, setMaterial] = useState({} as Material)
+    const [userMaterials, setUserMaterials] = useState([] as Material[])
+
     const [newMaterialOpen, setNewMaterialOpen] = useState(false)
+    const [updateMaterialOpen, setUpdateMaterialOpen] = useState(false)
     const handleNewMaterialOpen = () => setNewMaterialOpen(true)
     const handleNewMaterialClose = () => setNewMaterialOpen(false)
+    const handleUpdateMaterialOpen = (material: Material) => {
+        setMaterial(material)
+        setUpdateMaterialOpen(true)
+    }
+    const handleUpdateMaterialClose = () => setUpdateMaterialOpen(false)
+
+    const { authUser } = useAuth()
+
+    useEffect(() => {
+        const getMaterials = async () => {
+            const getUserMaterials = materials.filter(
+                (material) => material.author === authUser.user?.username
+            )
+            setUserMaterials(getUserMaterials)
+        }
+        getMaterials()
+    }, [authUser.user?.username])
 
     return (
         <>
@@ -23,13 +46,25 @@ export default function MaterialsPage() {
                 {' '}
                 My materials{' '}
             </Typography>
-            <MaterialsFiles handleNewMaterialOpen={handleNewMaterialOpen} />
+            <MaterialsFiles
+                materials={userMaterials}
+                setUserMaterials={setUserMaterials}
+                handleNewMaterialOpen={handleNewMaterialOpen}
+                handleUpdateMaterialOpen={handleUpdateMaterialOpen}
+            />
             <TransitionModal
                 open={newMaterialOpen}
                 handleClose={handleNewMaterialClose}
                 sx={{ maxWidth: 500, width: '100%' }}
             >
-                <NewMaterialView />
+                <MaterialView operation="create" />
+            </TransitionModal>
+            <TransitionModal
+                open={updateMaterialOpen}
+                handleClose={handleUpdateMaterialClose}
+                sx={{ maxWidth: 500, width: '100%' }}
+            >
+                <MaterialView material={material} operation="update" />
             </TransitionModal>
         </>
     )

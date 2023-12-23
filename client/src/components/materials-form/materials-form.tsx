@@ -17,6 +17,7 @@ import { useResponsive } from '../../hooks/useResponsive'
 import { bgGradient } from '../../theme/css'
 import { useTheme } from '@mui/material/styles'
 import { CloudUpload } from '@mui/icons-material'
+import { Material } from '../../_mocks/materials'
 
 const currencies = [
     {
@@ -48,7 +49,20 @@ const fileTypes = [
     },
 ]
 
-export default function NewMaterialView() {
+interface UpdateMaterialViewProps {
+    material?: Material
+    operation: 'create' | 'update'
+}
+
+export default function MaterialView({
+    material,
+    operation,
+}: Readonly<UpdateMaterialViewProps>) {
+    let fileName: string = ''
+    if (material) {
+        fileName = material.file?.split('/').pop() ?? ''
+    }
+
     const theme = useTheme()
     const { authUser } = useAuth()
     const smUp = useResponsive('up', 'sm')
@@ -56,7 +70,7 @@ export default function NewMaterialView() {
     const fileInput = useRef<HTMLInputElement>(null)
     const [openSnackbar, setOpenSnackbar] = useState(false)
     const [errorData, setErrorData] = useState('')
-    const [fileUploaded, setFileUploaded] = useState('')
+    const [fileUploaded, setFileUploaded] = useState(fileName)
     const responsiveDirection = smUp ? 'row' : 'column'
 
     const uploadButtonColor = fileUploaded !== '' ? 'secondary' : 'primary'
@@ -64,21 +78,21 @@ export default function NewMaterialView() {
 
     const formik = useFormik({
         initialValues: {
-            title: '',
-            description: '',
-            price: 0,
-            currency: '',
+            title: material?.title ?? '',
+            description: material?.description ?? '',
+            price: material?.price ?? '',
+            currency: material?.currency ?? '',
             author: authUser.user?.username,
-            file: '',
-            type: '',
+            file: material?.file ?? '',
+            type: material?.type ?? '',
         },
         validationSchema: uploadMaterialValidationSchema,
         onSubmit: (values) => {
             alert(JSON.stringify(values, null, 2))
         },
         onReset: () => {
-            formik.setFieldValue('file', '')
-            setFileUploaded('')
+            formik.setFieldValue('file', material?.file ?? '')
+            setFileUploaded(fileName)
             if (fileInput.current) {
                 fileInput.current.value = ''
             }
@@ -287,8 +301,9 @@ export default function NewMaterialView() {
                         type="submit"
                         disabled={!formik.isValid}
                     >
-                        {' '}
-                        Upload material{' '}
+                        {operation === 'create'
+                            ? 'Upload material'
+                            : 'Update material'}
                     </Button>
                 </Stack>
             </Stack>
@@ -319,7 +334,9 @@ export default function NewMaterialView() {
                     }}
                 >
                     <Typography variant="h4" mb={3}>
-                        Upload new material
+                        {operation === 'create'
+                            ? 'Upload new material'
+                            : 'Update material'}
                     </Typography>
                     {renderForm}
                 </Card>
