@@ -1,26 +1,50 @@
-import { Grid } from '@mui/material';
-import { Helmet } from 'react-helmet-async';
-import VideoComponent from '../components/course-lesson-details/course-lesson-details';
-import { courses } from '../_mocks/courses';
-import { useResponsive } from "../hooks/useResponsive";
-
+import { useEffect, useState } from 'react'
+import { Grid } from '@mui/material'
+import { Helmet } from 'react-helmet-async'
+import VideoComponent from '../components/course-lesson-details/course-lesson-details'
+import { courses } from '../_mocks/courses'
+import { useResponsive } from '../hooks/useResponsive'
+import CourseMaterials from '../components/course-materials/course-materials'
+import { Material, materials } from '../_mocks/materials'
+import { useAuth } from '../hooks/useAuth'
 
 export default function CoursesPage() {
-  const isSmallScreen = useResponsive('down', 'sm');
+    const [courseMaterials, setCourseMaterials] = useState([] as Material[])
 
-  return (
-    <>
-      <Helmet>
-        <title> Courses | FIS G4 </title>
-      </Helmet>
-      <Grid container>
-      <Grid item xs={isSmallScreen ? 12 : 8}>
-          <VideoComponent playlistTitle={courses[0].title} videoTitle={courses[0].title2} videoUrl={courses[0].videoUrl} description={courses[0].description} videoImage={courses[0].image} />
-        </Grid>
-        <Grid item xs={isSmallScreen ? 12 : 4}>
-          {/* Contenido de la columna derecha */}
-        </Grid>
-      </Grid>      
-    </>
-  )
+    const COURSE_ID = '1'
+    const { authUser } = useAuth()
+
+    useEffect(() => {
+        const getMaterials = async () => {
+            const getUserMaterials = materials.filter((material) =>
+                material.courses.includes(COURSE_ID)
+            )
+            setCourseMaterials(getUserMaterials)
+        }
+        getMaterials()
+    }, [authUser])
+
+    const isSmallScreen = useResponsive('down', 'sm')
+
+    return (
+        <>
+            <Helmet>
+                <title> Courses | FIS G4 </title>
+            </Helmet>
+            <Grid container spacing={2}>
+                <Grid item xs={isSmallScreen ? 12 : 7}>
+                    <VideoComponent
+                        playlistTitle={courses[0].title}
+                        videoTitle={courses[0].title2}
+                        videoUrl={courses[0].videoUrl}
+                        description={courses[0].description}
+                        videoImage={courses[0].image}
+                    />
+                </Grid>
+                <Grid item xs={isSmallScreen ? 12 : 5}>
+                    <CourseMaterials materials={courseMaterials} />
+                </Grid>
+            </Grid>
+        </>
+    )
 }
