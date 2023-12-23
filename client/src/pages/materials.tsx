@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import { Helmet } from 'react-helmet-async'
-import { Typography } from '@mui/material'
+import { Pagination, Typography } from '@mui/material'
 import MaterialsFiles from '../components/materials-files/materials-files'
 import TransitionModal from '../components/transition-modal/transition-modal'
 import MaterialView from '../components/materials-form/materials-form'
 import { Material, materials } from '../_mocks/materials'
 import { useAuth } from '../hooks/useAuth'
+import usePagination from '../components/pagintion/pagination'
+import MaterialFilter from '../components/materials-filter/materials-filter'
 
 export default function MaterialsPage() {
     const [material, setMaterial] = useState({} as Material)
@@ -21,6 +23,31 @@ export default function MaterialsPage() {
     }
     const handleUpdateMaterialClose = () => setUpdateMaterialOpen(false)
 
+    const [filteredMaterials, setFilteredMaterials] = useState([] as Material[])
+    const [filter, setFilter] = useState({
+        title: '',
+        lowerPrice: 0,
+        upperPrice: 100,
+    })
+
+    const handleFilterChange = (newFilter: any) => {
+        setFilter(newFilter)
+    }
+
+    useEffect(() => {
+        const filtered = userMaterials.filter((material) => {
+            const titleMatch = material.title
+                .toLowerCase()
+                .includes(filter.title.toLowerCase())
+            const priceMatch =
+                material.price >= filter.lowerPrice &&
+                material.price <= filter.upperPrice
+            return titleMatch && priceMatch
+        })
+
+        setFilteredMaterials(filtered)
+    }, [userMaterials, filter])
+
     const { authUser } = useAuth()
 
     useEffect(() => {
@@ -33,10 +60,21 @@ export default function MaterialsPage() {
         getMaterials()
     }, [authUser.user?.username])
 
+    const [page, setPage] = useState(1)
+    const PER_PAGE = 5
+
+    const count = Math.ceil(filteredMaterials.length / PER_PAGE)
+    const _DATA = usePagination(filteredMaterials, PER_PAGE)
+
+    const handleChange = (e: any, p: number) => {
+        setPage(p)
+        _DATA.jump(p)
+    }
+
     return (
         <>
             <Helmet>
-                <title> Courses | FIS G4 </title>
+                <title> Materials | FIS G4 </title>
             </Helmet>
 
             <Typography
@@ -46,8 +84,9 @@ export default function MaterialsPage() {
                 {' '}
                 My materials{' '}
             </Typography>
+            <MaterialFilter onFilter={handleFilterChange} />
             <MaterialsFiles
-                materials={userMaterials}
+                materials={_DATA.currentData()}
                 setUserMaterials={setUserMaterials}
                 handleNewMaterialOpen={handleNewMaterialOpen}
                 handleUpdateMaterialOpen={handleUpdateMaterialOpen}
@@ -66,6 +105,21 @@ export default function MaterialsPage() {
             >
                 <MaterialView material={material} operation="update" />
             </TransitionModal>
+            {userMaterials.length > 0 && (
+                <Pagination
+                    count={count}
+                    size="large"
+                    page={page}
+                    variant="outlined"
+                    shape="rounded"
+                    onChange={handleChange}
+                    sx={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        marginTop: '20px',
+                    }}
+                />
+            )}
         </>
     )
 }
