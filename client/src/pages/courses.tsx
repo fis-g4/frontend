@@ -4,12 +4,14 @@ import { Helmet } from 'react-helmet-async'
 import VideoComponent from '../components/course-lesson-details/course-lesson-details'
 import { courses } from '../_mocks/courses'
 import { useResponsive } from '../hooks/useResponsive'
-import CourseMaterials from '../components/course-materials/course-materials'
+import CourseMaterials from '../components/course-classes-materials/course-classes-materials'
 import { Material, materials } from '../_mocks/materials'
 import { useAuth } from '../hooks/useAuth'
+import { Class, classes } from '../_mocks/classes'
 
 export default function CoursesPage() {
     const [courseMaterials, setCourseMaterials] = useState([] as Material[])
+    const [courseClasses, setCourseClasses] = useState([] as Class[])
 
     const COURSE_ID = '1'
     const { authUser } = useAuth()
@@ -21,7 +23,14 @@ export default function CoursesPage() {
             )
             setCourseMaterials(getUserMaterials)
         }
+        const getClasses = async () => {
+            const getUserClasses = classes.filter(
+                (class_) => class_.course === COURSE_ID
+            )
+            setCourseClasses(getUserClasses)
+        }
         getMaterials()
+        getClasses()
     }, [authUser])
 
     const isSmallScreen = useResponsive('down', 'sm')
@@ -42,7 +51,10 @@ export default function CoursesPage() {
                     />
                 </Grid>
                 <Grid item xs={isSmallScreen ? 12 : 5}>
-                    <CourseMaterials materials={courseMaterials} />
+                    <CourseMaterials
+                        classes={courseClasses}
+                        materials={courseMaterials}
+                    />
                 </Grid>
             </Grid>
         </>
