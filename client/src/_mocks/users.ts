@@ -1,6 +1,6 @@
 import { sample } from 'lodash'
 
-interface User {
+export interface User {
     id: string
     photoUrl: string
     firstName: string

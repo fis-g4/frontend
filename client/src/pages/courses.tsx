@@ -8,7 +8,7 @@ export default function CoursesPage() {
       <Helmet>
         <title> Courses | FIS G4 </title>
       </Helmet>
-      <UserList />
+      <div>Courses Page</div>
     </>
   );
 }

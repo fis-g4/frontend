@@ -18,7 +18,7 @@ export const materials: Material[] = [
         price: 19.99,
         currency: 'EUR',
         author: 'johndoe',
-        purchasers: [],
+        purchasers: ['username1', 'username2'],
         file: 'https://cran.r-project.org/web/packages/tidyverse/tidyverse.pdf',
         type: 'presentation',
     },
