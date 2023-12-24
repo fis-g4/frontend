@@ -6,7 +6,7 @@ import TransitionModal from '../components/transition-modal/transition-modal'
 import MaterialView from '../components/materials-form/materials-form'
 import { Material, materials } from '../_mocks/materials'
 import { useAuth } from '../hooks/useAuth'
-import usePagination from '../components/pagintion/pagination'
+import usePagination from '../components/pagination/pagination'
 import MaterialFilter from '../components/materials-filter/materials-filter'
 
 export default function MaterialsPage() {
