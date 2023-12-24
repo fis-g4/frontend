@@ -4,16 +4,30 @@ import { Typography, ListItemIcon, IconButton, Box } from '@mui/material'
 
 import { Material } from '../../_mocks/materials'
 import { Download, ShoppingCart } from '@mui/icons-material'
+import { AuthUserContext } from '../../hooks/useAuth'
 
 interface CourseMaterialsProps {
     materials: Material[]
+    authUser: AuthUserContext
 }
 
 export default function CourseMaterials({
     materials,
+    authUser,
 }: Readonly<CourseMaterialsProps>) {
+    const accessToMaterial = (material: Material) => {
+        if (
+            material.price === 0 ||
+            material.author === authUser.user?.username ||
+            material.purchasers.includes(authUser.user?.username as string)
+        ) {
+            return true
+        }
+        return false
+    }
+
     return (
-        <Box sx={{ height: '70vh', overflowY: 'scroll' }}>
+        <Box sx={{ height: '70vh', overflowY: 'auto' }}>
             {materials.map((material) => (
                 <Card key={material.id} sx={{ my: 1, border: '1px solid' }}>
                     <CardContent
@@ -34,10 +48,7 @@ export default function CourseMaterials({
                             </Typography>
                         </Box>
                         <ListItemIcon>
-                            {
-                                //TODO: Add a check to see if the user has already bought the material
-                            }
-                            {material.price === 0 && (
+                            {accessToMaterial(material) && (
                                 <IconButton
                                     color="secondary"
                                     href={material.file}
@@ -48,7 +59,7 @@ export default function CourseMaterials({
                                     <Download />
                                 </IconButton>
                             )}
-                            {material.price > 0 && (
+                            {!accessToMaterial(material) && (
                                 <IconButton>
                                     <ShoppingCart />
                                 </IconButton>

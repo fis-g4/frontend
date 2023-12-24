@@ -7,15 +7,18 @@ import { Material } from '../../_mocks/materials'
 import { Class } from '../../_mocks/classes'
 import CourseClasses from './course-classes'
 import CourseMaterials from './course-materials'
+import { AuthUserContext } from '../../hooks/useAuth'
 
 interface CourseClassesMaterialsProps {
     classes: Class[]
     materials: Material[]
+    authUser: AuthUserContext
 }
 
 export default function CourseClassesMaterials({
     classes,
     materials,
+    authUser,
 }: Readonly<CourseClassesMaterialsProps>) {
     const [contentType, setContentType] = useState('classes')
 
@@ -58,7 +61,10 @@ export default function CourseClassesMaterials({
                     <CourseClasses classes={classes} />
                 )}
                 {contentType === 'materials' && (
-                    <CourseMaterials materials={materials} />
+                    <CourseMaterials
+                        materials={materials}
+                        authUser={authUser}
+                    />
                 )}
             </CardContent>
         </Card>

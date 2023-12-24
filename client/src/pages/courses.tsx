@@ -4,8 +4,8 @@ import { Helmet } from 'react-helmet-async'
 import VideoComponent from '../components/course-lesson-details/course-lesson-details'
 import { courses } from '../_mocks/courses'
 import { useResponsive } from '../hooks/useResponsive'
-import CourseMaterials from '../components/course-classes-materials/course-classes-materials'
 import { Material, materials } from '../_mocks/materials'
+import CourseClassesMaterials from '../components/course-classes-materials/course-classes-materials'
 import { useAuth } from '../hooks/useAuth'
 import { Class, classes } from '../_mocks/classes'
 
@@ -51,9 +51,10 @@ export default function CoursesPage() {
                     />
                 </Grid>
                 <Grid item xs={isSmallScreen ? 12 : 5}>
-                    <CourseMaterials
+                    <CourseClassesMaterials
                         classes={courseClasses}
                         materials={courseMaterials}
+                        authUser={authUser}
                     />
                 </Grid>
             </Grid>
