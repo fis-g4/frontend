@@ -13,7 +13,7 @@ export const classes: Class[] = [
         title: 'Introducción a Tidyverse',
         description: 'Breve introducción a la librería Tidyverse de R',
         order: 1,
-        file: '',
+        file: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4',
         course: '1',
     },
     {
@@ -21,7 +21,7 @@ export const classes: Class[] = [
         title: 'Tarea clustering',
         description: 'Tarea de clustering de la asignatura de FID',
         order: 2,
-        file: '',
+        file: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4',
         course: '1',
     },
     {
@@ -29,7 +29,7 @@ export const classes: Class[] = [
         title: 'Tarea clustering 2',
         description: 'Tarea de clustering de la asignatura de FID',
         order: 3,
-        file: '',
+        file: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
         course: '1',
     },
     {

@@ -13,12 +13,14 @@ interface CourseClassesMaterialsProps {
     classes: Class[]
     materials: Material[]
     authUser: AuthUserContext
+    handleSelectedClass: (class_: Class) => void
 }
 
 export default function CourseClassesMaterials({
     classes,
     materials,
     authUser,
+    handleSelectedClass,
 }: Readonly<CourseClassesMaterialsProps>) {
     const [contentType, setContentType] = useState('classes')
 
@@ -58,7 +60,10 @@ export default function CourseClassesMaterials({
 
                 <Divider sx={{ my: 1 }} />
                 {contentType === 'classes' && (
-                    <CourseClasses classes={classes} />
+                    <CourseClasses
+                        classes={classes}
+                        handleSelectedClass={handleSelectedClass}
+                    />
                 )}
                 {contentType === 'materials' && (
                     <CourseMaterials

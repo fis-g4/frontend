@@ -1,6 +1,13 @@
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
-import { Typography, ListItemIcon, IconButton, Box } from '@mui/material'
+import {
+    Typography,
+    ListItemIcon,
+    IconButton,
+    Box,
+    useTheme,
+    alpha,
+} from '@mui/material'
 
 import { Material } from '../../_mocks/materials'
 import { Download, ShoppingCart } from '@mui/icons-material'
@@ -26,10 +33,22 @@ export default function CourseMaterials({
         return false
     }
 
+    const theme = useTheme()
+
     return (
         <Box sx={{ height: '70vh', overflowY: 'auto' }}>
             {materials.map((material) => (
-                <Card key={material.id} sx={{ my: 1, border: '1px solid' }}>
+                <Card
+                    key={material.id}
+                    sx={{
+                        my: 1,
+                        border: '1px solid',
+                        backgroundColor: alpha(
+                            theme.palette.primary.light,
+                            0.05
+                        ),
+                    }}
+                >
                     <CardContent
                         sx={{
                             display: 'flex',
@@ -48,9 +67,8 @@ export default function CourseMaterials({
                             </Typography>
                         </Box>
                         <ListItemIcon>
-                            {accessToMaterial(material) && (
+                            {accessToMaterial(material) ? (
                                 <IconButton
-                                    color="secondary"
                                     href={material.file}
                                     target="_blank"
                                     rel="noreferrer"
@@ -58,8 +76,7 @@ export default function CourseMaterials({
                                 >
                                     <Download />
                                 </IconButton>
-                            )}
-                            {!accessToMaterial(material) && (
+                            ) : (
                                 <IconButton>
                                     <ShoppingCart />
                                 </IconButton>
