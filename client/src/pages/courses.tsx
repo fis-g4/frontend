@@ -4,9 +4,9 @@ import { Helmet } from 'react-helmet-async'
 import VideoComponent from '../components/course-lesson-details/course-lesson-details'
 import { courses } from '../_mocks/courses'
 import { useResponsive } from '../hooks/useResponsive'
-import CourseMaterials from '../components/course-materials/course-materials'
 import { Material, materials } from '../_mocks/materials'
 import { useAuth } from '../hooks/useAuth'
+import CourseClassesMaterials from '../components/course-classes-materials/course-classes-materials'
 
 export default function CoursesPage() {
     const [courseMaterials, setCourseMaterials] = useState([] as Material[])
@@ -42,7 +42,10 @@ export default function CoursesPage() {
                     />
                 </Grid>
                 <Grid item xs={isSmallScreen ? 12 : 5}>
-                    <CourseMaterials materials={courseMaterials} />
+                    <CourseClassesMaterials
+                        materials={courseMaterials}
+                        authUser={authUser}
+                    />
                 </Grid>
             </Grid>
         </>
