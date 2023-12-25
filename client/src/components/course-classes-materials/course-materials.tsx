@@ -12,6 +12,7 @@ import {
 import { Material } from '../../_mocks/materials'
 import { Download, ShoppingCart } from '@mui/icons-material'
 import { AuthUserContext } from '../../hooks/useAuth'
+import { longWordInTheText } from '../../utils/format-text'
 
 interface CourseMaterialsProps {
     materials: Material[]
@@ -35,19 +36,6 @@ export default function CourseMaterials({
 
     const theme = useTheme()
 
-    const longWordInTheText = (text: string) => {
-        const words = text.split(' ')
-        let res_words = []
-        for (const word of words) {
-            if (word.length > 20) {
-                res_words.push(word.slice(0, 20) + '...')
-            } else {
-                res_words.push(word)
-            }
-        }
-        return res_words.join(' ')
-    }
-
     return (
         <Box sx={{ height: '70vh', overflowY: 'auto' }}>
             {materials.map((material) => (
@@ -70,10 +58,10 @@ export default function CourseMaterials({
                     >
                         <Box>
                             <Typography variant="body1">
-                                {longWordInTheText(material.title)}
+                                {longWordInTheText(material.title, 20)}
                             </Typography>
                             <Typography variant="body2" color="textSecondary">
-                                {longWordInTheText(material.description)}
+                                {longWordInTheText(material.description, 20)}
                             </Typography>
                             <Typography variant="body2" color="primary">
                                 Price: ${material.price}

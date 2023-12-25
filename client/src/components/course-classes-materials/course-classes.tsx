@@ -4,6 +4,7 @@ import { Typography, Box, IconButton, useTheme, alpha } from '@mui/material'
 
 import { Class } from '../../_mocks/classes'
 import { OndemandVideo } from '@mui/icons-material'
+import { longWordInTheText } from '../../utils/format-text'
 
 interface CourseClassesProps {
     classes: Class[]
@@ -49,13 +50,13 @@ export default function CourseClasses({
                             </IconButton>
                             <Box sx={{ ml: 1 }}>
                                 <Typography variant="body1">
-                                    {_class.title}
+                                    {longWordInTheText(_class.title, 20)}
                                 </Typography>
                                 <Typography
                                     variant="body2"
                                     color="textSecondary"
                                 >
-                                    {_class.description}
+                                    {longWordInTheText(_class.description, 20)}
                                 </Typography>
                             </Box>
                         </Box>

@@ -38,7 +38,7 @@ export default function CoursesPage() {
         getClasses()
     }, [authUser])
 
-    const isSmallScreen = useResponsive('down', 'sm')
+    const isSmallScreen = useResponsive('down', 'md')
 
     return (
         <>
