@@ -13,6 +13,7 @@ import { Material } from '../../_mocks/materials'
 import { Download, ShoppingCart } from '@mui/icons-material'
 import { AuthUserContext } from '../../hooks/useAuth'
 import { longWordInTheText } from '../../utils/format-text'
+import { formatCurrency } from '../../utils/format-currency'
 
 interface CourseMaterialsProps {
     materials: Material[]
@@ -64,7 +65,8 @@ export default function CourseMaterials({
                                 {longWordInTheText(material.description, 20)}
                             </Typography>
                             <Typography variant="body2" color="primary">
-                                Price: ${material.price}
+                                Price: {formatCurrency(material.currency)}{' '}
+                                {material.price}
                             </Typography>
                         </Box>
                         <ListItemIcon>
