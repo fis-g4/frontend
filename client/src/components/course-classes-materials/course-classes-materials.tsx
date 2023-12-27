@@ -1,7 +1,6 @@
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
 import { Divider, Typography } from '@mui/material'
-
 import { Material } from '../../_mocks/materials'
 import CourseMaterials from './course-materials'
 import { AuthUserContext } from '../../hooks/useAuth'
@@ -16,6 +15,7 @@ export default function CourseClassesMaterials({
     authUser,
 }: Readonly<CourseMaterialsProps>) {
     return (
+        
         <Card
             sx={{
                 border: 'none',
