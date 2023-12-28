@@ -1,6 +1,7 @@
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
-import { Divider, Typography, alpha, useTheme } from '@mui/material'
+import { Divider, Typography } from '@mui/material';
+import { useTheme, alpha } from '@mui/system';
 
 
 

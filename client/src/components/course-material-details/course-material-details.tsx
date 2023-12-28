@@ -1,46 +1,56 @@
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import { Divider, Typography, useTheme } from '@mui/material'
-
-
-// Crear interfaz para los detalles de un material
-
+import React, { useEffect, useState } from 'react';
+import { Card, CardContent, Divider, Typography } from '@mui/material';
+import { Document, Page } from 'react-pdf';
 interface FileComponentProps {
     title: string;
     description: string;
-    price: number;
-    currency: string;
-    author: string;
-    type: string;
-    file: string;
+    file: string; // URL del archivo PDF o HTML
 }
 
+const FileComponent: React.FC<FileComponentProps> = ({
+    title,
+    description,
+    file,
+}) => {
+    const [isPdf, setIsPdf] = useState(false);
 
-// Crear componente FileComponent
+    useEffect(() => {
+        console.log('File:', file);
+        // Intentar cargar el recurso para determinar si es un PDF
+        const fetchData = async () => {
+            try {
+                const response = await fetch(file);
+                const contentType = response.headers.get('content-type');
 
-export default function FileComponent({ title, description, price, currency, author, type, file }: FileComponentProps) {
-    const theme = useTheme()
-    return (
+                // Verificar si el contenido es de tipo PDF
+                setIsPdf(contentType?.toLowerCase().includes('application/pdf') || false);
+            } catch (error) {
+                console.error('Error fetching file:', error);
+            }
+        };
+
+        fetchData();
+    }, [file]);
+
+    return (    
         <Card>
-            <CardContent>
-                <Typography variant="h4" >{title}</Typography>
-                <Divider sx={{ marginBottom: 1, marginTop: 1 }} />
-                <Typography variant="body1" sx={{ marginBottom: 1 }}>Description: {description}</Typography>
-                <Typography variant="body1" sx={{ marginBottom: 1 }}>Price: {price} {currency}</Typography>
-                <Typography variant="body1" sx={{ marginBottom: 1 }}>Author: {author}</Typography>
-                <Typography variant="body1" sx={{ marginBottom: 1 }}>Type: {type}</Typography>
-                <a href={file} download>Download</a>
-            </CardContent>
-        </Card>
-    )
-}
+        <CardContent>
+          <Typography variant="h4">{title}</Typography>
+          <Divider sx={{ marginBottom: 1, marginTop: 1 }} />
+          <Typography variant="body1" sx={{ marginBottom: 1 }}>
+            Description: {description}
+          </Typography>
+        <iframe
+            src={file}
+            width="100%"
+            height="600"
+            title="PDF Viewer"
+        ></iframe>
 
+        </CardContent>
+      </Card>
+    
+  );
+};
 
-
-
-
-
-
-
-
-
+export default FileComponent;
