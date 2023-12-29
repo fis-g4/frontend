@@ -55,7 +55,7 @@ export default function CoursesPage() {
                             description={
                                 selectedClass?.description ?? 'Loading...'
                             }
-                            videoImage={'./assets/images/video-thumbnail.svg '}
+                            videoImage={'./assets/images/video-thumbnail.png '}
                         />
                     ) : (
                         <Typography variant="h4" align="center">
