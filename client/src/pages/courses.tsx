@@ -1,18 +1,25 @@
 import { useEffect, useState } from 'react'
-import { Grid } from '@mui/material'
+import { Grid, Typography } from '@mui/material'
 import { Helmet } from 'react-helmet-async'
 import VideoComponent from '../components/course-lesson-details/course-lesson-details'
 import { courses } from '../_mocks/courses'
 import { useResponsive } from '../hooks/useResponsive'
 import { Material, materials } from '../_mocks/materials'
-import { useAuth } from '../hooks/useAuth'
 import CourseClassesMaterials from '../components/course-classes-materials/course-classes-materials'
+import { useAuth } from '../hooks/useAuth'
+import { Class, classes } from '../_mocks/classes'
 
 export default function CoursesPage() {
     const [courseMaterials, setCourseMaterials] = useState([] as Material[])
+    const [courseClasses, setCourseClasses] = useState([] as Class[])
+    const [selectedClass, setSelectedClass] = useState<Class | null>()
 
     const COURSE_ID = '1'
     const { authUser } = useAuth()
+
+    const handleSelectedClass = (class_: Class) => {
+        setSelectedClass(class_)
+    }
 
     useEffect(() => {
         const getMaterials = async () => {
@@ -21,10 +28,17 @@ export default function CoursesPage() {
             )
             setCourseMaterials(getUserMaterials)
         }
+        const getClasses = async () => {
+            const getUserClasses = classes.filter(
+                (class_) => class_.course === COURSE_ID
+            )
+            setCourseClasses(getUserClasses)
+        }
         getMaterials()
+        getClasses()
     }, [authUser])
 
-    const isSmallScreen = useResponsive('down', 'sm')
+    const isSmallScreen = useResponsive('down', 'md')
 
     return (
         <>
@@ -33,18 +47,28 @@ export default function CoursesPage() {
             </Helmet>
             <Grid container spacing={2}>
                 <Grid item xs={isSmallScreen ? 12 : 7}>
-                    <VideoComponent
-                        playlistTitle={courses[0].title}
-                        videoTitle={courses[0].title2}
-                        videoUrl={courses[0].videoUrl}
-                        description={courses[0].description}
-                        videoImage={courses[0].image}
-                    />
+                    {selectedClass?.file ? (
+                        <VideoComponent
+                            playlistTitle={courses[0].title}
+                            videoTitle={selectedClass?.title ?? 'Loading...'}
+                            videoUrl={selectedClass?.file ?? ''}
+                            description={
+                                selectedClass?.description ?? 'Loading...'
+                            }
+                            videoImage={'./assets/images/video-thumbnail.png '}
+                        />
+                    ) : (
+                        <Typography variant="h4" align="center">
+                            Select a class to start
+                        </Typography>
+                    )}
                 </Grid>
                 <Grid item xs={isSmallScreen ? 12 : 5}>
                     <CourseClassesMaterials
+                        classes={courseClasses}
                         materials={courseMaterials}
                         authUser={authUser}
+                        handleSelectedClass={handleSelectedClass}
                     />
                 </Grid>
             </Grid>
