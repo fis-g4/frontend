@@ -96,3 +96,39 @@ export const updateUserValidationSchema = Yup.object().shape({
         }):
         Yup.string().trim()),
 }, [['newPassword', 'confirmNewPassword'], ['currentPassword', 'newPassword']]);
+
+export function createMessageValidationSchema(senderValue: string, subjectValue: string|undefined, messageValue: string|undefined, messageReal: string) {
+    return Yup.object().shape({
+        subject: Yup.string().trim()
+            .required('The subject is required')
+            .min(3, 'The subject must be at least 3 characters long')
+            .max(64, 'The subject must be at most 64 characters long')
+            .test('noChange', 'There has been no change', (value) => {
+                if (value) {
+                    return value !== subjectValue || messageValue !== messageReal;
+                }
+                return true;
+            }),
+        message: Yup.string().trim()
+            .required('The message is required')
+            .min(3, 'The message must be at least 3 characters long')
+            .max(1024, 'The message must be at most 1024 characters long'),
+        sender : Yup.string().trim().required('The sender is required'),
+        receivers: Yup.array()
+            .required('You must select at least one receiver')
+            .min(1, 'You must select at least one receiver')
+            .test('noDuplicates', 'You cannot select the same user more than once', (value) => {
+                if (value) {
+                    const set = new Set(value);
+                    return set.size === value.length;
+                }
+                return true;
+            })
+            .test('noSender', 'You cannot select yourself as a receiver', (value) => {
+                if (value) {
+                    console.log(senderValue);
+                    return !value.includes(senderValue);
+                }
+                return true;
+            }),
+})};

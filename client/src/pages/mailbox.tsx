@@ -1,5 +1,7 @@
+import { Typography } from '@mui/material';
 import { Helmet } from 'react-helmet-async';
-
+import MailboxTabs from '../components/mailbox-tabs/mailbox-tabs';
+import MessageNew from '../components/message-new/message-new';
 
 export default function MailboxPage() {
   return (
@@ -8,7 +10,9 @@ export default function MailboxPage() {
         <title> Mailbox | FIS G4 </title>
       </Helmet>
 
-      <div> Mailbox Page </div>
+      <Typography variant="h3" sx={{ marginLeft: '25px', marginTop: '10px' }}> Check your messages </Typography>
+      <MailboxTabs />
+      <MessageNew />
     </>
   );
 }
