@@ -12,7 +12,7 @@ interface TabPanelProps {
   value: number;
 }
 
-function CustomTabPanel(props: TabPanelProps) {
+function CustomTabPanel(props: Readonly<TabPanelProps>) {
   const { children, value, index, ...other } = props;
 
   return (
@@ -39,7 +39,7 @@ function a11yProps(index: number) {
   };
 }
 
-export default function MailboxTabs() {
+export default function MailboxTabs({ usersList, refresh, setRefresh } : { usersList: {username:string, profilePicture:string}[], refresh: boolean, setRefresh: React.Dispatch<React.SetStateAction<boolean>>}) {
   const [value, setValue] = useState(0);
 
   const senderColumns: MessagesColumn[] = [
@@ -80,13 +80,13 @@ export default function MailboxTabs() {
         </Tabs>
       </Box>
       <CustomTabPanel value={value} index={0}>
-        <MessagesBox columns={receiversColumns}/>
+        <MessagesBox columns={senderColumns} filter='UNREAD' usersList={usersList} refresh={refresh} setRefresh={setRefresh} />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>
-        <MessagesBox columns={receiversColumns}/>
+        <MessagesBox columns={senderColumns} filter='RECEIVED' usersList={usersList} refresh={refresh} setRefresh={setRefresh} />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={2}>
-        <MessagesBox columns={senderColumns}/>
+        <MessagesBox columns={receiversColumns} filter='SENT' usersList={usersList} refresh={refresh} setRefresh={setRefresh} />
       </CustomTabPanel>
     </Box>
   );

@@ -4,7 +4,7 @@ import { useState } from "react";
 import TransitionModal from "../transition-modal/transition-modal";
 import MessageNewForm from "../../message-new-form/message-new-form";
 
-export default function MessageNew() {
+export default function MessageNew({ usersList, setRefresh } : { usersList: {username:string, profilePicture:string}[], setRefresh: ()=>void}) {
     const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
@@ -17,7 +17,7 @@ export default function MessageNew() {
                 </Fab>
             </Box>
             <TransitionModal open={open} handleClose={handleClose} sx={{ maxWidth: 500, width: '100%' }}>
-                <MessageNewForm />
+                <MessageNewForm usersList={usersList} handleClose={handleClose} setRefresh={setRefresh} />
             </TransitionModal>
         </>
     )

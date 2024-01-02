@@ -10,8 +10,10 @@ import { useAuth } from "../../hooks/useAuth";
 import TransitionDialog from "../transition-dialog/transition-dialog";
 import TransitionModal from "../transition-modal/transition-modal";
 import MessageNewForm from "../../message-new-form/message-new-form";
+import { useMessagesApi } from "../../api/useMessagesApi";
+import TransitionSnackbar from "../transition-snackbar/transition-snackbar";
 
-export function MessagesRow({ row, columns } : { row: MessagesRowInterface, columns: MessagesColumn[],}) {
+export function MessagesRow({ row, columns, usersList, setRefresh } : Readonly<{ row: MessagesRowInterface, columns: MessagesColumn[], usersList: {username: string, profilePicture: string}[], setRefresh: ()=>void }>) {
 
     const [open, setOpen] = useState(false);
     const { authUser } = useAuth();
@@ -19,6 +21,9 @@ export function MessagesRow({ row, columns } : { row: MessagesRowInterface, colu
     const [isEditable, setIsEditable] = useState(false);
     const [openDialog, setOpenDialog] = useState(false);
     const [openModal, setOpenModal] = useState(false);
+    const [openSnackbar, setOpenSnackbar] = useState(false);
+    const [errorData, setErrorData] = useState('');
+    const { openMessage, deleteMessage } = useMessagesApi();
 
     useEffect(() => {
         if (authUser.user === null) return;
@@ -28,12 +33,21 @@ export function MessagesRow({ row, columns } : { row: MessagesRowInterface, colu
         }
     }, []);
 
+    const handleCloseSnackbar = () => {
+        setOpenSnackbar(false);
+    }
+
+    const handleOpenSnackbar = (error?: string) => {
+        setOpenSnackbar(true);
+        setErrorData(error || 'There was an error deleting the message. Please try later.');
+    }
+
     const createAvatarGroup = (users: string[]) => {
         return (
             <AvatarGroup max={4} total={users.length} sx={{ justifyContent: 'start' }}>
                 {users.map((user, i) => (
                     <Tooltip title={user} arrow>
-                        <Avatar key={i} src='' alt={user} />
+                        <Avatar key={i} src={usersList.filter(u => u.username===user)[0].profilePicture} alt={user} />
                     </Tooltip>
                 ))}
             </AvatarGroup>
@@ -53,11 +67,33 @@ export function MessagesRow({ row, columns } : { row: MessagesRowInterface, colu
         <IconButton
             aria-label="expand row"
             size="small"
-            onClick={() => {setOpen(!open); setIsNew(false);}}
+            onClick={handleOpenMessage}
         >
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
         </IconButton>
     )
+
+    function handleOpenMessage() {
+        if (!isNew){
+            setOpen(!open);
+        } else{
+            openMessage(row._id).then((response) => {
+                if(response.ok) {
+                    setOpen(!open);
+                    setIsNew(false);
+                } else{
+                    response.json().then((responseData: any) => {
+                        handleOpenSnackbar(responseData.error);
+                    }).catch((_error) => {
+                        handleOpenSnackbar('There was an error opening the message. Please try later.');
+                    });
+                }
+            }).catch((_error) => {
+                handleOpenSnackbar('There was an error opening the message. Please try later.');
+            });
+        }
+    }
+
 
     const handleOpenModal = () => setOpenModal(true);
 
@@ -68,8 +104,20 @@ export function MessagesRow({ row, columns } : { row: MessagesRowInterface, colu
     }
 
     const handleAcceptDialog = () => {
-        alert('Mensaje borrado')
-        setOpenDialog(false);
+        deleteMessage(row._id).then((response) => {
+            if(response.ok) {
+                setOpenDialog(false);
+                setRefresh();
+            } else{
+                response.json().then((responseData: any) => {
+                    handleOpenSnackbar(responseData.error);
+                }).catch((_error) => {
+                    handleOpenSnackbar();
+                });
+            }
+        }).catch((_error) => {
+            handleOpenSnackbar();
+        });
     }
 
     const handleCancelDialog = () => {
@@ -85,7 +133,7 @@ export function MessagesRow({ row, columns } : { row: MessagesRowInterface, colu
 
     return (
         <>
-            <TableRow hover role="checkbox" tabIndex={-1} key={row.id} sx={{ '& > *': { borderBottom: 'unset' } }}>
+            <TableRow hover role="checkbox" tabIndex={-1} key={row._id} sx={{ '& > *': { borderBottom: 'unset' } }}>
                 <TableCell>
                     {isNew?
                         <Badge color="primary" badgeContent="!">
@@ -135,8 +183,9 @@ export function MessagesRow({ row, columns } : { row: MessagesRowInterface, colu
                 action={actionDialog}
             />
             <TransitionModal open={openModal} handleClose={handleCloseModal} sx={{ maxWidth: 500, width: '100%' }}>
-                <MessageNewForm receiversValue={row.receivers} subjectValue={row.subject} messagesValue={row.message} />
+                <MessageNewForm messageId={row._id} receiversValue={row.receivers} subjectValue={row.subject} messagesValue={row.message} usersList={usersList} handleClose={handleCloseModal} setRefresh={setRefresh} />
             </TransitionModal>
+            <TransitionSnackbar open={openSnackbar} onClose={handleCloseSnackbar} message={errorData} autoHideDuration={6000} />
         </>
     )
 }

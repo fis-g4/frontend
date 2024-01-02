@@ -22,6 +22,8 @@ export default function Router() {
   const routes = useRoutes([
     {
       element: (
+        authUser.isLoading ?
+        <LoadingView /> :
         authUser.isAuthenticated ?
         <DashboardLayout>
           <Suspense fallback={<LoadingView />}>

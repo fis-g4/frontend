@@ -17,19 +17,32 @@ import Iconify from '../iconify/iconify';
 import Logo from '../logo/logo';
 import { useAuth } from '../../hooks/useAuth';
 import { registerValidationSchema } from '../../utils/schemas';
-import { account } from '../../_mocks/account';
+import { useUsersApi } from '../../api/useUsersApi';
+import TransitionSnackbar from '../transition-snackbar/transition-snackbar';
 
 export default function SignupView({ handleLoginOpen, handleRegisterClose } : { handleLoginOpen: () => void, handleRegisterClose: () => void }) {
   const theme = useTheme();
 
   const { login } = useAuth();
+  const { registerUser } = useUsersApi();
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [errorData, setErrorData] = useState('');
 
   const handleSignIn = () => {
     handleRegisterClose();
     handleLoginOpen();
+  }
+
+  const handleCloseSnackbar = () => {
+    setOpenSnackbar(false);
+  }
+
+  const handleOpenSnackbar = (error?: string) => {
+    setOpenSnackbar(true);
+    setErrorData(error || 'There was an error with the sign up. Please try again.');
   }
 
   const formik = useFormik({
@@ -43,7 +56,29 @@ export default function SignupView({ handleLoginOpen, handleRegisterClose } : { 
     },
     validationSchema: registerValidationSchema,
     onSubmit: (values) => {
-      login(account, 'exampleToken.')
+      registerUser(
+        values.firstName,
+        values.lastName,
+        values.username,
+        values.password,
+        values.email
+        ).then((response: any) => {
+        if (response.status === 201) {
+          response.json().then((responseData: any) => {
+            login(responseData.data.user, responseData.data.token);
+          }).catch((_error: any) => {
+            handleCloseSnackbar();
+          });
+        } else{
+          response.json().then((responseData: any) => {
+            handleOpenSnackbar(responseData.error);
+          }).catch((_error: any) => {
+            handleCloseSnackbar();
+          });
+        }
+      }).catch((_error) => {
+        handleCloseSnackbar();
+      });
     },
   });
 
@@ -150,44 +185,47 @@ export default function SignupView({ handleLoginOpen, handleRegisterClose } : { 
   );
 
   return (
-    <Box
-      sx={{
-        ...bgGradient({
-          color: alpha(theme.palette.background.default, 0.9),
-          imgUrl: '/assets/backgrounds/overlay_4.jpg',
-        }),
-        height: 1,
-        background: 'transparent !important',
-      }}
-    >
-      <Logo
+    <>
+      <Box
         sx={{
-          position: 'fixed',
-          top: { xs: 16, md: 24 },
-          left: { xs: 16, md: 24 },
+          ...bgGradient({
+            color: alpha(theme.palette.background.default, 0.9),
+            imgUrl: '/assets/backgrounds/overlay_4.jpg',
+          }),
+          height: 1,
+          background: 'transparent !important',
         }}
-      />
-
-      <Stack alignItems="center" justifyContent="center" sx={{ height: 1 }}>
-        <Card
+      >
+        <Logo
           sx={{
-            p: 5,
-            width: 1,
-            maxWidth: 420,
+            position: 'fixed',
+            top: { xs: 16, md: 24 },
+            left: { xs: 16, md: 24 },
           }}
-        >
-          <Typography variant="h4">Create your account</Typography>
+        />
 
-          <Typography variant="body2" sx={{ mt: 2, mb: 5 }}>
-            Already have an account?
-            <Link variant="subtitle2" sx={{ ml: 0.5, cursor: 'pointer' }} onClick={handleSignIn} >
-                Sign In
-            </Link>
-          </Typography>
+        <Stack alignItems="center" justifyContent="center" sx={{ height: 1 }}>
+          <Card
+            sx={{
+              p: 5,
+              width: 1,
+              maxWidth: 420,
+            }}
+          >
+            <Typography variant="h4">Create your account</Typography>
 
-          {renderForm}
-        </Card>
-      </Stack>
-    </Box>
+            <Typography variant="body2" sx={{ mt: 2, mb: 5 }}>
+              Already have an account?
+              <Link variant="subtitle2" sx={{ ml: 0.5, cursor: 'pointer' }} onClick={handleSignIn} >
+                  Sign In
+              </Link>
+            </Typography>
+
+            {renderForm}
+          </Card>
+        </Stack>
+      </Box>
+      <TransitionSnackbar open={openSnackbar} onClose={handleCloseSnackbar} message={errorData} autoHideDuration={6000} />
+    </>
   );
 }

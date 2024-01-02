@@ -10,10 +10,12 @@ import Logo from '../components/logo/logo';
 import { bgGradient } from '../theme/css';
 import SendIcon from '@mui/icons-material/Send';
 import SearchIcon from "@mui/icons-material/Search";
-import { Avatar, Chip, Icon, InputAdornment, ListSubheader, MenuItem, SelectChangeEvent, Theme } from '@mui/material';
+import { Avatar, Chip, Icon, InputAdornment, ListSubheader, MenuItem, SelectChangeEvent, Theme, setRef } from '@mui/material';
 import { useEffect, useMemo, useState } from 'react';
 import { useAuth } from '../hooks/useAuth';
 import { createMessageValidationSchema } from '../utils/schemas';
+import { useMessagesApi } from '../api/useMessagesApi';
+import TransitionSnackbar from '../components/transition-snackbar/transition-snackbar';
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -27,14 +29,6 @@ const MenuProps = {
   autoFocus: false,
 };
 
-const names = [
-    { username: 'johndoe', profilePic: '' },
-    { username: 'johndoe1', profilePic: '' },
-    { username: 'johndoe1', profilePic: '' },
-    { username: 'johndoe1', profilePic: '' },
-    { username: 'johndoe1', profilePic: '' },
-];
-
 function getStyles(name: string, receivers: readonly string[], theme: Theme) {
   return {
     fontWeight:
@@ -44,18 +38,30 @@ function getStyles(name: string, receivers: readonly string[], theme: Theme) {
   };
 }
 
-export default function MessageNewForm({ receiversValue, subjectValue, messagesValue }: { receiversValue?: string[], subjectValue?: string, messagesValue?: string }) {
+export default function MessageNewForm({ usersList, messageId, receiversValue, subjectValue, messagesValue, handleClose, setRefresh }: Readonly<{ usersList: {username:string, profilePicture:string}[], messageId?: string, receiversValue?: string[], subjectValue?: string, messagesValue?: string, handleClose: () => void, setRefresh: ()=>void }>) {
   const theme = useTheme();
   const { authUser } = useAuth();
   const [receivers, setReceivers] = useState<string[]>(receiversValue || []);
   const [messageReal, setMessageReal] = useState<string>(messagesValue || '');
   const [searchText, setSearchText] = useState("");
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [errorData, setErrorData] = useState('');
+  const { createMessage, updateMessage } = useMessagesApi();
+
+  const handleCloseSnackbar = () => {
+    setOpenSnackbar(false);
+  }
+
+  const handleOpenSnackbar = (error?: string) => {
+    setOpenSnackbar(true);
+    setErrorData(error || 'There was an error creating the message. Please try later.');
+  }
   
   const containsText = (text: string, searchText: string) =>
     text.toLowerCase().indexOf(searchText.toLowerCase()) > -1;
 
   const displayedOptions = useMemo(
-    () => names.filter((option) => containsText(option.username, searchText)),
+    () => usersList.filter((option) => containsText(option.username, searchText)),
     [searchText]
   );
 
@@ -83,16 +89,58 @@ export default function MessageNewForm({ receiversValue, subjectValue, messagesV
     },
     validationSchema: createMessageValidationSchema(authUser.user?.username || '', subjectValue, messagesValue, messageReal),
     onSubmit: (values) => {
-        alert(
-            JSON.stringify(values, null, 2)
-        );
+        if (messageId){
+          updateMessage(messageId, values.subject, values.message).then((response) => {
+            if(!response.ok) {
+              response.json().then((responseData) => {
+                handleOpenSnackbar(responseData.error);
+              }).catch((_error) => {
+                handleOpenSnackbar('There was an error updating the message. Please try later.');
+              });
+            } else{
+              response.json().then((responseData) => {
+                handleClose();
+                setRefresh();
+              }).catch((_error) => {
+                handleOpenSnackbar('There was an error updating the message. Please try later.');
+              });
+            }
+          }).catch((_error) => {
+            handleOpenSnackbar('There was an error updating the message. Please try later.');
+          });
+        } else {
+          const messageData = {
+            sender: values.sender,
+            receivers: values.receivers,
+            subject: values.subject,
+            message: values.message,
+          }
+          createMessage(messageData).then((response) => {
+            if(response.status !== 201) {
+              response.json().then((responseData) => {
+                handleOpenSnackbar(responseData.error);
+              }).catch((_error) => {
+                handleOpenSnackbar();
+              });
+            } else{
+              response.json().then((responseData) => {
+                handleClose();
+                setRefresh();
+              }).catch((_error) => {
+                handleOpenSnackbar();
+              });
+            }
+          }).catch((_error) => {
+            handleOpenSnackbar();
+          });
+        }
     },
   });
 
   useEffect(() => { setMessageReal(formik.values.message) }, [formik.values.message]);
 
   function getProfilePic(username: string) {
-    return names.find((user) => user.username === username)?.profilePic;
+    return usersList.find((user) => user.username === username)?.profilePicture;
   }
 
   const renderForm = (
@@ -193,37 +241,40 @@ export default function MessageNewForm({ receiversValue, subjectValue, messagesV
   );
 
   return (
-    <Box
-      sx={{
-        ...bgGradient({
-          color: alpha(theme.palette.background.default, 0.9),
-          imgUrl: '/assets/backgrounds/overlay_4.jpg',
-        }),
-        height: 1,
-        background: 'transparent !important',
-      }}
-    >
-      <Logo
+    <>
+      <Box
         sx={{
-          position: 'fixed',
-          top: { xs: 16, md: 24 },
-          left: { xs: 16, md: 24 },
+          ...bgGradient({
+            color: alpha(theme.palette.background.default, 0.9),
+            imgUrl: '/assets/backgrounds/overlay_4.jpg',
+          }),
+          height: 1,
+          background: 'transparent !important',
         }}
-      />
-
-      <Stack alignItems="center" justifyContent="center" sx={{ height: 1 }}>
-        <Card
+      >
+        <Logo
           sx={{
-            p: 5,
-            width: 1,
-            maxWidth: 420,
+            position: 'fixed',
+            top: { xs: 16, md: 24 },
+            left: { xs: 16, md: 24 },
           }}
-        >
-          <Typography variant="h4" sx={{marginBottom: 3}}>Send a message</Typography>
+        />
 
-          {renderForm}
-        </Card>
-      </Stack>
-    </Box>
+        <Stack alignItems="center" justifyContent="center" sx={{ height: 1 }}>
+          <Card
+            sx={{
+              p: 5,
+              width: 1,
+              maxWidth: 420,
+            }}
+          >
+            <Typography variant="h4" sx={{marginBottom: 3}}>Send a message</Typography>
+
+            {renderForm}
+          </Card>
+        </Stack>
+      </Box>
+      <TransitionSnackbar open={openSnackbar} onClose={handleCloseSnackbar} message={errorData} autoHideDuration={6000} />
+    </>
   );
 }

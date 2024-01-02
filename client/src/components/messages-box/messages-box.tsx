@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -7,8 +7,9 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
-import { rows } from '../../_mocks/messages';
 import { MessagesRow } from '../messages-row/messages-row';
+import { useMessagesApi } from '../../api/useMessagesApi';
+import TransitionSnackbar from '../transition-snackbar/transition-snackbar';
 
 export interface MessagesColumn {
   id: 'sender' | 'receivers' | 'subject' | 'date';
@@ -20,7 +21,7 @@ export interface MessagesColumn {
 }
 
 export interface MessagesRowInterface {
-  id: string;
+  _id: string;
   sender: string;
   receivers: string[];
   subject: string;
@@ -31,9 +32,50 @@ export interface MessagesRowInterface {
   deleted_by_receiver: boolean[];
 }
 
-export default function MessagesBox({ columns } : { columns: MessagesColumn[] }) {
+export default function MessagesBox({ columns, filter, usersList, refresh, setRefresh } : { columns: MessagesColumn[], filter: 'UNREAD' | 'SENT' | 'RECEIVED', usersList: {username: string, profilePicture: string}[], refresh: boolean, setRefresh: React.Dispatch<React.SetStateAction<boolean>> }) {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [messagesList, setMessagesList] = useState<MessagesRowInterface[]>([]);
+  const [total, setTotal] = useState(0);
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [errorData, setErrorData] = useState('');
+  const { getMessagesMe } = useMessagesApi();
+
+  const handleCloseSnackbar = () => {
+    setOpenSnackbar(false);
+  }
+
+  const handleOpenSnackbar = (error?: string) => {
+    setOpenSnackbar(true);
+    setErrorData(error || 'There was an error retrieving the messages. Please try later.');
+  }
+
+  useEffect(() => {
+    const queryParams = new URLSearchParams({
+      offset: (page*rowsPerPage).toString(),
+      limit: rowsPerPage.toString(),
+      filter: filter,
+      sort: 'DESC'
+    });
+    getMessagesMe(queryParams).then((response) => {
+      if(response.ok) {
+        response.json().then((dataResponse) => {
+          setTotal(dataResponse.data.total);
+          setMessagesList(dataResponse.data.messages);
+        }).catch((_error) => {
+          handleOpenSnackbar();
+        });
+      } else{
+        response.json().then((responseData: any) => {
+          handleOpenSnackbar(responseData.error);
+        }).catch((_error) => {
+          handleOpenSnackbar();
+        });
+      }
+    }).catch((error) => {
+      handleOpenSnackbar();
+    });
+  }, [rowsPerPage, page, filter, refresh]);
 
   const handleChangePage = (_event: unknown, newPage: number) => {
     setPage(newPage);
@@ -65,11 +107,11 @@ export default function MessagesBox({ columns } : { columns: MessagesColumn[] })
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows
+            {messagesList
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((row) => {
+              .map((row, i) => {
                 return (
-                  <MessagesRow columns={columns} row={row} />
+                  <MessagesRow key={i} columns={columns} row={row} usersList={usersList} setRefresh={()=> setRefresh(!refresh)} />
                 );
               })}
           </TableBody>
@@ -78,12 +120,13 @@ export default function MessagesBox({ columns } : { columns: MessagesColumn[] })
       <TablePagination
         rowsPerPageOptions={[10, 25, 100]}
         component="div"
-        count={rows.length}
+        count={total}
         rowsPerPage={rowsPerPage}
         page={page}
         onPageChange={handleChangePage}
         onRowsPerPageChange={handleChangeRowsPerPage}
       />
+      <TransitionSnackbar open={openSnackbar} onClose={handleCloseSnackbar} message={errorData} autoHideDuration={6000} />
     </Paper>
   );
 }
