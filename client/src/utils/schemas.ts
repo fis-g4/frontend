@@ -132,3 +132,11 @@ export function createMessageValidationSchema(senderValue: string, subjectValue:
                 return true;
             }),
 })};
+
+export function deleteAccount(usernameValue: string){
+    return Yup.object().shape({
+        username: Yup.string().trim()
+            .required('The username is required')
+            .oneOf([usernameValue], 'The username is not correct')
+    });
+}

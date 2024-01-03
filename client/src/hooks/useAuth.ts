@@ -61,9 +61,6 @@ export const useAuth = () => {
                 } else {
                     removeUser();
                 }
-            }).catch((error) => {
-                console.log(error);
-                removeUser();
             });
         } else {
             removeUser();

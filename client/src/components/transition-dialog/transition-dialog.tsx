@@ -23,9 +23,21 @@ interface TransitionDialogInterface {
     title?: string;
     children?: React.ReactNode | string;
     action?: React.ReactNode;
+    formik?: any;
 }
 
-export default function TransitionDialog({ open, handleClose, title, children, action, ...other } : InferProps<TransitionDialogInterface>) {
+export default function TransitionDialog({ open, handleClose, title, children, action, formik, ...other } : InferProps<TransitionDialogInterface>) {
+  const elements = (
+    <>
+      <DialogContent>
+          {children ? typeof children === 'string' ? (<DialogContentText id="alert-dialog-slide-description">{children}</DialogContentText>) : children : <></>}
+      </DialogContent>
+      {action && (<DialogActions>
+          {action}
+      </DialogActions>)}
+    </>
+  )
+
   return (
     <Fragment>
       <Dialog
@@ -37,12 +49,7 @@ export default function TransitionDialog({ open, handleClose, title, children, a
         {...other}
       >
         {title && (<DialogTitle>{title}</DialogTitle>)}
-        <DialogContent>
-            {children ? typeof children === 'string' ? (<DialogContentText id="alert-dialog-slide-description">{children}</DialogContentText>) : children : <></>}
-        </DialogContent>
-        {action && (<DialogActions>
-            {action}
-        </DialogActions>)}
+        {formik !== undefined ? <form onSubmit={formik.handleSubmit}>{elements}</form>:elements}
       </Dialog>
     </Fragment>
   );

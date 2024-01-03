@@ -59,6 +59,16 @@ export const useUsersApi = () => {
         );
         return response;
     }
+
+    const deleteUser = async () => {
+        const response = await fetchWithInterceptor(`${process.env.REACT_APP_API_URL}${USERS_BASE_PATH}/me`, 
+            { 
+                method: "DELETE",
+                headers: basicHeaders
+            }
+        );
+        return response;
+    }
     
-    return { getUsersMe, loginUser, registerUser, updateUser, getAllUsers };
+    return { getUsersMe, loginUser, registerUser, updateUser, getAllUsers, deleteUser };
 };
