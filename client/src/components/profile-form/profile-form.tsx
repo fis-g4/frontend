@@ -25,6 +25,9 @@ export default function ProfileForm() {
     const responsiveDirection = smUp ? 'row' : 'column';
     const responsiveAlign = smUp ? 'flex-start' : 'center';
 
+    function noChanges(userUpdated: any){
+        return userUpdated.firstName === authUser.user?.firstName && userUpdated.lastName === authUser.user?.lastName && userUpdated.email === authUser.user?.email && userUpdated.profilePicture === authUser.user?.profilePicture && userUpdated.currentPassword === '' && userUpdated.newPassword === '';
+    }
 
     const formik = useFormik({
         initialValues: {
@@ -46,22 +49,38 @@ export default function ProfileForm() {
                 currentPassword: values.currentPassword,
                 newPassword: values.newPassword,
             }
-            updateUser(userUpdated).then((response: any) => {
-                if (response.status === 200) {
-                    if (authUser.user){
-                        const finalUser = {
-                            ...authUser.user,
-                            firstName: values.firstName,
-                            lastName: values.lastName,
-                            email: values.email,
-                            profilePicture: values.profilePicture,
+            if (noChanges(userUpdated)){
+                setErrorData('You have not made any changes.');
+                setOpenSnackbar(true);
+            } else{
+                updateUser(userUpdated).then((response: any) => {
+                    if (response.status === 200) {
+                        if (authUser.user){
+                            const finalUser = {
+                                ...authUser.user,
+                                firstName: values.firstName,
+                                lastName: values.lastName,
+                                email: values.email,
+                                profilePicture: values.profilePicture,
+                            }
+                            login(finalUser, authUser.token);
+                            setErrorData('Your profile has been updated successfully.');
+                            setOpenSnackbar(true);
                         }
-                        login(finalUser, authUser.token);
+                    } else{
+                        response.json().then((responseData: any) => {
+                            setErrorData(responseData.error);
+                            setOpenSnackbar(true);
+                        }).catch((_error: any) => {
+                            setErrorData('There was an error updating your profile. Please try again.');
+                            setOpenSnackbar(true);
+                        });
                     }
-                }
-            }).catch((error) => {
-                console.log(error);
-            });
+                }).catch((error) => {
+                    setErrorData('There was an error updating your profile. Please try again.');
+                    setOpenSnackbar(true);
+                });
+            }
         },
         onReset: () => {
             formik.setFieldValue('profilePicture', authUser.user?.profilePicture);

@@ -78,6 +78,9 @@ export const useAuth = () => {
 
     const fetchWithInterceptor = async (url:RequestInfo|URL, options?:RequestInit) =>{
         const response = await fetch(url, options);
+        if (!response.headers.get("Authorization")) {
+            return response;
+        }
         const newToken = response.headers.get("Authorization")?.split("Bearer ")[1].trim();
         if (newToken &&
             newToken !== getItem("token")) {

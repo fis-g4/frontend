@@ -5,7 +5,7 @@ import { useFormik } from "formik";
 import { useAuth } from "../../hooks/useAuth";
 import { useUsersApi } from "../../api/useUsersApi";
 import TransitionSnackbar from "../transition-snackbar/transition-snackbar";
-import { deleteAccount } from "../../utils/schemas";
+import { deleteAccountValidationSchema } from "../../utils/schemas";
 
 export default function SettingsAccount() {
     const { authUser, logout } = useAuth();
@@ -23,7 +23,7 @@ export default function SettingsAccount() {
         initialValues: {
             username: '',
         },
-        validationSchema: deleteAccount(authUser.user?.username || ''),
+        validationSchema: deleteAccountValidationSchema(authUser.user?.username || ''),
         onSubmit: (_values) => {
             deleteUser().then((response) => {
                 if(response.ok) {
@@ -68,6 +68,7 @@ export default function SettingsAccount() {
                 onBlur={formik.handleBlur}
                 error={formik.touched.username && Boolean(formik.errors.username)}
                 helperText={formik.touched.username && formik.errors.username}
+                required
             />
         </Stack>
     );

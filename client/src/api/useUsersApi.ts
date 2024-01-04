@@ -69,6 +69,16 @@ export const useUsersApi = () => {
         );
         return response;
     }
+
+    const resetPassword = async (params: URLSearchParams) => {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}${USERS_BASE_PATH}/reset?${params}`, 
+            { 
+                method: "GET",
+                headers: { "Content-Type": "application/json" },
+            }
+        );
+        return response;
+    }
     
-    return { getUsersMe, loginUser, registerUser, updateUser, getAllUsers, deleteUser };
+    return { getUsersMe, loginUser, registerUser, updateUser, getAllUsers, deleteUser, resetPassword };
 };

@@ -133,10 +133,17 @@ export function createMessageValidationSchema(senderValue: string, subjectValue:
             }),
 })};
 
-export function deleteAccount(usernameValue: string){
+export function deleteAccountValidationSchema(usernameValue: string){
     return Yup.object().shape({
         username: Yup.string().trim()
             .required('The username is required')
             .oneOf([usernameValue], 'The username is not correct')
     });
 }
+
+export const resetPasswordValidationSchema = Yup.object({
+    username: Yup.string().trim()
+        .required('The username is required')
+        .min(3, 'The username must be at least 3 characters long')
+        .max(40, 'The username must be at most 40 characters long'),
+});

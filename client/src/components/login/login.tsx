@@ -21,7 +21,7 @@ import { loginValidationSchema } from '../../utils/schemas';
 import { useUsersApi } from '../../api/useUsersApi';
 import TransitionSnackbar from '../transition-snackbar/transition-snackbar';
 
-export default function LoginView({ handleLoginClose, handleRegisterOpen } : { handleLoginClose: () => void; handleRegisterOpen: () => void }) {
+export default function LoginView({ handleLoginClose, handleRegisterOpen, handleResetPasswordOpen } : { handleLoginClose: () => void; handleRegisterOpen: () => void, handleResetPasswordOpen: () => void }) {
   const theme = useTheme();
 
   const { login } = useAuth();
@@ -43,6 +43,11 @@ export default function LoginView({ handleLoginClose, handleRegisterOpen } : { h
   const handleOpenSnackbar = (error?: string) => {
     setOpenSnackbar(true);
     setErrorData(error || 'There was an error logging in. Please try again.');
+  }
+
+  const handleForgotPassword = () => {
+    handleLoginClose();
+    handleResetPasswordOpen();
   }
 
   const formik = useFormik({
@@ -111,7 +116,7 @@ export default function LoginView({ handleLoginClose, handleRegisterOpen } : { h
         </Stack>
 
         <Stack direction="row" alignItems="center" justifyContent="flex-end" sx={{ my: 3 }}>
-          <Link variant="subtitle2" underline="hover" sx={{ cursor: 'pointer' }}>
+          <Link variant="subtitle2" underline="hover" sx={{ cursor: 'pointer' }} onClick={handleForgotPassword}>
             Forgot password?
           </Link>
         </Stack>
