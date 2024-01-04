@@ -61,6 +61,10 @@ export const useAuth = () => {
                 } else {
                     removeUser();
                 }
+            }).catch((_error) => {
+                setInterval(() => {
+                    removeUser();
+                }, 5000);
             });
         } else {
             removeUser();
