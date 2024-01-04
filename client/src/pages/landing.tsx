@@ -8,6 +8,7 @@ import Footer from '../components/footer/footer'
 import TransitionModal from '../components/transition-modal/transition-modal'
 import LoginView from '../components/login/login'
 import SignupView from '../components/signup/signup'
+import ResetPasswordView from '../components/reset-password/reset-password'
 
 export default function LandingPage() {
     const [loginOpen, setLoginOpen] = useState(false);
@@ -16,6 +17,9 @@ export default function LandingPage() {
     const [registerOpen, setRegisterOpen] = useState(false);
     const handleRegisterOpen = () => setRegisterOpen(true);
     const handleRegisterClose = () => setRegisterOpen(false);
+    const [resetPasswordOpen, setResetPasswordOpen] = useState(false);
+    const handleResetPasswordOpen = () => setResetPasswordOpen(true);
+    const handleResetPasswordClose = () => setResetPasswordOpen(false);
     return (
         <>
             <Helmet>
@@ -27,10 +31,13 @@ export default function LandingPage() {
             <LandingPopularCourses handleRegisterOpen={handleRegisterOpen} />
             <Footer/>
             <TransitionModal open={loginOpen} handleClose={handleLoginClose} sx={{ maxWidth: 500, width: '100%' }}>
-                <LoginView handleLoginClose={handleLoginClose} handleRegisterOpen={handleRegisterOpen} />
+                <LoginView handleLoginClose={handleLoginClose} handleRegisterOpen={handleRegisterOpen} handleResetPasswordOpen={handleResetPasswordOpen} />
             </TransitionModal>
             <TransitionModal open={registerOpen} handleClose={handleRegisterClose} sx={{ maxWidth: 500, width: '100%' }}>
                 <SignupView handleRegisterClose={handleRegisterClose} handleLoginOpen={handleLoginOpen} />
+            </TransitionModal>
+            <TransitionModal open={resetPasswordOpen} handleClose={handleResetPasswordClose} sx={{ maxWidth: 500, width: '100%' }}>
+                <ResetPasswordView handleResetPasswordClose={handleResetPasswordClose} handleLoginOpen={handleLoginOpen} />
             </TransitionModal>
         </>
     )

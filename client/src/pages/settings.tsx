@@ -1,4 +1,6 @@
+import { Typography } from '@mui/material';
 import { Helmet } from 'react-helmet-async';
+import SettingsAccount from '../components/settings-account/settings-account';
 
 
 export default function SettingsPage() {
@@ -8,7 +10,8 @@ export default function SettingsPage() {
         <title> Settings | FIS G4 </title>
       </Helmet>
 
-      <div> Settings Page (for example: the account should be deleted here) </div>
+      <Typography variant="h3" sx={{ marginLeft: '25px', marginTop: '10px' }}> Manage the settings </Typography>
+      <SettingsAccount />    
     </>
   );
 }
