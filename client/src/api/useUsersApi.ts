@@ -39,12 +39,20 @@ export const useUsersApi = () => {
         return response;
     }
 
-    const updateUser = async (user: object) => {
+    const updateUser = async (user: any) => {
+        
+        let formData = new FormData()
+        formData.append("profilePicture", user.profilePicture)
+        delete user.profilePicture
+        for(let key in user){
+            formData.append(key, user[key])
+        }
+        
         const response = await fetchWithInterceptor(`${process.env.REACT_APP_API_URL}${USERS_BASE_PATH}/me`, 
             { 
                 method: "PUT",
-                headers: basicHeaders,
-                body: JSON.stringify(user)
+                headers: { Authorization: `Bearer ${authUser.token}`},
+                body: formData
             }
         );
         return response;

@@ -61,7 +61,7 @@ export default function ProfileForm() {
                                 firstName: values.firstName,
                                 lastName: values.lastName,
                                 email: values.email,
-                                profilePicture: values.profilePicture,
+                                profilePicture: profilePic,
                             }
                             login(finalUser, authUser.token);
                             setErrorData('Your profile has been updated successfully.');
