@@ -126,7 +126,6 @@ export function createMessageValidationSchema(senderValue: string, subjectValue:
             })
             .test('noSender', 'You cannot select yourself as a receiver', (value) => {
                 if (value) {
-                    console.log(senderValue);
                     return !value.includes(senderValue);
                 }
                 return true;

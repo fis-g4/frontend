@@ -28,7 +28,6 @@ export default function Nav({ openNav, onCloseNav } : { openNav: boolean; onClos
   const { authUser } = useAuth();
 
   useEffect(() => {
-    {console.log(authUser.user?.profilePicture)}
     if (openNav) {
       onCloseNav();
     }
