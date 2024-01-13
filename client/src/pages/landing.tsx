@@ -9,10 +9,12 @@ import TransitionModal from '../components/transition-modal/transition-modal'
 import LoginView from '../components/login/login'
 import SignupView from '../components/signup/signup'
 import ResetPasswordView from '../components/reset-password/reset-password'
-import { Box } from '@mui/material'
 import LandingHeroMobile from '../components/landing-hero-mobile/landing-hero-mobile'
+import { useResponsive } from '../hooks/useResponsive'
 
 export default function LandingPage() {
+    const isUpLg = useResponsive('up', 'lg');
+
     const [loginOpen, setLoginOpen] = useState(false);
     const handleLoginOpen = () => setLoginOpen(true);
     const handleLoginClose = () => setLoginOpen(false);
@@ -26,16 +28,12 @@ export default function LandingPage() {
     const [displayMode, setDisplayMode] = useState('desktop')
 
     useEffect(() => {
-
-        if (window.innerWidth > 800) {
+        if (isUpLg) {
             setDisplayMode('desktop')
         }else{
             setDisplayMode('mobile')
         }
-
-        console.log(displayMode)
-
-    }, [])
+    }, [isUpLg])
 
     return (
         <>

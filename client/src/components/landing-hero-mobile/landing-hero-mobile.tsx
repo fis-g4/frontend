@@ -4,9 +4,9 @@ import background from '../../static/backgrounds/fondoMobile.png'
 
 function LandingHeroMobile({
     handleRegisterOpen,
-}: {
+}: Readonly<{
     handleRegisterOpen: () => void
-}) {
+}>) {
     const BIG_LETTERS_FONT_SIZE = '40px'
     const BIG_LETTERS_FONT_FAMILY = 'Verdana'
 
@@ -68,7 +68,8 @@ function LandingHeroMobile({
 
                 <Box
                     width="60%"
-                    height="5%"
+                    maxHeight="50px"
+                    height="100%"
                     borderRadius="25px"
                     boxShadow="1px 1px 21px rgb(96, 148, 119);"
                     bgcolor="rgba(255,255,255,0.4)"
@@ -89,7 +90,6 @@ function LandingHeroMobile({
                 >
                     <Typography
                         sx={{
-
                             color: "rgb(96, 148, 119)",
                             fontWeight: 700,
                             fontSize: '22px',
