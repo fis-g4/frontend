@@ -19,6 +19,7 @@ export default function LandingPopularCourses({ handleRegisterOpen } : { handleR
                 mb={2}
                 sx={{
                     color: theme.palette.primary.main,
+                    fontSize: 'clamp(20px, 1vw, 25px)',
                     fontFamily: 'Verdana',
                 }}
             >
@@ -30,7 +31,7 @@ export default function LandingPopularCourses({ handleRegisterOpen } : { handleR
                 mb={4}
                 sx={{
                     color: theme.palette.grey[700],
-                    fontSize: '2vw',
+                    fontSize: 'clamp(25px, 2vw, 40px)',
                     fontWeight: 900,
                     fontFamily: 'Verdana',
                 }}
@@ -54,7 +55,9 @@ export default function LandingPopularCourses({ handleRegisterOpen } : { handleR
             <Box display="flex" justifyContent="center">
                 <Box
                     width="8vw"
+                    minWidth={250}
                     height="2.5vw"
+                    minHeight={50}
                     borderRadius="25px 25px 25px 0"
                     bgcolor={theme.palette.primary.main}
                     display="flex"
@@ -73,7 +76,8 @@ export default function LandingPopularCourses({ handleRegisterOpen } : { handleR
                         sx={{
                             color: theme.palette.common.white,
                             fontWeight: 400,
-                            fontSize: '0.9vw',
+                            fontSize: 'clamp(20px, 0.9vw, 22px)',
+                            
                             fontFamily: "Verdana",
                         }}
                     >

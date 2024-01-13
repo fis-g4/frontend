@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Helmet } from 'react-helmet-async'
 import LandingHeader from '../components/landing-header/landing-header'
 import LandingHero from '../components/landing-hero/landing-hero'
@@ -9,6 +9,8 @@ import TransitionModal from '../components/transition-modal/transition-modal'
 import LoginView from '../components/login/login'
 import SignupView from '../components/signup/signup'
 import ResetPasswordView from '../components/reset-password/reset-password'
+import { Box } from '@mui/material'
+import LandingHeroMobile from '../components/landing-hero-mobile/landing-hero-mobile'
 
 export default function LandingPage() {
     const [loginOpen, setLoginOpen] = useState(false);
@@ -20,13 +22,33 @@ export default function LandingPage() {
     const [resetPasswordOpen, setResetPasswordOpen] = useState(false);
     const handleResetPasswordOpen = () => setResetPasswordOpen(true);
     const handleResetPasswordClose = () => setResetPasswordOpen(false);
+
+    const [displayMode, setDisplayMode] = useState('desktop')
+
+    useEffect(() => {
+
+        if (window.innerWidth > 800) {
+            setDisplayMode('desktop')
+        }else{
+            setDisplayMode('mobile')
+        }
+
+        console.log(displayMode)
+
+    }, [])
+
     return (
         <>
             <Helmet>
                 <title> Welcome to FIS G4! </title>
             </Helmet>
             <LandingHeader handleLoginOpen={handleLoginOpen} handleRegisterOpen={handleRegisterOpen} />
-            <LandingHero handleRegisterOpen={handleRegisterOpen} />
+            {
+                displayMode === 'desktop' ?
+                <LandingHero handleRegisterOpen={handleRegisterOpen} />
+                :
+                <LandingHeroMobile handleRegisterOpen={handleRegisterOpen} />
+            }
             <LandingTopCategories />
             <LandingPopularCourses handleRegisterOpen={handleRegisterOpen} />
             <Footer/>
