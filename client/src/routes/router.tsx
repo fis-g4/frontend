@@ -48,6 +48,10 @@ export default function Router() {
       element: <Page404 />,
     },
     {
+      path: 'courses2',
+      element: <CoursesPage/>
+    },
+    {
       path: '*',
       element: <Navigate to="/error" replace />,
     },

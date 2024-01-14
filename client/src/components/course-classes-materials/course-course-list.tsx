@@ -15,10 +15,10 @@ import { AuthUserContext } from '../../hooks/useAuth'
 import { longWordInTheText } from '../../utils/format-text'
 import { formatCurrency } from '../../utils/format-currency'
 import React, { useState } from 'react'
-import ReviewOpen from '../review/reviews-courses'
 import TransitionModal from '../transition-modal/transition-modal'
 import Button from '@mui/material/Button'
 import { reviews } from '../../_mocks/reviews'
+import ReviewCoursesOpen from '../review/reviews-courses'
 interface CoursesProps {
     courses: Course[]
     authUser: AuthUserContext
@@ -103,7 +103,7 @@ export default function CourseList({
                                 handleClose={() => handleReviewClose(course.id)}
                                 sx={{ maxWidth: 500, width: '100%' }}
                                 >
-                                <ReviewOpen handleReviewClose={() => handleReviewClose(course.id)} id={course.id} />
+                                <ReviewCoursesOpen handleReviewClose={() => handleReviewClose(course.id)} id={course.id} />
                                 </TransitionModal>
                         </Box>
                         <ListItemIcon>
