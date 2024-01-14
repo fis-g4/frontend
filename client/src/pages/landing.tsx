@@ -9,8 +9,12 @@ import TransitionModal from '../components/transition-modal/transition-modal'
 import LoginView from '../components/login/login'
 import SignupView from '../components/signup/signup'
 import ResetPasswordView from '../components/reset-password/reset-password'
+import LandingHeroMobile from '../components/landing-hero-mobile/landing-hero-mobile'
+import { useResponsive } from '../hooks/useResponsive'
 
 export default function LandingPage() {
+    const isUpLg = useResponsive('up', 'lg');
+
     const [loginOpen, setLoginOpen] = useState(false);
     const handleLoginOpen = () => setLoginOpen(true);
     const handleLoginClose = () => setLoginOpen(false);
@@ -20,13 +24,20 @@ export default function LandingPage() {
     const [resetPasswordOpen, setResetPasswordOpen] = useState(false);
     const handleResetPasswordOpen = () => setResetPasswordOpen(true);
     const handleResetPasswordClose = () => setResetPasswordOpen(false);
+
+
     return (
         <>
             <Helmet>
                 <title> Welcome to FIS G4! </title>
             </Helmet>
             <LandingHeader handleLoginOpen={handleLoginOpen} handleRegisterOpen={handleRegisterOpen} />
-            <LandingHero handleRegisterOpen={handleRegisterOpen} />
+            {
+                isUpLg ?
+                <LandingHero handleRegisterOpen={handleRegisterOpen} />
+                :
+                <LandingHeroMobile handleRegisterOpen={handleRegisterOpen} />
+            }
             <LandingTopCategories />
             <LandingPopularCourses handleRegisterOpen={handleRegisterOpen} />
             <Footer/>
