@@ -1,4 +1,5 @@
-interface Course {
+export interface Course {
+    id: string
     instructor: string
     title: string
     title2: string
@@ -8,10 +9,14 @@ interface Course {
     length: string
     videoCount: string
     videoUrl: string
+    price: number
+    currency: 'USD' | 'EUR'
+    purchasers: string[]
 }
 
 export const courses: Course[] = [
     {
+        id: '1',
         instructor: 'Pro. Andrew Ng',
         title: 'Cloud Computing Mastery',
         title2: 'Cloud Computing Mastery',
@@ -23,8 +28,12 @@ export const courses: Course[] = [
         videoCount: '60+ Video',
         videoUrl:
             'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4',
+        price: 0,
+        currency: 'EUR',
+        purchasers: [],
     },
     {
+        id: '2',
         instructor: 'Pro. Jeff Dean',
         title: 'Matering Data Analysis',
         title2: 'Matering Data Analysis',
@@ -35,8 +44,12 @@ export const courses: Course[] = [
         length: '15hr 30m',
         videoCount: '60+ Video',
         videoUrl: 'https://www.youtube.com/embed/7J4i0xjz7jY',
+        price: 5,
+        currency: 'EUR',
+        purchasers: [],
     },
     {
+        id: '3',
         instructor: 'D. Aaron Courville',
         title: 'Public Speaking for Students',
         title2: 'Public Speaking for Students',
@@ -47,8 +60,12 @@ export const courses: Course[] = [
         length: '15hr 30m',
         videoCount: '60+ Video',
         videoUrl: 'https://www.youtube.com/embed/7J4i0xjz7jY',
+        price: 15,
+        currency: 'EUR',
+        purchasers: [],
     },
     {
+        id: '4',
         instructor: 'Pro. Melanie Mitchell',
         title: 'Programming with Python',
         title2: 'Programming with Python',
@@ -59,8 +76,12 @@ export const courses: Course[] = [
         length: '15hr 30m',
         videoCount: '60+ Video',
         videoUrl: 'https://www.youtube.com/embed/7J4i0xjz7jY',
+        price: 9,
+        currency: 'EUR',
+        purchasers: [],
     },
     {
+        id: '5',
         instructor: 'D. Daphne Koller',
         title: 'Mastering In Cibersecurity',
         title2: 'Mastering In Cibersecurity',
@@ -71,8 +92,12 @@ export const courses: Course[] = [
         length: '15hr 30m',
         videoCount: '60+ Video',
         videoUrl: 'https://www.youtube.com/embed/7J4i0xjz7jY',
+        price: 8,
+        currency: 'EUR',
+        purchasers: [],
     },
     {
+        id: '6',
         instructor: 'Dr. Michael Patel',
         title: 'Cloud Computing Mastery',
         title2: 'Cloud Computing Mastery',
@@ -83,5 +108,8 @@ export const courses: Course[] = [
         length: '15hr 30m',
         videoCount: '60+ Video',
         videoUrl: 'https://www.youtube.com/embed/7J4i0xjz7jY',
+        price: 11,
+        currency: 'EUR',
+        purchasers: [],
     },
 ]
