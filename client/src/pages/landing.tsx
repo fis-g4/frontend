@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Helmet } from 'react-helmet-async'
 import LandingHeader from '../components/landing-header/landing-header'
 import LandingHero from '../components/landing-hero/landing-hero'
@@ -25,15 +25,6 @@ export default function LandingPage() {
     const handleResetPasswordOpen = () => setResetPasswordOpen(true);
     const handleResetPasswordClose = () => setResetPasswordOpen(false);
 
-    const [displayMode, setDisplayMode] = useState('desktop')
-
-    useEffect(() => {
-        if (isUpLg) {
-            setDisplayMode('desktop')
-        }else{
-            setDisplayMode('mobile')
-        }
-    }, [isUpLg])
 
     return (
         <>
@@ -42,7 +33,7 @@ export default function LandingPage() {
             </Helmet>
             <LandingHeader handleLoginOpen={handleLoginOpen} handleRegisterOpen={handleRegisterOpen} />
             {
-                displayMode === 'desktop' ?
+                isUpLg ?
                 <LandingHero handleRegisterOpen={handleRegisterOpen} />
                 :
                 <LandingHeroMobile handleRegisterOpen={handleRegisterOpen} />
