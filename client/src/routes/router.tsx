@@ -6,6 +6,7 @@ import { useAuth } from '../hooks/useAuth';
 import DashboardLayout from '../layouts/dashboard';
 import LandingPage from '../pages/landing';
 import LoadingView from '../sections/loading/loading';
+import React from 'react';
 
 export const HomePage = lazy(() => import('../pages/home'));
 export const ProfilePage = lazy(() => import('../pages/profile'));

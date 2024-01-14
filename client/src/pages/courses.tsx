@@ -10,6 +10,7 @@ import CourseList from '../components/course-classes-materials/course-course-lis
 import { useAuth } from '../hooks/useAuth'
 import { Class, classes } from '../_mocks/classes'
 import { Course, courses } from '../_mocks/courses'
+import React from 'react'
 
 export default function CoursesPage() {
     const [courseMaterials, setCourseMaterials] = useState([] as Material[])

@@ -8,6 +8,7 @@ import TransitionSnackbar from '../transition-snackbar/transition-snackbar';
 import { StyledBadge } from "./styles";
 import { useResponsive } from "../../hooks/useResponsive";
 import { useUsersApi } from "../../api/useUsersApi";
+import React from "react";
 
 export default function ProfileForm() {
     const { authUser, login } = useAuth();
