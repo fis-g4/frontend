@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Card, CardContent, Divider, Typography } from '@mui/material';
-import { Document, Page } from 'react-pdf';
+import React from 'react';
+import { Card, CardContent, Divider, Typography, useTheme, alpha } from '@mui/material';
 interface FileComponentProps {
     title: string;
     description: string;
@@ -12,34 +11,13 @@ const FileComponent: React.FC<FileComponentProps> = ({
     description,
     file,
 }) => {
-    const [isPdf, setIsPdf] = useState(false);
-
-    useEffect(() => {
-        console.log('File:', file);
-        // Intentar cargar el recurso para determinar si es un PDF
-        const fetchData = async () => {
-            try {
-                const response = await fetch(file);
-                const contentType = response.headers.get('content-type');
-
-                // Verificar si el contenido es de tipo PDF
-                setIsPdf(contentType?.toLowerCase().includes('application/pdf') || false);
-            } catch (error) {
-                console.error('Error fetching file:', error);
-            }
-        };
-
-        fetchData();
-    }, [file]);
-
+    const theme = useTheme();
     return (    
         <Card>
         <CardContent>
           <Typography variant="h4">{title}</Typography>
           <Divider sx={{ marginBottom: 1, marginTop: 1 }} />
-          <Typography variant="body1" sx={{ marginBottom: 1 }}>
-            Description: {description}
-          </Typography>
+                              
         <iframe
             src={file}
             width="100%"

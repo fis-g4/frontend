@@ -1,6 +1,6 @@
 // material-details.tsx
 import React, { useEffect, useState } from 'react';
-import { Card, CardContent, Grid, Typography, Divider, Button } from '@mui/material'; // Import the Button component
+import { Card, CardContent, Grid, Typography, Divider, Button,useTheme, alpha  } from '@mui/material';
 import { useParams } from 'react-router-dom';
 import FileComponent from '../components/course-material-details/course-material-details';
 import { Material, materials } from '../_mocks/materials';
@@ -22,7 +22,7 @@ const MaterialDetailsPage = () => {
       }
     };
 
-    getMaterialDetails(); // Llamada a la función dentro del useEffect
+    getMaterialDetails();
   }, [authUser, id]);
 
     const isSmallScreen = useResponsive('down', 'sm')
@@ -34,29 +34,24 @@ const MaterialDetailsPage = () => {
       link.click();
       document.body.removeChild(link);
     };
+    const theme = useTheme();
     return (
       <Grid container spacing={2}>
 
-      <Grid item xs={isSmallScreen ? 12 : 6}>
-
-        <Card>
-          <CardContent>
-          <Typography variant="h4">Material Content</Typography>
-            <Divider sx={{ marginBottom: 1, marginTop: 1 }} />
-            <FileComponent
-              title={materialDetails?.title ?? ''}
-              description={materialDetails?.description ?? ''}
-              file={materialDetails?.file ?? ''}
-            />
-          </CardContent>
-        </Card>
+      <Grid item xs={isSmallScreen ? 12 : 8}>
+        <FileComponent
+          title={materialDetails?.title ?? ''}
+          description={materialDetails?.description ?? ''}
+          file={materialDetails?.file ?? ''}
+        />
       </Grid>
-      <Grid item xs={isSmallScreen ? 12 : 6}>
-        <Card style={{ height: '100%' }}>
+      <Grid item xs={isSmallScreen ? 12 : 4}>
+        <Card >
           <CardContent>
-            <Typography variant="h6">Other Attributes</Typography>
+            <Typography variant="h6">More information:</Typography>
             <Divider sx={{ marginBottom: 1, marginTop: 1 }} />
-            <Typography sx={{ marginBottom: 2 }}>Price: {materialDetails?.currency ?? ''}{materialDetails?.price ?? 0}</Typography>
+            <Typography variant="body2" sx={{ backgroundColor: alpha(theme.palette.grey[500],0.24), color: theme.palette.common.black, padding: 1, borderRadius: '4px', maxHeight: '25em', overflow: 'auto' }}>{materialDetails?.description ?? ''}</Typography> 
+            <Typography sx={{ marginBottom: 2 }}>Price: {materialDetails?.currency ?? ''} {materialDetails?.price ?? 0}</Typography>
             <Typography sx={{ marginBottom: 2 }}>Author: {materialDetails?.author ?? ''}</Typography>
             <Typography sx={{ marginBottom: 2 }}>Type: {materialDetails?.type ?? ''}</Typography>
             <Button variant="contained" color="primary" onClick={handleDownload}>

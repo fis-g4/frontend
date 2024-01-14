@@ -43,8 +43,8 @@ export default function CourseMaterials({
         <Box sx={{ height: '70vh', overflowY: 'auto' }}>
           {materials.map((material) => (
             // Utiliza Link para envolver el área clickeable
-            <Link key={material.id} to={`/material/${material.id}`}>
-              <Card sx={{ my: 1, border: '1px solid', textDecoration: 'none' }}>
+            
+              <Card key={material.id} sx={{ my: 1, border: '1px solid', textDecoration: 'none' }}>
                 <CardContent
                   sx={{
                     display: 'flex',
@@ -52,9 +52,11 @@ export default function CourseMaterials({
                   }}
                 >
                   <Box>
+                  <Link to={`/material/${material.id}`}>
                     <Typography variant="body1">
                       {longWordInTheText(material.title)}
                     </Typography>
+                  </Link>
                     <Typography variant="body2" color="textSecondary">
                       {longWordInTheText(material.description)}
                     </Typography>
@@ -85,7 +87,7 @@ export default function CourseMaterials({
                   </ListItemIcon>
                 </CardContent>
               </Card>
-            </Link>
+           
           ))}
         </Box>
       );
