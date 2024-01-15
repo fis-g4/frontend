@@ -1,4 +1,5 @@
-import { Box, Grid, IconButton, Link, Typography, alpha, useTheme } from "@mui/material"
+import { Box, Grid, IconButton, Typography, alpha, useTheme } from "@mui/material"
+import { Link } from 'react-router-dom';
 import Slack from '../../static/icons/slack.svg';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import PhoneOutlinedIcon from '@mui/icons-material/PhoneOutlined';
@@ -28,21 +29,20 @@ const Footer = () => {
                 <Typography variant="subtitle1" color={letterColor} gutterBottom>
                 DEVELOPMENT
                 </Typography>
-                <Link href={GITHUB_URL} color={letterColor} display="block" style={{textDecoration: "none"}}>Github</Link>
+                <Link to={GITHUB_URL} color={letterColor} style={{textDecoration: "none", display: "block", color: letterColor}}>Github</Link>
             </Grid>
               <Grid item xs={isSmall ? 12 : 3} sm={3} md={2}>
                 <Typography variant="subtitle1" color={letterColor} gutterBottom>
                   PRODUCT
                 </Typography>
-                <Link href="#" color={letterColor} display="block" style={{textDecoration: "none"}}>Pricing</Link>
+                <Link to="#" color={letterColor} style={{textDecoration: "none", display: "block", color: letterColor}}>Pricing</Link>
               </Grid>
               <Grid item xs={isSmall ? 12 : 3} sm={3} md={2}>
                 <Typography variant="subtitle1" color={letterColor} gutterBottom>
                   COMPANY
                 </Typography>
-                <Link href="#" color={letterColor} display="block" style={{textDecoration: "none"}}>About Us</Link>
-                <Link href="#" color={letterColor} display="block" style={{textDecoration: "none"}}>Privacy Policy</Link>
-                <Link href="#" color={letterColor} display="block" style={{textDecoration: "none"}}>Terms of Service</Link>
+                <Link to="#" color={letterColor} style={{textDecoration: "none", display: "block", color: letterColor}}>About Us</Link>
+                <Link to="/contract" color={letterColor} style={{ textDecoration: "none", display: "block", color: letterColor }}> Customer Agreement</Link>
               </Grid>
               <Grid item xs={isSmall ? 12 : 3} sm={3} md={2}>
               <Box textAlign={isSmall ? "center" : "left"}>
@@ -52,14 +52,14 @@ const Footer = () => {
         
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: isSmall ? "center" : "flex-start" }}>
             {/* Email */}
-            <Link href="mailto:fisg4microservices@gmail.com" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center', marginLeft: -2 }}>
+            <Link to="mailto:fisg4microservices@gmail.com" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center', marginLeft: -2 }}>
                 <IconButton style={{ padding: 1 }}>
                     <EmailOutlinedIcon fontSize="large" style={{ color: 'black' }} />
                 </IconButton>
             </Link>
 
             {/* Slack */}
-            <Link href={SLACK_URL}>
+            <Link to={SLACK_URL}>
                 <img src={Slack} alt="Slack Icon" style={{height: 30, marginLeft: 20 ,backgroundColor: 'white', borderRadius: '20%', padding:3}} />
             </Link>
         </div>

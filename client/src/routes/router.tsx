@@ -14,6 +14,8 @@ export const PlansPage = lazy(() => import('../pages/plans'));
 export const MailboxPage = lazy(() => import('../pages/mailbox'));
 export const SettingsPage = lazy(() => import('../pages/settings'));
 export const Page404 = lazy(() => import('../pages/page-not-found'));
+export const ContractPage = lazy(() => import('../pages/contract'));
+
 
 
 export default function Router() {
@@ -38,6 +40,7 @@ export default function Router() {
         { path: 'plans', element: <PlansPage />},
         { path: 'mailbox', element: <MailboxPage />},
         { path: 'settings', element: <SettingsPage /> },
+        { path: 'contract', element: <ContractPage />}
       ],
     },
     {
