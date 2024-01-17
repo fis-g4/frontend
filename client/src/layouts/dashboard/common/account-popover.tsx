@@ -67,7 +67,7 @@ export default function AccountPopover() {
         }}
       >
         <Avatar
-          src={authUser.user?.photoURL || 'assets/images/broken-avatar.svg'}
+          src={authUser.user?.profilePicture || 'assets/images/broken-avatar.svg'}
           alt={authUser.user?.firstName + " " + authUser.user?.lastName}
           sx={{
             width: 36,
@@ -75,7 +75,7 @@ export default function AccountPopover() {
             border: (theme) => `solid 2px ${theme.palette.background.default}`,
           }}
         >
-          {authUser.user?.firstName.charAt(0).toUpperCase() + ' ' + authUser.user?.lastName.charAt(0).toUpperCase()}
+          {(authUser.user?.firstName.charAt(0).toUpperCase() || '') + ' ' + (authUser.user?.lastName.charAt(0).toUpperCase() || '')}
         </Avatar>
       </IconButton>
 

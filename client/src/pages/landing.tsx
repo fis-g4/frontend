@@ -8,29 +8,47 @@ import Footer from '../components/footer/footer'
 import TransitionModal from '../components/transition-modal/transition-modal'
 import LoginView from '../components/login/login'
 import SignupView from '../components/signup/signup'
+import ResetPasswordView from '../components/reset-password/reset-password'
+import LandingHeroMobile from '../components/landing-hero-mobile/landing-hero-mobile'
+import { useResponsive } from '../hooks/useResponsive'
 
 export default function LandingPage() {
+    const isUpLg = useResponsive('up', 'lg');
+
     const [loginOpen, setLoginOpen] = useState(false);
     const handleLoginOpen = () => setLoginOpen(true);
     const handleLoginClose = () => setLoginOpen(false);
     const [registerOpen, setRegisterOpen] = useState(false);
     const handleRegisterOpen = () => setRegisterOpen(true);
     const handleRegisterClose = () => setRegisterOpen(false);
+    const [resetPasswordOpen, setResetPasswordOpen] = useState(false);
+    const handleResetPasswordOpen = () => setResetPasswordOpen(true);
+    const handleResetPasswordClose = () => setResetPasswordOpen(false);
+
+
     return (
         <>
             <Helmet>
                 <title> Welcome to FIS G4! </title>
             </Helmet>
             <LandingHeader handleLoginOpen={handleLoginOpen} handleRegisterOpen={handleRegisterOpen} />
-            <LandingHero handleRegisterOpen={handleRegisterOpen} />
+            {
+                isUpLg ?
+                <LandingHero handleRegisterOpen={handleRegisterOpen} />
+                :
+                <LandingHeroMobile handleRegisterOpen={handleRegisterOpen} />
+            }
             <LandingTopCategories />
             <LandingPopularCourses handleRegisterOpen={handleRegisterOpen} />
             <Footer/>
             <TransitionModal open={loginOpen} handleClose={handleLoginClose} sx={{ maxWidth: 500, width: '100%' }}>
-                <LoginView handleLoginClose={handleLoginClose} handleRegisterOpen={handleRegisterOpen} />
+                <LoginView handleLoginClose={handleLoginClose} handleRegisterOpen={handleRegisterOpen} handleResetPasswordOpen={handleResetPasswordOpen} />
             </TransitionModal>
             <TransitionModal open={registerOpen} handleClose={handleRegisterClose} sx={{ maxWidth: 500, width: '100%' }}>
                 <SignupView handleRegisterClose={handleRegisterClose} handleLoginOpen={handleLoginOpen} />
+            </TransitionModal>
+            <TransitionModal open={resetPasswordOpen} handleClose={handleResetPasswordClose} sx={{ maxWidth: 500, width: '100%' }}>
+                <ResetPasswordView handleResetPasswordClose={handleResetPasswordClose} handleLoginOpen={handleLoginOpen} />
             </TransitionModal>
         </>
     )

@@ -6,6 +6,7 @@ export interface Material {
     currency: 'USD' | 'EUR'
     author: string
     purchasers: string[]
+    courses: string[]
     file: string
     type: 'book' | 'article' | 'presentation' | 'exercises'
 }
@@ -19,6 +20,7 @@ export const materials: Material[] = [
         currency: 'EUR',
         author: 'johndoe',
         purchasers: [],
+        courses: ['1'],
         file: 'https://cran.r-project.org/web/packages/tidyverse/tidyverse.pdf',
         type: 'presentation',
     },
@@ -30,6 +32,7 @@ export const materials: Material[] = [
         currency: 'EUR',
         author: 'johndoe',
         purchasers: [],
+        courses: ['1'],
         file: 'https://elvex.ugr.es/decsai/intelligent/slides/dm/d3%20clustering.pdf',
         type: 'presentation',
     },
@@ -41,6 +44,7 @@ export const materials: Material[] = [
         currency: 'EUR',
         author: 'johndoe',
         purchasers: [],
+        courses: ['1'],
         file: 'https://elvex.ugr.es/decsai/intelligent/slides/dm/d3%20clustering.pdf',
         type: 'presentation',
     },
@@ -52,6 +56,7 @@ export const materials: Material[] = [
         currency: 'EUR',
         author: 'johndoe',
         purchasers: [],
+        courses: [],
         file: 'https://elvex.ugr.es/decsai/intelligent/slides/dm/d3%20clustering.pdf',
         type: 'presentation',
     },
@@ -63,6 +68,7 @@ export const materials: Material[] = [
         currency: 'EUR',
         author: 'johndoe',
         purchasers: [],
+        courses: ['1'],
         file: 'https://elvex.ugr.es/decsai/intelligent/slides/dm/d3%20clustering.pdf',
         type: 'presentation',
     },
@@ -74,6 +80,7 @@ export const materials: Material[] = [
         currency: 'EUR',
         author: 'johndoe',
         purchasers: [],
+        courses: ['1'],
         file: 'https://elvex.ugr.es/decsai/intelligent/slides/dm/d3%20clustering.pdf',
         type: 'presentation',
     },
