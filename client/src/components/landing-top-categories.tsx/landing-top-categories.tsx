@@ -18,6 +18,7 @@ export default function CategorySection() {
                 mb={2}
                 sx={{
                     color: theme.palette.primary.main,
+                    fontSize: 'clamp(20px, 1vw, 25px)',
                     fontFamily: 'Verdana',
                 }}
             >
@@ -29,7 +30,7 @@ export default function CategorySection() {
                 mb={4}
                 sx={{
                     color: theme.palette.grey[700],
-                    fontSize: '2vw',
+                    fontSize: 'clamp(25px, 2vw, 40px)',
                     fontWeight: 900,
                     fontFamily: 'Verdana',
                 }}

@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { TextField, Button, Grid } from '@mui/material'
+import { useState } from 'react'
+import { TextField, Button, Grid, useTheme, alpha } from '@mui/material'
 
 const MaterialFilter = ({ onFilter }: any) => {
     const [titleFilter, setTitleFilter] = useState('')
@@ -13,6 +13,19 @@ const MaterialFilter = ({ onFilter }: any) => {
             upperPrice: upperPriceFilter,
         })
     }
+
+    const resetFilter = () => {
+        setTitleFilter('')
+        setLowerPriceFilter(0)
+        setUpperPriceFilter(100)
+        onFilter({
+            title: '',
+            lowerPrice: 0,
+            upperPrice: 100,
+        })
+    }
+
+    const theme = useTheme()
 
     return (
         <Grid
@@ -62,7 +75,21 @@ const MaterialFilter = ({ onFilter }: any) => {
                 <Button
                     variant="contained"
                     size="large"
-                    color="warning"
+                    sx={{
+                        bgcolor: alpha(theme.palette.error.light, 0.9),
+                        '&:hover': {
+                            bgcolor: alpha(theme.palette.error.main, 0.9),
+                        },
+                        marginRight: 2,
+                    }}
+                    onClick={resetFilter}
+                >
+                    Clear filter
+                </Button>
+                <Button
+                    variant="contained"
+                    size="large"
+                    color="success"
                     onClick={handleFilter}
                 >
                     Filter
