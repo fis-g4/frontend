@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { TextField, Button, Grid, useTheme, alpha } from '@mui/material'
 
 const MaterialFilter = ({ onFilter }: any) => {

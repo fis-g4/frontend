@@ -1,6 +1,5 @@
-import React from 'react'
 import { useResponsive } from '../../hooks/useResponsive'
-import { Box, Grid, Button } from '@mui/material'
+import { Box, Grid, Button, Typography } from '@mui/material'
 import MaterialCard from './material-card'
 import { Material } from '../../_mocks/materials'
 import { UploadFile } from '@mui/icons-material'
@@ -33,6 +32,10 @@ export default function MaterialsFiles({
         console.log('Delete material')
     }
 
+    const responsiveDirection = smUp ? 'row' : 'column'
+
+    const responsiveAlignCard = smUp ? 'flex-start' : 'center'
+
     return (
         <Box mt={5} mb={2}>
             <Box display="flex" justifyContent="center">
@@ -61,16 +64,36 @@ export default function MaterialsFiles({
                             Upload new material
                         </Button>
                     </Grid>
-                    {materials.map((material, index) => (
-                        <Grid item key={index} width="100%" maxWidth="750px">
-                            <MaterialCard
-                                {...material}
-                                onEdit={handleEdit}
-                                onDelete={handleDelete}
-                                smUp={smUp}
-                            />
+                    {materials.length === 0 ? (
+                        <Grid
+                            item
+                            container
+                            justifyContent="center"
+                            alignItems="center"
+                            width="100%"
+                            maxWidth="750px"
+                        >
+                            <Typography variant="h3" align="center">
+                                No materials found
+                            </Typography>
                         </Grid>
-                    ))}
+                    ) : (
+                        materials.map((material, index) => (
+                            <Grid
+                                item
+                                key={index}
+                                width="100%"
+                                maxWidth="750px"
+                            >
+                                <MaterialCard
+                                    {...material}
+                                    onEdit={handleEdit}
+                                    onDelete={handleDelete}
+                                    smUp={smUp}
+                                />
+                            </Grid>
+                        ))
+                    )}
                 </Grid>
             </Box>
         </Box>
