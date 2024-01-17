@@ -9,6 +9,8 @@ import { StyledBadge } from "./styles";
 import { useResponsive } from "../../hooks/useResponsive";
 import { useUsersApi } from "../../api/useUsersApi";
 import React from "react";
+import TransitionModal from "../transition-modal/transition-modal";
+import ReviewUsersOpen from "../review/reviews-users";
 
 export default function ProfileForm() {
     const { authUser, login } = useAuth();
@@ -29,7 +31,20 @@ export default function ProfileForm() {
     function noChanges(userUpdated: any){
         return userUpdated.firstName === authUser.user?.firstName && userUpdated.lastName === authUser.user?.lastName && userUpdated.email === authUser.user?.email && userUpdated.profilePicture === authUser.user?.profilePicture && userUpdated.currentPassword === '' && userUpdated.newPassword === '';
     }
-
+    const [reviewOpenMap, setReviewOpenMap] = useState<{ [key: string]: boolean }>({});
+    const handleReviewOpen = (user: string) => {
+        setReviewOpenMap((prevMap) => ({
+            ...prevMap,
+            [user]: true,
+        }));
+        };
+    
+        const handleReviewClose = (user: string) => {
+        setReviewOpenMap((prevMap) => ({
+            ...prevMap,
+            [user]: false,
+        }));
+        };
     const formik = useFormik({
         initialValues: {
           firstName: authUser.user?.firstName || '',
@@ -161,6 +176,53 @@ export default function ProfileForm() {
                                 <Typography variant="h6" sx={{ color: 'text.secondary' }}>
                                     {authUser.user?.plan} account | {authUser.user?.coinsAmount} coins
                                 </Typography>
+                            </Box>
+                        </Box>
+                        <Box
+                            sx={{
+                                my: 3,
+                                mx: 2.5,
+                                py: 2,
+                                px: 2.5,
+                                display: 'flex',
+                                borderRadius: 1.5,
+                                alignItems: 'center',
+                                bgcolor: (theme) => alpha(theme.palette.grey[500], 0.12),
+                            }}
+                            >
+                            <Box sx={{ mx: 2 }}>
+                            <Button
+                                variant="outlined"
+                                color="secondary"
+                                sx={{ marginRight: '10px' }}
+                                onClick={() => handleReviewOpen(authUser.user?.username || '')}
+                                >
+                                Reviews about me
+                                </Button>
+                                <TransitionModal
+                                key={authUser.user?.username }
+                                open={reviewOpenMap[authUser.user?.username ||''] || false}
+                                handleClose={() => handleReviewClose(authUser.user?.username ||'')}
+                                sx={{ maxWidth: 500, width: '100%' }}
+                                >
+                                <ReviewUsersOpen handleReviewClose={() => handleReviewClose(authUser.user?.username ||'')} user={authUser.user?.username ||''} />
+                                </TransitionModal>
+                            <Button
+                                variant="outlined"
+                                color="secondary"
+                                sx={{ marginRight: '10px' }}
+                                onClick={() => handleReviewOpen(authUser.user?.username || '')}
+                                >
+                                Reviews from me
+                                </Button>
+                                <TransitionModal
+                                key={authUser.user?.username }
+                                open={reviewOpenMap[authUser.user?.username ||''] || false}
+                                handleClose={() => handleReviewClose(authUser.user?.username ||'')}
+                                sx={{ maxWidth: 500, width: '100%' }}
+                                >
+                                <ReviewUsersOpen handleReviewClose={() => handleReviewClose(authUser.user?.username ||'')} user={authUser.user?.username ||''} />
+                                </TransitionModal>
                             </Box>
                         </Box>
                     </Stack>

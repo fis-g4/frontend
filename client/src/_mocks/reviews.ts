@@ -1,5 +1,6 @@
 interface Review {
     user: string
+    creator: string
     title: string
     description: string
     rating: number
@@ -9,20 +10,31 @@ interface Review {
 
 export const reviews: Review[] = [
     {
-        user: 'David',
+        user: '',
         title: 'Me ha gustado el curso',
         description: 'Muy instructivo',
         rating: 5,
         course: 1,
-        material: 'null'
+        material: 'null',
+        creator: 'John'
     },
     {
-        user: 'David',
-        title: 'Me ha parecido una mierda la verdad',
+        user: '',
+        title: 'Me ha parecido malo la verdad',
         description: 'Descripcion de prueba',
         rating: 5,
         course: 1,
-        material: 'null'
+        material: 'null',
+        creator:'Kevin'
+    },
+    {
+        user: 'Kevin',
+        title: 'Me ha parecido una perdida de tiempo la verdad',
+        description: 'Descripcion de prueba',
+        rating: 5,
+        course: 1,
+        material: 'null',
+        creator:'David'
     }
    
 ]
