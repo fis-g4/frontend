@@ -15,9 +15,8 @@ import UserListPagination from './pagination'
 import { useResponsive } from '../../hooks/useResponsive'
 import RouterLink from '../../routes/components/router-link'
 import { useAuth } from '../../hooks/useAuth'
-import { materials } from '../../_mocks/materials'
-import { User, users } from '../../_mocks/users'
 import UsersFilter from '../users-filter/users-filter'
+import { useMaterialsApi } from '../../api/useMaterialsApi'
 
 const USERS_PER_PAGE = 18
 
@@ -25,7 +24,23 @@ interface ListProps {
     materialId: string
 }
 
+// TODO: CHECK THIS
+interface User {
+    id: string
+    photoUrl: string
+    firstName: string
+    lastName: string
+    username: string
+    email: string
+    plan: planEnum
+    coins: number
+}
+
+type planEnum = 'Free' | 'Pro' | 'Premium'
+
 function UserList({ materialId }: Readonly<ListProps>) {
+    const { getMaterialPurchasers } = useMaterialsApi()
+
     const [page, setPage] = useState(1)
     const [materialPurchases, setMaterialPurchases] = useState([] as User[])
     const [error, setError] = useState('')
@@ -61,7 +76,7 @@ function UserList({ materialId }: Readonly<ListProps>) {
             let planMatch
             if (userFilter.plan === 'all') {
                 planMatch = true
-            }else{
+            } else {
                 planMatch = user.plan
                     .toLowerCase()
                     .includes(userFilter.plan.toLowerCase())
@@ -79,35 +94,23 @@ function UserList({ materialId }: Readonly<ListProps>) {
     }, [materialPurchases, userFilter])
 
     useEffect(() => {
-        const getUserByUsername = (username: string) =>
-            users.find((user) => user.username === username)
         const getUsersWhoPurchasedMyMaterial = async () => {
-            const myMaterial = materials.find(
-                (material) =>
-                    material.id === materialId &&
-                    material.author === authUser.user?.username
-            )
-
-            if (myMaterial) {
-                const usersWhoPurchasedMyMaterial = await Promise.all(
-                    myMaterial.purchasers.map(async (username) => {
-                        const user = getUserByUsername(username)
-                        return user
-                    })
-                )
-                setMaterialPurchases(
-                    usersWhoPurchasedMyMaterial.filter(
-                        (user) => user !== undefined
-                    ) as User[]
-                )
-                setError('')
-            } else {
-                setError('You have not purchased any material yet')
+            try {
+                const response = await getMaterialPurchasers(materialId);
+                if (response.ok) {
+                    const usersWhoPurchasedMyMaterial = await response.json();
+                    setMaterialPurchases(usersWhoPurchasedMyMaterial);
+                    setError('');
+                } else {
+                    setError('Error fetching material purchasers');
+                }
+            } catch (error) {
+                setError('An error occurred while fetching material purchasers');
             }
         }
-
-        getUsersWhoPurchasedMyMaterial()
-    }, [authUser, materialId])
+    
+        getUsersWhoPurchasedMyMaterial();
+    }, [authUser, materialId, getMaterialPurchasers]);
 
     const pageCount = Math.ceil(filteredUsers.length / USERS_PER_PAGE)
 
@@ -140,7 +143,7 @@ function UserList({ materialId }: Readonly<ListProps>) {
                 {pageUsers.map((user) => (
                     <Grid item xs={isSmall ? 12 : 6} key={user.id}>
                         <List>
-                            {/*TODO: MODIFICAR LINK */}
+                            {/*TODO: MODIFICAR LINK O ELIMINAR*/}
                             <ListItem
                                 component={RouterLink}
                                 href="/me"

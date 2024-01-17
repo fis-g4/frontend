@@ -1,4 +1,3 @@
-import { json } from 'stream/consumers'
 import { useAuth } from '../hooks/useAuth'
 
 export const CLASSES_BASE_PATH = '/v1/classes'
