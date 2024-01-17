@@ -31,6 +31,11 @@ const navConfig = [
     path: '/courses',
     icon: icon('ic_courses'),
   },
+  {
+    title: 'my materials',
+    path: '/materials',
+    icon: icon('ic_folder'),
+  },
 ];
 
 export default navConfig;
