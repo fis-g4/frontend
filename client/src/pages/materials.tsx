@@ -10,8 +10,6 @@ import usePagination from '../components/pagination/pagination'
 import MaterialFilter from '../components/materials-filter/materials-filter'
 import UserList from '../components/users-list/user-list'
 import CloseIcon from '@mui/icons-material/Close'
-import UsersFilter from '../components/users-filter/users-filter'
-import { User } from '../_mocks/users'
 
 export default function MaterialsPage() {
     const [material, setMaterial] = useState({} as Material)
@@ -142,7 +140,6 @@ export default function MaterialsPage() {
                         setUserMaterials={setUserMaterials}
                         handleNewMaterialOpen={handleNewMaterialOpen}
                         handleUpdateMaterialOpen={handleUpdateMaterialOpen}
-                        handleMaterial={handleMaterial}
                     />
                     <TransitionModal
                         open={newMaterialOpen}
