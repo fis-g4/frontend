@@ -12,6 +12,17 @@ export const useClassesApi = () => {
 
     // ------------------------ GET ROUTES ------------------------
 
+    const getAllClasses = async () => {
+        const response = await fetchWithInterceptor(
+            `${process.env.REACT_APP_API_URL}${CLASSES_BASE_PATH}/`,
+            {
+                method: 'GET',
+                headers: basicHeaders,
+            }
+        )
+        return response
+    }
+
     const getClass = async (id: string) => {
         const response = await fetchWithInterceptor(
             `${process.env.REACT_APP_API_URL}${CLASSES_BASE_PATH}/${id}`,
@@ -84,6 +95,7 @@ export const useClassesApi = () => {
     }
 
     return {
+        getAllClasses,
         getClass,
         uploadClass,
         updateClass,

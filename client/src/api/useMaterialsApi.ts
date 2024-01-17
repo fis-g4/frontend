@@ -12,6 +12,17 @@ export const useMaterialsApi = () => {
 
     // ------------------------ GET ROUTES ------------------------
 
+    const getAllMaterials = async () => {
+        const response = await fetchWithInterceptor(
+            `${process.env.REACT_APP_API_URL}${MATERIALS_BASE_PATH}/`,
+            {
+                method: 'GET',
+                headers: basicHeaders,
+            }
+        )
+        return response
+    }
+
     const getMaterialsMe = async () => {
         const response = await fetchWithInterceptor(
             `${process.env.REACT_APP_API_URL}${MATERIALS_BASE_PATH}/me`,
@@ -140,6 +151,7 @@ export const useMaterialsApi = () => {
     }
 
     return {
+        getAllMaterials,
         getMaterialsMe,
         getMaterialsId,
         getMaterialPurchasers,
