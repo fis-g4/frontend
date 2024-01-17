@@ -12,6 +12,7 @@ import { Class, classes } from '../_mocks/classes'
 import { Course, courses } from '../_mocks/courses'
 import React from 'react'
 
+
 export default function CoursesPage() {
     const [courseMaterials, setCourseMaterials] = useState([] as Material[])
     const [courseClasses, setCourseClasses] = useState([] as Class[])

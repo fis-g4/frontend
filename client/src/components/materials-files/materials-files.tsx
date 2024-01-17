@@ -32,10 +32,6 @@ export default function MaterialsFiles({
         console.log('Delete material')
     }
 
-    const responsiveDirection = smUp ? 'row' : 'column'
-
-    const responsiveAlignCard = smUp ? 'flex-start' : 'center'
-
     return (
         <Box mt={5} mb={2}>
             <Box display="flex" justifyContent="center">
@@ -99,3 +95,5 @@ export default function MaterialsFiles({
         </Box>
     )
 }
+
+
