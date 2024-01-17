@@ -28,6 +28,7 @@ const MaterialDetailsPage = () => {
     const isSmallScreen = useResponsive('down', 'sm')
     const handleDownload = () => {
       const link = document.createElement('a');
+      link.target = '_blank';
       link.href = materialDetails?.file ?? '';
       link.download = materialDetails?.title ?? 'file';
       document.body.appendChild(link);
