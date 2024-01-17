@@ -12,7 +12,7 @@ import ThemeProvider from './theme';
 export default function App() {
   useScrollToTop();
 
-  const [authUser, setAuthUser] = useState<AuthUserContext>({ isAuthenticated: false, user: null, token: "" });
+  const [authUser, setAuthUser] = useState<AuthUserContext>({ isAuthenticated: false, user: null, token: "", isLoading: true });
 
   return (
     <ThemeProvider>

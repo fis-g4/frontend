@@ -1,10 +1,20 @@
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
-import { Typography, ListItemIcon, IconButton, Box } from '@mui/material'
 import { Link } from 'react-router-dom'
+import {
+    Typography,
+    ListItemIcon,
+    IconButton,
+    Box,
+    useTheme,
+    alpha,
+} from '@mui/material'
+
 import { Material } from '../../_mocks/materials'
 import { Download, ShoppingCart } from '@mui/icons-material'
 import { AuthUserContext } from '../../hooks/useAuth'
+import { longWordInTheText } from '../../utils/format-text'
+import { formatCurrency } from '../../utils/format-currency'
 
 interface CourseMaterialsProps {
     materials: Material[]
@@ -26,69 +36,62 @@ export default function CourseMaterials({
         return false
     }
 
-    const longWordInTheText = (text: string) => {
-        const words = text.split(' ')
-        let res_words = []
-        for (const word of words) {
-            if (word.length > 20) {
-                res_words.push(word.slice(0, 20) + '...')
-            } else {
-                res_words.push(word)
-            }
-        }
-        return res_words.join(' ')
-    }
+    const theme = useTheme()
 
     return (
         <Box sx={{ height: '70vh', overflowY: 'auto' }}>
-          {materials.map((material) => (
-            // Utiliza Link para envolver el área clickeable
-            
-              <Card key={material.id} sx={{ my: 1, border: '1px solid', textDecoration: 'none' }}>
-                <CardContent
-                  sx={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                  }}
+            {materials.map((material) => (
+                <Card
+                    key={material.id}
+                    sx={{
+                        my: 1,
+                        border: '1px solid',
+                        backgroundColor: alpha(
+                            theme.palette.primary.light,
+                            0.05
+                        ),
+                    }}
                 >
-                  <Box>
-                  <Link to={`/material/${material.id}`}>
-                    <Typography variant="body1">
-                      {longWordInTheText(material.title)}
-                    </Typography>
-                  </Link>
-                    <Typography variant="body2" color="textSecondary">
-                      {longWordInTheText(material.description)}
-                    </Typography>
-                    <Typography variant="body2" color="primary">
-                      Price: ${material.price}
-                    </Typography>
-                  </Box>
-                  <ListItemIcon>
-                    {
-                      //TODO: Add a check to see if the user has already bought the material
-                    }
-                    {accessToMaterial(material) && (
-                      <IconButton
-                        color="secondary"
-                        href={material.file}
-                        target="_blank"
-                        rel="noreferrer"
-                        download
-                      >
-                        <Download />
-                      </IconButton>
-                    )}
-                    {!accessToMaterial(material) && (
-                      <IconButton>
-                        <ShoppingCart />
-                      </IconButton>
-                    )}
-                  </ListItemIcon>
-                </CardContent>
-              </Card>
-           
-          ))}
+                    <CardContent
+                        sx={{
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                        }}
+                    >
+                        <Box>
+                        <Link to={`/material/${material.id}`}>
+                            <Typography variant="body1">
+                                {longWordInTheText(material.title, 20)}
+                               
+                            </Typography>
+                        </Link>
+                            <Typography variant="body2" color="textSecondary">
+                                {longWordInTheText(material.description, 20)}
+                            </Typography>
+                            <Typography variant="body2" color="primary">
+                                Price: {formatCurrency(material.currency)}{' '}
+                                {material.price}
+                            </Typography>
+                        </Box>
+                        <ListItemIcon>
+                            {accessToMaterial(material) ? (
+                                <IconButton
+                                    href={material.file}
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    download
+                                >
+                                    <Download />
+                                </IconButton>
+                            ) : (
+                                <IconButton>
+                                    <ShoppingCart />
+                                </IconButton>
+                            )}
+                        </ListItemIcon>
+                    </CardContent>
+                </Card>
+            ))}
         </Box>
       );
     }

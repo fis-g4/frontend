@@ -6,11 +6,13 @@ import { useAuth } from '../hooks/useAuth';
 import DashboardLayout from '../layouts/dashboard';
 import LandingPage from '../pages/landing';
 import LoadingView from '../sections/loading/loading';
+import React from 'react';
 
 export const HomePage = lazy(() => import('../pages/home'));
 export const ProfilePage = lazy(() => import('../pages/profile'));
 export const CoursesPage = lazy(() => import('../pages/courses'));
 export const MaterialDetailsPage = lazy(() => import('../pages/material-details'));
+export const MaterialsPage = lazy(() => import('../pages/materials'));
 export const PlansPage = lazy(() => import('../pages/plans'));
 export const MailboxPage = lazy(() => import('../pages/mailbox'));
 export const SettingsPage = lazy(() => import('../pages/settings'));
@@ -23,6 +25,8 @@ export default function Router() {
   const routes = useRoutes([
     {
       element: (
+        authUser.isLoading ?
+        <LoadingView /> :
         authUser.isAuthenticated ?
         <DashboardLayout>
           <Suspense fallback={<LoadingView />}>
@@ -37,6 +41,7 @@ export default function Router() {
         { path: 'me', element: <ProfilePage /> },
         { path: 'courses', element: <CoursesPage /> },
         { path: 'material/:id', element: <MaterialDetailsPage /> },
+        { path: 'materials', element: <MaterialsPage />},
         { path: 'plans', element: <PlansPage />},
         { path: 'mailbox', element: <MailboxPage />},
         { path: 'settings', element: <SettingsPage /> },
