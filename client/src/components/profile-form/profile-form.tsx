@@ -10,7 +10,9 @@ import { useResponsive } from "../../hooks/useResponsive";
 import { useUsersApi } from "../../api/useUsersApi";
 import React from "react";
 import TransitionModal from "../transition-modal/transition-modal";
-import ReviewUsersOpen from "../review/reviews-users";
+import ReviewUsersOpen from "../review/reviews-users-from";
+import ReviewUsersAboutOpen from "../review/reviews-users-about";
+import ReviewUsersFromOpen from "../review/reviews-users-from";
 
 export default function ProfileForm() {
     const { authUser, login } = useAuth();
@@ -31,20 +33,34 @@ export default function ProfileForm() {
     function noChanges(userUpdated: any){
         return userUpdated.firstName === authUser.user?.firstName && userUpdated.lastName === authUser.user?.lastName && userUpdated.email === authUser.user?.email && userUpdated.profilePicture === authUser.user?.profilePicture && userUpdated.currentPassword === '' && userUpdated.newPassword === '';
     }
-    const [reviewOpenMap, setReviewOpenMap] = useState<{ [key: string]: boolean }>({});
-    const handleReviewOpen = (user: string) => {
-        setReviewOpenMap((prevMap) => ({
+    const [reviewOpenMapFrom, setReviewOpenMapFrom] = useState<{ [key: string]: boolean }>({});
+    const [reviewOpenMapAbout, setReviewOpenMapAbout] = useState<{ [key: string]: boolean }>({});
+    const handleReviewOpenFrom = (user: string) => {
+        setReviewOpenMapFrom((prevMap) => ({
             ...prevMap,
             [user]: true,
         }));
         };
     
-        const handleReviewClose = (user: string) => {
-        setReviewOpenMap((prevMap) => ({
+    const handleReviewCloseFrom = (user: string) => {
+        setReviewOpenMapFrom((prevMap) => ({
+        ...prevMap,
+        [user]: false,
+    }));
+    };
+    const handleReviewOpenAbout = (user: string) => {
+        setReviewOpenMapAbout((prevMap) => ({
+            ...prevMap,
+            [user]: true,
+        }));
+        };
+    
+    const handleReviewCloseAbout = (user: string) => {
+        setReviewOpenMapAbout((prevMap) => ({
             ...prevMap,
             [user]: false,
         }));
-        };
+    };
     const formik = useFormik({
         initialValues: {
           firstName: authUser.user?.firstName || '',
@@ -195,33 +211,33 @@ export default function ProfileForm() {
                                 variant="outlined"
                                 color="secondary"
                                 sx={{ marginRight: '10px' }}
-                                onClick={() => handleReviewOpen(authUser.user?.username || '')}
+                                onClick={() => handleReviewOpenAbout(authUser.user?.username || '')}
                                 >
                                 Reviews about me
                                 </Button>
                                 <TransitionModal
                                 key={authUser.user?.username }
-                                open={reviewOpenMap[authUser.user?.username ||''] || false}
-                                handleClose={() => handleReviewClose(authUser.user?.username ||'')}
+                                open={reviewOpenMapAbout[authUser.user?.username ||''] || false}
+                                handleClose={() => handleReviewCloseAbout(authUser.user?.username ||'')}
                                 sx={{ maxWidth: 500, width: '100%' }}
                                 >
-                                <ReviewUsersOpen handleReviewClose={() => handleReviewClose(authUser.user?.username ||'')} user={authUser.user?.username ||''} />
+                                <ReviewUsersAboutOpen user={authUser.user?.username ||''}/>
                                 </TransitionModal>
                             <Button
                                 variant="outlined"
                                 color="secondary"
                                 sx={{ marginRight: '10px' }}
-                                onClick={() => handleReviewOpen(authUser.user?.username || '')}
+                                onClick={() => handleReviewOpenFrom(authUser.user?.username || '')}
                                 >
                                 Reviews from me
                                 </Button>
                                 <TransitionModal
                                 key={authUser.user?.username }
-                                open={reviewOpenMap[authUser.user?.username ||''] || false}
-                                handleClose={() => handleReviewClose(authUser.user?.username ||'')}
+                                open={reviewOpenMapFrom[authUser.user?.username ||''] || false}
+                                handleClose={() => handleReviewCloseFrom(authUser.user?.username ||'')}
                                 sx={{ maxWidth: 500, width: '100%' }}
                                 >
-                                <ReviewUsersOpen handleReviewClose={() => handleReviewClose(authUser.user?.username ||'')} user={authUser.user?.username ||''} />
+                                <ReviewUsersFromOpen  user={authUser.user?.username ||''} />
                                 </TransitionModal>
                             </Box>
                         </Box>

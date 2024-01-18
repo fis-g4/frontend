@@ -5,7 +5,7 @@ interface Review {
     description: string
     rating: number
     course: number
-    material: string
+    material: number
 }
 
 export const reviews: Review[] = [
@@ -15,8 +15,8 @@ export const reviews: Review[] = [
         description: 'Muy instructivo',
         rating: 5,
         course: 1,
-        material: 'null',
-        creator: 'John'
+        material: 0,
+        creator: 'John',
     },
     {
         user: '',
@@ -24,7 +24,7 @@ export const reviews: Review[] = [
         description: 'Descripcion de prueba',
         rating: 5,
         course: 1,
-        material: 'null',
+        material: 0,
         creator:'Kevin'
     },
     {
@@ -33,7 +33,43 @@ export const reviews: Review[] = [
         description: 'Descripcion de prueba',
         rating: 5,
         course: 1,
-        material: 'null',
+        material: 0,
+        creator:''
+    },
+    {
+        user: 'Kevin',
+        title: 'Me ha parecido una perdida de tiempo la verdad',
+        description: 'Descripcion de prueba',
+        rating: 5,
+        course: 1,
+        material: 0,
+        creator:''
+    },
+    {
+        user: '',
+        title: 'Me ha parecido una perdida de tiempo la verdad',
+        description: 'Descripcion de prueba',
+        rating: 5,
+        course: 0,
+        material: 0,
+        creator:''
+    },
+    {
+        user: '',
+        title: 'Me ha parecido una real de tiempo la verdad',
+        description: 'Descripcion de prueba',
+        rating: 5,
+        course: 0,
+        material: 0,
+        creator:''
+    },
+    {
+        user: '',
+        title: 'Me ha parecido una perdida de tiempo la verdad',
+        description: 'Descripcion de prueba',
+        rating: 5,
+        course: 1,
+        material: 0,
         creator:'David'
     }
    

@@ -8,7 +8,7 @@ import { useTheme } from '@mui/material/styles';
 import TransitionSnackbar from '../transition-snackbar/transition-snackbar';
 import { reviews } from '../../_mocks/reviews';
 
-export default function ReviewUsersOpen({ handleReviewClose, user }: { handleReviewClose: () => void; user: string }) {
+export default function ReviewUsersAboutOpen({  user}: { user: string}) {
     const theme = useTheme();
     const [openSnackbar, setOpenSnackbar] = useState(false);
     const [errorData, setErrorData] = useState('');
@@ -22,20 +22,19 @@ export default function ReviewUsersOpen({ handleReviewClose, user }: { handleRev
         setSelectedReviewIndex((prevIndex) => (prevIndex - 1 + courseReviews.length) % courseReviews.length);
     };
 
-    const handleGetStarted = () => {
-        handleReviewClose();
-    };
 
     const handleCloseSnackbar = () => {
         setOpenSnackbar(false);
     };
+    let courseReviews = [];
 
-    const handleForgotPassword = () => {
-        handleReviewClose();
-    };
+       // console.log('Es sobre mi');
+        //courseReviews = reviews.filter((review) => review.user.toString() === user);
 
-    const courseReviews = reviews.filter((review) => review.user.toString() === user);
-    console.log(courseReviews.length);
+        console.log('Es de mi');
+        courseReviews = reviews.filter((review) => review.user.toString() === user && review.course === 0 && review.material === 0);
+
+
 
     return (
         <>
