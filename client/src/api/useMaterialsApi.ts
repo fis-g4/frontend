@@ -46,7 +46,6 @@ export const useMaterialsApi = () => {
     }
 
     const getMaterialPurchasers = async (id: string) => {
-        console.log(basicHeaders)
         const response = await fetchWithInterceptor(
             `${process.env.REACT_APP_API_URL}${MATERIALS_BASE_PATH}/${id}/users`,
             {
