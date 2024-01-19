@@ -65,7 +65,6 @@ export const useMaterialsApi = () => {
         price: number,
         currency: string,
         author: string,
-        purchasers: string[],
         file: string,
         type: string
     ) => {
@@ -80,7 +79,6 @@ export const useMaterialsApi = () => {
                     price: price,
                     currency: currency,
                     author: author,
-                    purchasers: purchasers,
                     file: file,
                     type: type,
                 }),
@@ -129,7 +127,7 @@ export const useMaterialsApi = () => {
         const response = await fetchWithInterceptor(
             `${process.env.REACT_APP_API_URL}${MATERIALS_BASE_PATH}/${materialId}`,
             {
-                method: 'POST',
+                method: 'PUT',
                 headers: { Authorization: `Bearer ${authUser.token}` },
                 body: formData,
             }

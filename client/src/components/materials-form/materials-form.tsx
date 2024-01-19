@@ -18,6 +18,7 @@ import { bgGradient } from '../../theme/css'
 import { useTheme } from '@mui/material/styles'
 import { CloudUpload } from '@mui/icons-material'
 import { Material } from '../../_mocks/materials'
+import { useMaterialsApi } from '../../api/useMaterialsApi'
 
 const currencies = [
     {
@@ -67,6 +68,8 @@ export default function MaterialView({
     const { authUser } = useAuth()
     const smUp = useResponsive('up', 'sm')
 
+    const { uploadMaterial, updateMaterial } = useMaterialsApi()
+
     const fileInput = useRef<HTMLInputElement>(null)
     const [openSnackbar, setOpenSnackbar] = useState(false)
     const [errorData, setErrorData] = useState('')
@@ -87,8 +90,65 @@ export default function MaterialView({
             type: material?.type ?? '',
         },
         validationSchema: uploadMaterialValidationSchema,
-        onSubmit: (values) => {
-            alert(JSON.stringify(values, null, 2))
+        onSubmit: (values: any) => {
+            let materialValues = {
+                title: values.title,
+                description: values.description,
+                price: values.price,
+                currency: values.currency,
+                author: values.author,
+                file: values.file,
+                type: values.type,
+            }
+            if (noChanges(materialValues)) {
+                setErrorData('You have not made any changes.')
+                setOpenSnackbar(true)
+            } else {
+                if (operation === 'create') {
+                    uploadMaterial(
+                        materialValues.title,
+                        materialValues.description,
+                        materialValues.price,
+                        materialValues.currency,
+                        materialValues.author,
+                        materialValues.file,
+                        materialValues.type
+                    )
+                        .then((response) => {
+                            if (response.ok) {
+                                setErrorData('Material uploaded successfully.')
+                                setOpenSnackbar(true)
+                            } else {
+                                setErrorData('Error uploading material.')
+                                setOpenSnackbar(true)
+                            }
+                        })
+                        .catch((error) => {
+                            setErrorData('Error uploading material.')
+                            setOpenSnackbar(true)
+                        })
+                } else if (operation === 'update') {
+                    if (material?.id === undefined) {
+                        setErrorData('Error updating material.')
+                        setOpenSnackbar(true)
+                        return
+                    }
+                    updateMaterial(materialValues, material.id)
+                        .then((response) => {
+                            if (response.ok) {
+                                setErrorData('Material updated successfully.')
+                                setOpenSnackbar(true)
+                            } else {
+                                setErrorData('Error updating material.')
+                                setOpenSnackbar(true)
+                            }
+                        })
+                        .catch((error) => {
+                            setErrorData('Error updating material.')
+                            setOpenSnackbar(true)
+                        })
+                }
+            }
         },
         onReset: () => {
             formik.setFieldValue('file', material?.file ?? '')
@@ -108,6 +168,17 @@ export default function MaterialView({
         setErrorData(error)
     }
 
+    function noChanges(materialUpdated: any) {
+        return (
+            materialUpdated.title === material?.title &&
+            materialUpdated.description === material?.description &&
+            materialUpdated.price === material?.price &&
+            materialUpdated.currency === material?.currency &&
+            materialUpdated.type === material?.type &&
+            materialUpdated.file === material?.file
+        )
+    }
+
     useEffect(() => {
         if (formik.errors.file) {
             formik.setFieldValue('file', '')
@@ -115,7 +186,7 @@ export default function MaterialView({
             if (fileInput.current) {
                 fileInput.current.value = ''
             }
-            handleOpenSnackbar(formik.errors.file)
+            handleOpenSnackbar(formik.errors.file.toString())
         }
     }, [formik.errors.file])
 

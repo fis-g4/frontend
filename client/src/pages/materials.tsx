@@ -10,7 +10,8 @@ import usePagination from '../components/pagination/pagination'
 import MaterialFilter from '../components/materials-filter/materials-filter'
 import UserList from '../components/users-list/user-list'
 import CloseIcon from '@mui/icons-material/Close'
-import UsersFilter from '../components/users-filter/users-filter'
+import { useMaterialsApi } from '../api/useMaterialsApi'
+
 interface User {
     id: string
     photoUrl: string
@@ -25,6 +26,8 @@ interface User {
 type planEnum = 'Free' | 'Pro' | 'Premium'
 
 export default function MaterialsPage() {
+    const { getMaterialsMe } = useMaterialsApi()
+
     const [material, setMaterial] = useState({} as Material)
     const [userMaterials, setUserMaterials] = useState([] as Material[])
 
@@ -32,6 +35,9 @@ export default function MaterialsPage() {
 
     const handleMaterial = (id: string, title: string) =>
         setMaterialDetails([id, title])
+
+    const [error, setError] = useState('')
+    const { authUser } = useAuth()
 
     const [newMaterialOpen, setNewMaterialOpen] = useState(false)
     const [updateMaterialOpen, setUpdateMaterialOpen] = useState(false)
@@ -55,6 +61,25 @@ export default function MaterialsPage() {
     }
 
     useEffect(() => {
+        const getMyMaterials = async () => {
+            try {
+                const response = await getMaterialsMe()
+                if (response.ok) {
+                    const myMaterials = await response.json()
+                    setUserMaterials(myMaterials)
+                    setError('')
+                } else {
+                    setError('Error fetching your materials')
+                }
+            } catch (error) {
+                setError('An error occurred while fetching your materials')
+            }
+        }
+
+        getMyMaterials()
+    }, [authUser, getMaterialsMe])
+
+    useEffect(() => {
         const filtered = userMaterials.filter((material) => {
             const titleMatch = material.title
                 .toLowerCase()
@@ -62,10 +87,16 @@ export default function MaterialsPage() {
             if (materialFilter.lowerPrice && !materialFilter.upperPrice) {
                 const priceMatch = material.price >= materialFilter.lowerPrice
                 return titleMatch && priceMatch
-            } else if (!materialFilter.lowerPrice && materialFilter.upperPrice) {
+            } else if (
+                !materialFilter.lowerPrice &&
+                materialFilter.upperPrice
+            ) {
                 const priceMatch = material.price <= materialFilter.upperPrice
                 return titleMatch && priceMatch
-            } else if (!materialFilter.lowerPrice && !materialFilter.upperPrice) {
+            } else if (
+                !materialFilter.lowerPrice &&
+                !materialFilter.upperPrice
+            ) {
                 return titleMatch
             } else {
                 const priceMatch =
@@ -77,8 +108,6 @@ export default function MaterialsPage() {
 
         setFilteredMaterials(filtered)
     }, [userMaterials, materialFilter])
-
-    const { authUser } = useAuth()
 
     useEffect(() => {
         const getMaterials = async () => {
@@ -141,7 +170,6 @@ export default function MaterialsPage() {
                                 <CloseIcon />
                             </IconButton>
                         </Box>
-
                     </Box>
                 )}
             </Box>
