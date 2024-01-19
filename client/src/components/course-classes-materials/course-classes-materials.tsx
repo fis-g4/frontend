@@ -7,6 +7,7 @@ import {
   Divider,
   ToggleButtonGroup,
   ToggleButton,
+  MenuItem,
 } from '@mui/material';
 
 import { AuthUserContext } from '../../hooks/useAuth';
@@ -14,42 +15,49 @@ import { Class } from '../../_mocks/classes';
 import { Material } from '../../_mocks/materials';
 import CourseClasses from './course-classes';
 import CourseMaterials from './course-materials';
+import { Course } from '../../_mocks/courses';
 
 interface CourseClassesMaterialsProps {
   classes: Class[];
   materials: Material[];
   authUser: AuthUserContext;
   handleSelectedClass: (class_: Class) => void;
+  course:Course;
 }
 
 export default function CourseClassesMaterials({
   classes,
   materials,
   authUser,
-  handleSelectedClass,
+  handleSelectedClass, 
+  course
 }: Readonly<CourseClassesMaterialsProps>) {
   const [contentType, setContentType] = useState('classes');
-  
   const [reviewType, setReviewType] = useState('user');
+  const [selectedMaterial, setSelectedMaterial] = useState<Material | null>(null);
   const [reviewFormData, setReviewFormData] = useState({
-    type:reviewType,
+    type: reviewType,
     title: '',
-    user:'',
-    course_id:'',
-    material_id:'',
     description: '',
     rating: 1,
+    course: 0,
+    material: 0,
+    creator: '',
   });
+
   const handleReviewType = (type: string) => {
     setReviewType(type);
-    // Cambiar el título según el tipo de revisión
     setReviewFormData((prevFormData) => ({
       ...prevFormData,
-      type: type,  // Asegúrate de actualizar el tipo de revisión
       title: '',
     }));
   };
-  
+
+  const handleMaterialChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+    const materialId = event.target.value;
+    const selectedMaterial = materials.find((material) => material.id === materialId) || null;
+    setSelectedMaterial(selectedMaterial);
+  };
 
   const handleButton = (event: React.MouseEvent<HTMLElement>, type: string | null) => {
     if (type === 'classes') {
@@ -66,10 +74,36 @@ export default function CourseClassesMaterials({
       [name]: name === 'rating' ? Math.max(1, Math.min(5, parseInt(value, 10))) : value,
     }));
   };
-  
+
   const handleReviewSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log('Formulario enviado:', reviewFormData);
+
+    let dataToSend: any = {
+      type: reviewType,
+      title: reviewFormData.title,
+      description: reviewFormData.description,
+      rating: reviewFormData.rating,
+      creator: reviewFormData.creator,
+    };
+
+    if (reviewType === 'user') {
+      dataToSend = {
+        ...dataToSend,
+        user: authUser.user?.id || '',
+      };
+    } else if (reviewType === 'course') {
+      dataToSend = {
+        ...dataToSend,
+        course: course.id ,
+      };
+    } else if (reviewType === 'material' && selectedMaterial) {
+      dataToSend = {
+        ...dataToSend,
+        material: selectedMaterial.id,
+      };
+    }
+
+    console.log('Formulario enviado:', dataToSend);
     // Puedes enviar los datos a tu API o realizar otras acciones aquí
   };
 
@@ -78,10 +112,10 @@ export default function CourseClassesMaterials({
       <Card
         sx={{
           border: 'none',
-          marginBottom: '20px', // Añadir margen inferior
+          marginBottom: '20px',
         }}
       >
-        <CardContent sx={{ height: '50vh' }}>
+        <CardContent sx={{ height: '55vh' }}>
           <ToggleButtonGroup
             value={contentType}
             exclusive
@@ -116,7 +150,7 @@ export default function CourseClassesMaterials({
         fullWidth
         color="primary"
       >
-       <ToggleButton value="user" aria-label="user">
+        <ToggleButton value="user" aria-label="user">
           Usuario
         </ToggleButton>
         <ToggleButton value="course" aria-label="course">
@@ -125,10 +159,27 @@ export default function CourseClassesMaterials({
         <ToggleButton value="material" aria-label="material">
           Material
         </ToggleButton>
-      </ToggleButtonGroup> 
+      </ToggleButtonGroup>
+
+      {reviewType === 'material' && (
+        <TextField
+          fullWidth
+          select
+          label="Choose a material"
+          name="material"
+          value={selectedMaterial ? selectedMaterial.id : ''}
+          onChange={handleMaterialChange}
+          margin="normal"
+        >
+          {materials.map((material) => (
+            <MenuItem key={material.id} value={material.id}>
+              {material.title}
+            </MenuItem>
+          ))}
+        </TextField>
+      )}
 
       <form onSubmit={handleReviewSubmit} style={{ marginTop: '20px' }}>
-        
         <TextField
           fullWidth
           label="Title"
@@ -153,7 +204,7 @@ export default function CourseClassesMaterials({
           onChange={handleReviewFormChange}
           margin="normal"
           multiline
-          rows={4}
+          rows={1}
         />
         <TextField
           fullWidth
@@ -166,7 +217,7 @@ export default function CourseClassesMaterials({
           inputProps={{ min: '1', max: '5' }}
         />
         <Button type="submit" variant="contained" color="primary" sx={{ mt: 2 }}>
-          Enviar Revisión
+          Send review
         </Button>
       </form>
     </>
