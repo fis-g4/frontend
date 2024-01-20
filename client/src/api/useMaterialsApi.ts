@@ -46,7 +46,6 @@ export const useMaterialsApi = () => {
     }
 
     const getMaterialPurchasers = async (id: string) => {
-        console.log(basicHeaders)
         const response = await fetchWithInterceptor(
             `${process.env.REACT_APP_API_URL}${MATERIALS_BASE_PATH}/${id}/users`,
             {
@@ -64,24 +63,27 @@ export const useMaterialsApi = () => {
         description: string,
         price: number,
         currency: string,
-        author: string,
         file: string,
         type: string
     ) => {
+        const postHeaders = {
+            Authorization: `Bearer ${authUser.token}`,
+        }
+
+        const formData = new FormData()
+        formData.append('title', title)
+        formData.append('description', description)
+        formData.append('price', price.toString())
+        formData.append('currency', currency)
+        formData.append('type', type)
+        formData.append('file', file)
+
         const response = await fetchWithInterceptor(
-            `${process.env.REACT_APP_API_URL}${MATERIALS_BASE_PATH}/`,
+            `${process.env.REACT_APP_API_URL}${MATERIALS_BASE_PATH}`,
             {
                 method: 'POST',
-                headers: basicHeaders,
-                body: JSON.stringify({
-                    title: title,
-                    description: description,
-                    price: price,
-                    currency: currency,
-                    author: author,
-                    file: file,
-                    type: type,
-                }),
+                headers: postHeaders,
+                body: formData,
             }
         )
         return response

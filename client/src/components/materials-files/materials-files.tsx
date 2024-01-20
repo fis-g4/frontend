@@ -12,12 +12,14 @@ export default function MaterialsFiles({
     handleNewMaterialOpen,
     handleUpdateMaterialOpen,
     handleMaterial,
+    handleRefresh,
 }: Readonly<{
     materials: Material[]
     setUserMaterials: (materials: Material[]) => void
     handleNewMaterialOpen: () => void
     handleUpdateMaterialOpen: (material: Material) => void
     handleMaterial: (id: string, title: string) => void
+    handleRefresh: () => void
 }>) {
     const smUp = useResponsive('up', 'sm')
 
@@ -30,7 +32,6 @@ export default function MaterialsFiles({
         const material = materials.find((material) => material.id === id)
         if (!material) return //TODO: REVIEW
         handleUpdateMaterialOpen(material)
-        console.log('Edit material')
     }
 
     const handleDelete = (id: string) => {
