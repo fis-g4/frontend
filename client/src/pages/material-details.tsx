@@ -6,20 +6,26 @@ import FileComponent from '../components/course-material-details/course-material
 import { Material, materials } from '../_mocks/materials';
 import { useResponsive } from '../hooks/useResponsive';
 import { useAuth } from '../hooks/useAuth'
+import { useMaterialsApi } from '../api/useMaterialsApi'
 const MaterialDetailsPage = () => {
   const { id } = useParams();
   const [materialDetails, setMaterialDetails] = useState<Material | null>(null);
   const { authUser } = useAuth()
-
+  const { getMaterialsId } = useMaterialsApi()
   useEffect(() => {
-    // Obtener los detalles del material usando el ID
+    
     const getMaterialDetails = async () => {
-      // Buscar el material por ID
-      const foundMaterial = materials.find((material) => material.id === id);
-
-      if (foundMaterial) {
-        setMaterialDetails(foundMaterial);
-      }
+      try{
+        const response = await getMaterialsId(id ?? '');
+        if (response.ok) {
+          const foundMaterial: Material = await response.json();
+          setMaterialDetails(foundMaterial);
+        }else{
+          console.error('Error fetching material by id:', response.status, response.statusText);
+        }
+      }catch(error){
+        console.error('An error occurred while fetching material details:', error);
+      }  
     };
 
     getMaterialDetails();

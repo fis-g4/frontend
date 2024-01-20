@@ -9,11 +9,13 @@ export default function MaterialsFiles({
     setUserMaterials,
     handleNewMaterialOpen,
     handleUpdateMaterialOpen,
+    handleMaterial,
 }: Readonly<{
     materials: Material[]
     setUserMaterials: (materials: Material[]) => void
     handleNewMaterialOpen: () => void
     handleUpdateMaterialOpen: (material: Material) => void
+    handleMaterial: (id: string, title: string) => void
 }>) {
     const smUp = useResponsive('up', 'sm')
 
@@ -86,6 +88,7 @@ export default function MaterialsFiles({
                                     onEdit={handleEdit}
                                     onDelete={handleDelete}
                                     smUp={smUp}
+                                    handleMaterial={handleMaterial}
                                 />
                             </Grid>
                         ))

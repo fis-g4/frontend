@@ -17,7 +17,6 @@ import { formatCurrency } from '../../utils/format-currency'
 import React, { useState } from 'react'
 import TransitionModal from '../transition-modal/transition-modal'
 import Button from '@mui/material/Button'
-import { reviews } from '../../_mocks/reviews'
 import ReviewCoursesOpen from '../review/reviews-courses'
 interface CoursesProps {
     courses: Course[]
