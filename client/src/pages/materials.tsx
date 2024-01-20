@@ -10,6 +10,19 @@ import usePagination from '../components/pagination/pagination'
 import MaterialFilter from '../components/materials-filter/materials-filter'
 import UserList from '../components/users-list/user-list'
 import CloseIcon from '@mui/icons-material/Close'
+import UsersFilter from '../components/users-filter/users-filter'
+interface User {
+    id: string
+    photoUrl: string
+    firstName: string
+    lastName: string
+    username: string
+    email: string
+    plan: planEnum
+    coins: number
+}
+
+type planEnum = 'Free' | 'Pro' | 'Premium'
 
 export default function MaterialsPage() {
     const [material, setMaterial] = useState({} as Material)
@@ -140,6 +153,7 @@ export default function MaterialsPage() {
                         setUserMaterials={setUserMaterials}
                         handleNewMaterialOpen={handleNewMaterialOpen}
                         handleUpdateMaterialOpen={handleUpdateMaterialOpen}
+                        handleMaterial={handleMaterial}
                     />
                     <TransitionModal
                         open={newMaterialOpen}

@@ -8,12 +8,26 @@ import { Material, materials } from '../_mocks/materials'
 import CourseClassesMaterials from '../components/course-classes-materials/course-classes-materials'
 import CourseList from '../components/course-classes-materials/course-course-list'
 import { useAuth } from '../hooks/useAuth'
-import { Class, classes } from '../_mocks/classes'
+//import { Class, classes } from '../_mocks/classes'
 import { Course, courses } from '../_mocks/courses'
 import React from 'react'
+import { useClassesApi } from '../api/useClassesApi'
+import { useMaterialsApi } from '../api/useMaterialsApi'
 
+interface Class {
+    id: string
+    title: string
+    description: string
+    order: number
+    file: string
+    course: string
+}
 
 export default function CoursesPage() {
+
+    const { getAllClasses } = useClassesApi()
+    const { getAllMaterials } = useMaterialsApi()
+    
     const [courseMaterials, setCourseMaterials] = useState([] as Material[])
     const [courseClasses, setCourseClasses] = useState([] as Class[])
     const [_courses, setCourses] = useState([] as Course[])
@@ -33,17 +47,42 @@ export default function CoursesPage() {
 
     useEffect(() => {
         const getMaterials = async () => {
-            const getUserMaterials = materials.filter((material) =>
-                material.courses.includes(COURSE_ID)
-            )
-            setCourseMaterials(getUserMaterials)
-        }
+            try {
+                const response = await getAllMaterials();
+        
+                if (response.ok) {
+                    const allMaterials: Material[] = await response.json();
+                    const getUserMaterials = allMaterials.filter(
+                        (material) => material.courses.includes(COURSE_ID)
+                    );
+                    setCourseMaterials(getUserMaterials);
+                } else {
+                    console.error('Error fetching materials:', response.status, response.statusText); //TODO: A MODIFICAR POR EL MICROSERVICIO DE CURSOS
+                }
+            } catch (error) {
+                console.error('An error occurred while fetching materials:', error); //TODO: A MODIFICAR POR EL MICROSERVICIO DE CURSOS
+            }
+        };
+
         const getClasses = async () => {
-            const getUserClasses = classes.filter(
-                (class_) => class_.course === COURSE_ID
-            )
-            setCourseClasses(getUserClasses)
-        }
+            try {
+                const response = await getAllClasses();
+        
+                if (response.ok) {
+                    const allClasses: Class[] = await response.json();
+                    const getUserClasses = allClasses.filter(
+                        (class_) => class_.course === COURSE_ID //TODO: A MODIFICAR POR EL MICROSERVICIO DE CURSOS
+                    );
+                    setCourseClasses(getUserClasses);
+                } else {
+                    console.error('Error fetching classes:', response.status, response.statusText); //TODO: PONER UN ERROR POR PANTALLA A LO MEJOR
+                }
+            } catch (error) {
+
+                console.error('An error occurred while fetching classes:', error); //TODO: PONER UN ERROR POR PANTALLA A LO MEJOR
+            }
+        };
+
         const getCourses = async () => {
             const getAllCourses = courses
             setCourses(getAllCourses)
@@ -51,7 +90,7 @@ export default function CoursesPage() {
         getMaterials()
         getClasses()
         getCourses()
-    }, [authUser])
+    }, [authUser, getAllClasses, getAllMaterials])
 
     const isSmallScreen = useResponsive('down', 'md')
 
