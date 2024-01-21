@@ -21,7 +21,7 @@ export interface AuthUser {
     coinsAmount: number;
 }
   
-type planEnum = "Free" | "Pro" | "Premium";
+type planEnum = "Basic" | "Advanced" | "Pro";
 
 export const useAuth = () => {
     const { authUser, setAuthUser } = useContext(AuthContext);

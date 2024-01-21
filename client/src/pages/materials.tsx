@@ -22,7 +22,7 @@ interface User {
     coins: number
 }
 
-type planEnum = 'Free' | 'Pro' | 'Premium'
+type planEnum = 'Basic' | 'Advanced' | 'Pro'
 
 export default function MaterialsPage() {
     const [material, setMaterial] = useState({} as Material)
