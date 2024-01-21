@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Grid, Typography, IconButton } from '@mui/material'
+import { Grid, Typography, IconButton, Button } from '@mui/material'
 import { ArrowBack } from '@mui/icons-material'
 import { Helmet } from 'react-helmet-async'
 import VideoComponent from '../components/course-lesson-details/course-lesson-details'
@@ -10,9 +10,11 @@ import CourseList from '../components/course-classes-materials/course-course-lis
 import { useAuth } from '../hooks/useAuth'
 //import { Class, classes } from '../_mocks/classes'
 import { Course, courses } from '../_mocks/courses'
-import React from 'react'
 import { useClassesApi } from '../api/useClassesApi'
 import { useMaterialsApi } from '../api/useMaterialsApi'
+import TransitionModal from '../components/transition-modal/transition-modal'
+import ClassView from '../components/classes-form/classes-form'
+import { text } from 'stream/consumers'
 
 interface Class {
     id: string
@@ -21,13 +23,19 @@ interface Class {
     order: number
     file: string
     course: string
+    creator: string
 }
 
 export default function CoursesPage() {
 
     const { getAllClasses } = useClassesApi()
     const { getAllMaterials } = useMaterialsApi()
-    
+
+    const [newClassOpen, setNewClassOpen] = useState(false)
+    const handleNewClassOpen = () => setNewClassOpen(true)
+    const handleNewClassClose = () => setNewClassOpen(false)
+    const [modalVisible, setModalVisible] = useState(false)
+
     const [courseMaterials, setCourseMaterials] = useState([] as Material[])
     const [courseClasses, setCourseClasses] = useState([] as Class[])
     const [_courses, setCourses] = useState([] as Course[])
@@ -44,6 +52,15 @@ export default function CoursesPage() {
     const handleSelectedCourse = (course: Course) => {
         setSelectedCourse(course)
     }
+
+    //TODO: AÑADIR FUNCIÓN PARA OBTENER UN CURSO (MICROSERVICIO DE CURSOS)
+    /*TODO: AÑADIR CHECK DE SI EL USUARIO ES EL INSTRUCTOR DEL CURSO*/
+    /*
+    if(authUser.user?.username === course.instructor){
+        setModalVisible(true)
+    }
+    */
+
 
     useEffect(() => {
         const getMaterials = async () => {
@@ -145,7 +162,23 @@ export default function CoursesPage() {
                                 </Typography>
                             )}
                         </Grid>
+                        
                         <Grid item xs={isSmallScreen ? 12 : 5}>
+                            <Button
+                                color= "primary"
+                                variant="contained"
+                                type="submit"
+                                onClick={() => handleNewClassOpen()}
+                            >
+                                Add new class
+                            </Button>
+                            <TransitionModal
+                                open={newClassOpen}
+                                handleClose={handleNewClassClose}
+                                sx={{ maxWidth: 500, width: '100%' }}
+                                > 
+                            <ClassView operation="create" />
+                            </TransitionModal>
                             <CourseClassesMaterials
                                 classes={courseClasses}
                                 materials={courseMaterials}
