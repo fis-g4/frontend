@@ -17,7 +17,7 @@ export interface Course {
 export const courses: Course[] = [
     {
         id: '1',
-        instructor: 'Pro. Andrew Ng',
+        instructor: 'ivan',
         title: 'Cloud Computing Mastery',
         title2: 'Cloud Computing Mastery',
         description:

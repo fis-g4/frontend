@@ -11,27 +11,41 @@ from '@mui/material'
 import { useAuth } from '../../hooks/useAuth'
 import { useEffect, useRef, useState } from 'react'
 import { useFormik } from 'formik'
-import { uploadMaterialValidationSchema } from '../../utils/schemas'
+import { uploadClassValidationSchema } from '../../utils/schemas'
 import TransitionSnackbar from '../transition-snackbar/transition-snackbar'
 import { useResponsive } from '../../hooks/useResponsive'
 import { bgGradient } from '../../theme/css'
 import { useTheme } from '@mui/material/styles'
 import { CloudUpload } from '@mui/icons-material'
 import { Class } from '../../_mocks/classes'
-
+import { useClassesApi } from '../../api/useClassesApi'
 interface UpdateClassViewProps {
     _class?: Class
     operation: 'create' | 'update'
+    creator: string
+    course: string
+    handleRefresh: () => void
+    handleNewClassClose?: () => void
+    handleUpdateClassClose?: () => void
+    handleFullyOpenSnackbar: (error: string) => void
 }
 
 export default function ClassView({
     _class,
     operation,
+    creator,
+    course,
+    handleRefresh,
+    handleNewClassClose,
+    handleUpdateClassClose,
+    handleFullyOpenSnackbar,
 }: Readonly<UpdateClassViewProps>) {
     let fileName: string = ''
     if (_class) {
         fileName = _class.file?.split('/').pop() ?? ''
     }
+
+    const { uploadClass, updateClass } = useClassesApi()
 
     const theme = useTheme()
     const { authUser } = useAuth()
@@ -40,7 +54,8 @@ export default function ClassView({
     const fileInput = useRef<HTMLInputElement>(null)
     const [openSnackbar, setOpenSnackbar] = useState(false)
     const [errorData, setErrorData] = useState('')
-    const [fileUploaded, setFileUploaded] = useState(fileName)
+    const [fileUploaded, setFileUploaded] = useState('')
+    const [fileUploadedName, setFileUploadedName] = useState(fileName)
     const responsiveDirection = smUp ? 'row' : 'column'
 
     const uploadButtonColor = fileUploaded !== '' ? 'secondary' : 'primary'
@@ -52,19 +67,81 @@ export default function ClassView({
             order: _class?.order ?? '',
             description: _class?.description ?? '',
             creator: authUser.user?.username,
-            course: _class?.course ?? '',
+            course: course ?? '',
             file: _class?.file ?? '',
         },
-        validationSchema: uploadMaterialValidationSchema,
+        validationSchema: uploadClassValidationSchema,
         onSubmit: (values) => {
-            alert(JSON.stringify(values, null, 2))
+            let classesValues = {
+                title: values.title,
+                description: values.description,
+                order: values.order,
+                file: values.file,
+                course: course,
+                creator: values.creator
+            }
+            if (noChanges(classesValues)) {
+                setErrorData('You have not made any changes.')
+                setOpenSnackbar(true)
+            } else {
+                if (operation === 'create') {
+                    uploadClass(
+                        classesValues.title,
+                        classesValues.description,
+                        classesValues.order.toString(),
+                        classesValues.creator || '',
+                        classesValues.course,
+                        classesValues.file
+                    )             
+                        .then((response) => {
+                            if (response.ok) {
+                                handleNewClassClose?.()
+                                handleFullyOpenSnackbar(
+                                    'Class uploaded successfully.'
+                                )
+                                handleRefresh()
+                            } else {
+                                setErrorData('Error uploading class.')
+                                setOpenSnackbar(true)
+                                console.log(response.json())
+
+                            }
+                        })
+                        .catch((error) => {
+                            console.log(error)
+                            setErrorData('Error uploading class.')
+                            setOpenSnackbar(true)
+                        })
+                } else if (operation === 'update') {
+                    if (_class?.id === undefined) {
+                        setErrorData('Error updating class.')
+                        setOpenSnackbar(true)
+                        return
+                    }
+                    updateClass(classesValues, _class.id)
+                        .then((response) => {
+                            if (response.ok) {
+                                handleUpdateClassClose?.()
+                                handleFullyOpenSnackbar(
+                                    'Class updated successfully.'
+                                )
+                                handleRefresh()
+                            } else {
+                                setErrorData('Error updating class.')
+                                setOpenSnackbar(true)
+                            }
+                        })
+                        .catch((error) => {
+                            setErrorData('Error updating class.')
+                            setOpenSnackbar(true)
+                        })
+                }
+            }
         },
         onReset: () => {
             formik.setFieldValue('file', _class?.file ?? '')
-            setFileUploaded(fileName)
-            if (fileInput.current) {
-                fileInput.current.value = ''
-            }
+            setFileUploaded(_class?.file ?? '')
+            setFileUploadedName(fileName)
         },
     })
 
@@ -77,10 +154,22 @@ export default function ClassView({
         setErrorData(error)
     }
 
+    function noChanges(classUpdated: any) {
+        return (
+            classUpdated.title === _class?.title &&
+            classUpdated.description === _class?.description &&
+            classUpdated.order === _class?.order &&
+            classUpdated.creator === _class?.creator &&
+            classUpdated.course === _class?.course &&
+            classUpdated.file === _class?.file
+        )
+    }
+
     useEffect(() => {
         if (formik.errors.file) {
             formik.setFieldValue('file', '')
             setFileUploaded('')
+            setFileUploadedName('')
             if (fileInput.current) {
                 fileInput.current.value = ''
             }
@@ -187,10 +276,13 @@ export default function ClassView({
                             if (e.target.files && e.target.files[0]) {
                                 let file = e.target.files[0]
                                 let blob = file.slice(0, file.size, file.type)
+                                
                                 let newFile = new File([blob], file.name, {
                                     type: file.type,
+                                    
                                 })
-                                setFileUploaded(newFile.name)
+                                setFileUploaded(URL.createObjectURL(newFile))
+                                setFileUploadedName(newFile.name)
                                 formik.setFieldValue('file', newFile)
                             }
                         }}
@@ -224,8 +316,8 @@ export default function ClassView({
                         disabled={!formik.isValid}
                     >
                         {operation === 'create'
-                            ? 'Upload material'
-                            : 'Update material'}
+                            ? 'Upload class'
+                            : 'Update class'}
                     </Button>
                 </Stack>
             </Stack>

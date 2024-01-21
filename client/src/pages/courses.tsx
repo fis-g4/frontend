@@ -30,18 +30,24 @@ export default function CoursesPage() {
 
     const { getAllClasses } = useClassesApi()
     const { getAllMaterials } = useMaterialsApi()
-
-    const [newClassOpen, setNewClassOpen] = useState(false)
-    const handleNewClassOpen = () => setNewClassOpen(true)
-    const handleNewClassClose = () => setNewClassOpen(false)
+    const [refreshKey, setRefreshKey] = useState(true)
     const [modalVisible, setModalVisible] = useState(false)
-
+    const [class_, setClass] = useState<Class | null>(null)
     const [courseMaterials, setCourseMaterials] = useState([] as Material[])
     const [courseClasses, setCourseClasses] = useState([] as Class[])
     const [_courses, setCourses] = useState([] as Course[])
     const [selectedClass, setSelectedClass] = useState<Class | null>()
     const [selectedCourse, setSelectedCourse] = useState<Course | null>()
 
+    const [newClassOpen, setNewClassOpen] = useState(false)
+    const [updateClassOpen, setUpdateClassOpen] = useState(false)
+    const handleNewClassOpen = () => setNewClassOpen(true)
+    const handleNewClassClose = () => setNewClassOpen(false)
+    const handleUpdateClassOpen = (_class: Class) => {
+        setClass(_class)
+        setUpdateClassOpen(true)
+    }
+    const handleUpdateClassClose = () => setUpdateClassOpen(false)
     const COURSE_ID = '1'
     const { authUser } = useAuth()
 
@@ -52,6 +58,25 @@ export default function CoursesPage() {
     const handleSelectedCourse = (course: Course) => {
         setSelectedCourse(course)
     }
+
+    const [error, setError] = useState('')
+    const [errorData, setErrorData] = useState('')
+    const [openSnackbar, setOpenSnackbar] = useState(false)
+
+    const handleCloseSnackbar = () => {
+        setOpenSnackbar(false)
+    }
+
+    const handleOpenSnackbar = (errorData: string) => {
+        setErrorData(errorData)
+        setOpenSnackbar(true)
+    }
+
+    const handleRefresh = () => {
+        setRefreshKey(true)
+    }
+
+    const CourseId = "615e2f3b1d9f9b2b4c9e9b1a"
 
     //TODO: AÑADIR FUNCIÓN PARA OBTENER UN CURSO (MICROSERVICIO DE CURSOS)
     /*TODO: AÑADIR CHECK DE SI EL USUARIO ES EL INSTRUCTOR DEL CURSO*/
@@ -74,10 +99,10 @@ export default function CoursesPage() {
                     );
                     setCourseMaterials(getUserMaterials);
                 } else {
-                    console.error('Error fetching materials:', response.status, response.statusText); //TODO: A MODIFICAR POR EL MICROSERVICIO DE CURSOS
+                    //console.error('Error fetching materials:', response.status, response.statusText); //TODO: A MODIFICAR POR EL MICROSERVICIO DE CURSOS
                 }
             } catch (error) {
-                console.error('An error occurred while fetching materials:', error); //TODO: A MODIFICAR POR EL MICROSERVICIO DE CURSOS
+                //console.error('An error occurred while fetching materials:', error); //TODO: A MODIFICAR POR EL MICROSERVICIO DE CURSOS
             }
         };
 
@@ -104,10 +129,13 @@ export default function CoursesPage() {
             const getAllCourses = courses
             setCourses(getAllCourses)
         }
-        getMaterials()
-        getClasses()
-        getCourses()
-    }, [authUser, getAllClasses, getAllMaterials])
+        if (authUser.user && refreshKey) {
+            getMaterials()
+            getClasses()
+            getCourses()
+            setRefreshKey(false)
+        }
+    }, [authUser, getAllClasses, getAllMaterials, refreshKey])
 
     const isSmallScreen = useResponsive('down', 'md')
 
@@ -177,7 +205,15 @@ export default function CoursesPage() {
                                 handleClose={handleNewClassClose}
                                 sx={{ maxWidth: 500, width: '100%' }}
                                 > 
-                            <ClassView operation="create" />
+                            
+                            <ClassView
+                            operation="create"
+                            course={CourseId}
+                            creator= {authUser.user?.username ?? ''}
+                            handleRefresh={handleRefresh}
+                            handleNewClassClose={handleNewClassClose}
+                            handleFullyOpenSnackbar={handleOpenSnackbar}
+                            />
                             </TransitionModal>
                             <CourseClassesMaterials
                                 classes={courseClasses}

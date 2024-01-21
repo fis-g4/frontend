@@ -40,20 +40,26 @@ export const useClassesApi = () => {
         title: string,
         description: string,
         order: string,
+        creator: string,
+        courseId: string,
         file: string,
-        courseId: string
     ) => {
+        const postHeaders = {
+            Authorization: `Bearer ${authUser.token}`,
+        }
+        const formData = new FormData()
+        formData.append('title', title)
+        formData.append('order', order)
+        formData.append('description', description)
+        formData.append('creator', creator)
+        formData.append('courseId', courseId)
+        formData.append('file', file)
         const response = await fetchWithInterceptor(
             `${process.env.REACT_APP_API_URL}${CLASSES_BASE_PATH}/course/${courseId}`,
             {
                 method: 'POST',
-                headers: basicHeaders,
-                body: JSON.stringify({
-                    title: title,
-                    description: description,
-                    order: order,
-                    file: file,
-                }),
+                headers: postHeaders,
+                body: formData,
             }
         )
         return response
