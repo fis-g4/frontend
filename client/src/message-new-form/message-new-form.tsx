@@ -10,7 +10,7 @@ import Logo from '../components/logo/logo';
 import { bgGradient } from '../theme/css';
 import SendIcon from '@mui/icons-material/Send';
 import SearchIcon from "@mui/icons-material/Search";
-import { Avatar, Chip, Icon, InputAdornment, ListSubheader, MenuItem, SelectChangeEvent, Theme, setRef } from '@mui/material';
+import { Avatar, Chip, Icon, InputAdornment, ListSubheader, MenuItem, SelectChangeEvent, Theme } from '@mui/material';
 import { useEffect, useMemo, useState } from 'react';
 import { useAuth } from '../hooks/useAuth';
 import { createMessageValidationSchema } from '../utils/schemas';

@@ -84,7 +84,7 @@ export default function Nav({ openNav, onCloseNav } : { openNav: boolean; onClos
           <Typography variant="h6">Want more?</Typography>
 
           <Typography variant="body2" sx={{ color: 'text.secondary', mt: 1 }}>
-            From only {authUser.user?.plan.toLowerCase().trim() === 'basic' ? '$4.99/month' : '$29.99/month'}
+            From only {authUser.user?.plan.toLowerCase().trim() === 'basic' ? '9.99€/month' : '19.99€/month'}
           </Typography>
         </Box>
 
