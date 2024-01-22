@@ -39,6 +39,7 @@ export default function CoursesPage() {
     }
 
     const handleSelectedCourse = (course: Course) => {
+        console.log(selectedCourse)
         setSelectedCourse(course)
     }
     
@@ -97,7 +98,7 @@ export default function CoursesPage() {
             <TransitionModal open={newCourseOpen} handleClose={handleNewCourseClose} sx={{ maxWidth: 500, width: '100%' }}>
                 <NewCourseView handleNewCourseClose={handleNewCourseClose} />
             </TransitionModal>
-            {!selectedCourse?.id ? (
+            {!selectedCourse ? (
                 <div>
                     <IconButton
                         color="primary"
