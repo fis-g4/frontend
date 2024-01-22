@@ -13,7 +13,7 @@ export interface Material {
 
 export const materials: Material[] = [
     {
-        id: '1',
+        id: '615e2f3b1d9f9b2b4c9e9b20',
         title: 'Introducción a Tidyverse',
         description: 'Breve introducción a la librería Tidyverse de R',
         price: 19.99,
@@ -25,7 +25,7 @@ export const materials: Material[] = [
         type: 'presentation',
     },
     {
-        id: '2',
+        id: '615e2f3b1d9f9b2b4c9e9b21',
         title: 'Tarea clustering',
         description: 'Tarea de clustering de la asignatura de FID',
         price: 39.99,
@@ -37,7 +37,7 @@ export const materials: Material[] = [
         type: 'presentation',
     },
     {
-        id: '3',
+        id: '615e2f3b1d9f9b2b4c9e9b22',
         title: 'Tarea clustering 2',
         description: 'Tarea de clustering de la asignatura de FID',
         price: 39.99,
@@ -49,7 +49,7 @@ export const materials: Material[] = [
         type: 'presentation',
     },
     {
-        id: '4',
+        id: '615e2f3b1d9f9b2b4c9e9b23',
         title: 'Tarea clustering 3',
         description: 'Tarea de clustering de la asignatura de FID',
         price: 39.99,
@@ -61,7 +61,7 @@ export const materials: Material[] = [
         type: 'presentation',
     },
     {
-        id: '5',
+        id: '615e2f3b1d9f9b2b4c9e9b24',
         title: 'Tarea clustering 4',
         description: 'Tarea de clustering de la asignatura de FID',
         price: 39.99,

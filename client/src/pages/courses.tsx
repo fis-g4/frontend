@@ -95,7 +95,7 @@ export default function CoursesPage() {
                 if (response.ok) {
                     const allMaterials: Material[] = await response.json();
                     const getUserMaterials = allMaterials.filter(
-                        (material) => material.courses.includes(COURSE_ID)
+                        (material) => material.courses.includes(CourseId)
                     );
                     setCourseMaterials(getUserMaterials);
                 } else {
@@ -113,7 +113,7 @@ export default function CoursesPage() {
                 if (response.ok) {
                     const allClasses: Class[] = await response.json();
                     const getUserClasses = allClasses.filter(
-                        (class_) => class_.course === COURSE_ID //TODO: A MODIFICAR POR EL MICROSERVICIO DE CURSOS
+                        (class_) => class_.course === CourseId //TODO: A MODIFICAR POR EL MICROSERVICIO DE CURSOS
                     );
                     setCourseClasses(getUserClasses);
                 } else {

@@ -1,10 +1,12 @@
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
 import { Typography, Box, IconButton, useTheme, alpha } from '@mui/material'
-
+import { Download, Edit, Delete } from '@mui/icons-material'
 import { Class } from '../../_mocks/classes'
 import { OndemandVideo } from '@mui/icons-material'
 import { longWordInTheText } from '../../utils/format-text'
+import { set } from 'date-fns'
+import { useState } from 'react'
 
 interface CourseClassesProps {
     classes: Class[]
@@ -15,9 +17,21 @@ export default function CourseClasses({
     classes,
     handleSelectedClass,
 }: Readonly<CourseClassesProps>) {
-    const sortedClasses = [...classes].sort((a, b) => a.order - b.order)
 
+    const [sortedClasses, setSortedClasses] = useState([...classes].sort((a, b) => a.order - b.order));
     const theme = useTheme()
+
+    const onEdit = (id: string) => {
+        const _class = classes.find((_class) => _class.id === id)
+        if (!_class) return 
+        console.log('Edit class')
+    }
+
+    const onDelete = (id: string) => {
+        const newClasses = classes.filter((_class) => _class.id !== id)
+        setSortedClasses([...newClasses].sort((a, b) => a.order - b.order));
+        console.log('Delete class')
+    }
 
     return (
         <Box sx={{ height: '70vh', overflowY: 'auto' }}>
@@ -59,6 +73,12 @@ export default function CourseClasses({
                                     {longWordInTheText(_class.description, 20)}
                                 </Typography>
                             </Box>
+                            <IconButton color="warning" onClick={() => onEdit(_class.id)}>
+                                <Edit />
+                            </IconButton>
+                            <IconButton color="error" onClick={() => onDelete(_class.id)}>
+                                <Delete />
+                            </IconButton>
                         </Box>
                     </CardContent>
                 </Card>

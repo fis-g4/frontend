@@ -10,7 +10,7 @@ export interface Class {
 
 export const classes: Class[] = [
     {
-        id: '1',
+        id: '615e2f3b1d9f9b2b4c9e9b4f',
         title: 'Introducción a Tidyverse',
         description: 'Breve introducción a la librería Tidyverse de R',
         order: 1,
