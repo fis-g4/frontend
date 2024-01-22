@@ -1,3 +1,6 @@
+import { Material } from '../../_mocks/materials'
+import CourseMaterials from './course-materials'
+import { AuthUserContext } from '../../hooks/useAuth'
 import React, { useState } from 'react';
 import {
   TextField,
@@ -7,14 +10,12 @@ import {
   Divider,
   ToggleButtonGroup,
   ToggleButton,
-  MenuItem,
+  MenuItem
 } from '@mui/material';
 
-import { AuthUserContext } from '../../hooks/useAuth';
+
 import { Class } from '../../_mocks/classes';
-import { Material } from '../../_mocks/materials';
 import CourseClasses from './course-classes';
-import CourseMaterials from './course-materials';
 import { Course } from '../../_mocks/courses';
 
 interface CourseClassesMaterialsProps {
