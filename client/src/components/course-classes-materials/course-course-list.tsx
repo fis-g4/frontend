@@ -49,7 +49,7 @@ export default function CourseList({
     const accessToCourse = (course: Course) => {
         if (
             course.price === 0 ||
-            course.purchasers.includes(authUser.user?.username as string)
+            course.access.includes(authUser.user?.username as string)
         ) {
             return true
         }
@@ -80,13 +80,13 @@ export default function CourseList({
                     >
                         <Box>
                             <Typography variant="body1">
-                                {longWordInTheText(course.title, 20)}
+                                {longWordInTheText(course.name, 20)}
                             </Typography>
                             <Typography variant="body2" color="textSecondary">
                                 {longWordInTheText(course.description, 20)}
                             </Typography>
                             <Typography variant="body2" color="primary">
-                                Price: {formatCurrency(course.currency)}{' '}
+                                Price: 
                                 {course.price}
                             </Typography>
                             <Button
