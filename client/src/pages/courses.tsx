@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react'
 import { Grid, Typography, IconButton } from '@mui/material'
-import { ArrowBack } from '@mui/icons-material'
+import { ArrowBack, Add } from '@mui/icons-material'
 import { Helmet } from 'react-helmet-async'
 import VideoComponent from '../components/course-lesson-details/course-lesson-details'
 import { useResponsive } from '../hooks/useResponsive'
 
+import TransitionModal from '../components/transition-modal/transition-modal'
+import NewCourseView from '../components/course-classes-materials/course-form'
 import { useCoursesApi } from '../api/useCoursesApi'
 
 import { Material, materials } from '../_mocks/materials'
@@ -16,6 +18,9 @@ import { Course } from '../_mocks/courses'
 import React from 'react'
 
 export default function CoursesPage() {
+    const [newCourseOpen, setNewCourseOpen] = useState(false);
+    const handleNewCourseOpen = () => setNewCourseOpen(true);
+    const handleNewCourseClose = () => setNewCourseOpen(false);
     const [openSnackbar, setOpenSnackbar] = useState(false);
     const [errorData, setErrorData] = useState('');
     const [courseMaterials, setCourseMaterials] = useState([] as Material[])
@@ -89,8 +94,17 @@ export default function CoursesPage() {
             <Helmet>
                 <title> Courses | FIS G4 </title>
             </Helmet>
+            <TransitionModal open={newCourseOpen} handleClose={handleNewCourseClose} sx={{ maxWidth: 500, width: '100%' }}>
+                <NewCourseView handleNewCourseClose={handleNewCourseClose} />
+            </TransitionModal>
             {!selectedCourse?.id ? (
                 <div>
+                    <IconButton
+                        color="primary"
+                        onClick={() => handleNewCourseOpen()}
+                    >
+                        <Add />
+                    </IconButton>
                     <Typography variant="h4" align="center">
                         Select a course to start
                     </Typography>
