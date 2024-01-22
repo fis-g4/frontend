@@ -135,6 +135,7 @@ export default function CoursesPage() {
                                 classes={courseClasses}
                                 materials={courseMaterials}
                                 authUser={authUser}
+                                course= {selectedCourse}
                                 handleSelectedClass={handleSelectedClass}
                             />
                         </Grid>
