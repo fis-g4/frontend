@@ -10,7 +10,7 @@ import Logo from '../components/logo/logo';
 import { bgGradient } from '../theme/css';
 import SendIcon from '@mui/icons-material/Send';
 import SearchIcon from "@mui/icons-material/Search";
-import { Avatar, Chip, Icon, InputAdornment, ListSubheader, MenuItem, SelectChangeEvent, Theme, setRef } from '@mui/material';
+import { Avatar, Chip, Icon, InputAdornment, ListSubheader, MenuItem, SelectChangeEvent, Theme } from '@mui/material';
 import { useEffect, useMemo, useState } from 'react';
 import { useAuth } from '../hooks/useAuth';
 import { createMessageValidationSchema } from '../utils/schemas';
@@ -19,6 +19,8 @@ import TransitionSnackbar from '../components/transition-snackbar/transition-sna
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
+const RECEIVERS_CAPACITY_LIMIT = {"BASIC": 1, "ADVANCED": 10, "PRO": 10000000}
+
 const MenuProps = {
   PaperProps: {
     style: {
@@ -87,7 +89,7 @@ export default function MessageNewForm({ usersList, messageId, receiversValue, s
       subject: subjectValue || '',
       message: messagesValue || '',
     },
-    validationSchema: createMessageValidationSchema(authUser.user?.username || '', subjectValue, messagesValue, messageReal),
+    validationSchema: createMessageValidationSchema(authUser.user?.username || '', subjectValue, messagesValue, messageReal, RECEIVERS_CAPACITY_LIMIT[authUser.user?.plan || 'BASIC']),
     onSubmit: (values) => {
         if (messageId){
           updateMessage(messageId, values.subject, values.message).then((response) => {

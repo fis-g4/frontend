@@ -13,6 +13,20 @@ import CloseIcon from '@mui/icons-material/Close'
 import { useMaterialsApi } from '../api/useMaterialsApi'
 import LoadingView from '../sections/loading/loading'
 import TransitionSnackbar from '../components/transition-snackbar/transition-snackbar'
+import UsersFilter from '../components/users-filter/users-filter'
+
+interface User {
+    id: string
+    photoUrl: string
+    firstName: string
+    lastName: string
+    username: string
+    email: string
+    plan: planEnum
+    coins: number
+}
+
+type planEnum = 'BASIC' | 'ADVANCED' | 'PRO'
 
 export default function MaterialsPage() {
     const { getMaterialsMe } = useMaterialsApi()

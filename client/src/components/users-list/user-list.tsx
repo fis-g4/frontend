@@ -36,7 +36,7 @@ interface User {
     coins: number
 }
 
-type planEnum = 'Free' | 'Pro' | 'Premium'
+type planEnum = 'BASIC' | 'ADVANCED' | 'PRO'
 
 function UserList({ materialId }: Readonly<ListProps>) {
     const { getMaterialPurchasers } = useMaterialsApi()
@@ -102,7 +102,12 @@ function UserList({ materialId }: Readonly<ListProps>) {
                     setMaterialPurchases(usersWhoPurchasedMyMaterial);
                     setError('');
                 } else {
-                    setError('Error fetching material purchasers');
+                    const errorResponse = await response.json();
+                    if (errorResponse && errorResponse.error) {
+                        setError(`${response.status}: ${errorResponse.error}`);
+                    } else {
+                        setError(`${response.status}: Error fetching material purchasers`);
+                    }
                 }
             } catch (error) {
                 setError('An error occurred while fetching material purchasers');
@@ -129,86 +134,92 @@ function UserList({ materialId }: Readonly<ListProps>) {
     const isSmall = useResponsive('down', 'md')
     const theme = useTheme()
 
-    if (error) {
-        return <div>{error}</div>
-    }
     return (
         <div>
-            <Grid
-                container
-                spacing={2}
-                justifyContent={isSmall ? 'center' : 'flex-start'}
-            >
-                <UsersFilter onFilter={handleUserFilterChange} />
-                {pageUsers.map((user) => (
-                    <Grid item xs={isSmall ? 12 : 6} key={user.id}>
-                        <List>
-                            {/*TODO: MODIFICAR LINK O ELIMINAR*/}
-                            <ListItem
-                                component={RouterLink}
-                                href="/me"
-                                sx={{
-                                    textDecoration: 'none',
-                                    color: 'inherit',
-                                    borderRadius: 3,
-                                    backgroundColor: alpha(
-                                        theme.palette.grey[500],
-                                        0.16
-                                    ),
-                                }}
-                            >
-                                {' '}
-                                <ListItemAvatar>
-                                    <Avatar src={user.photoUrl} />
-                                </ListItemAvatar>
-                                <ListItemText
-                                    primary={
-                                        isSmall ? (
-                                            <Typography noWrap>
-                                                {user.username}
-                                            </Typography>
-                                        ) : (
-                                            <Box
-                                                display="flex"
-                                                alignItems="center"
-                                            >
-                                                <Typography
-                                                    noWrap
-                                                    sx={{ marginRight: 1 }}
-                                                >
-                                                    {user.firstName}{' '}
-                                                </Typography>
-                                                <Typography
-                                                    noWrap
-                                                    sx={{ marginRight: 0.5 }}
-                                                >
-                                                    {user.lastName} |{' '}
-                                                </Typography>
-                                                <Typography
-                                                    noWrap
-                                                    sx={{ marginRight: 1 }}
-                                                >
-                                                    {user.username}{' '}
-                                                </Typography>
-                                            </Box>
-                                        )
-                                    }
-                                    secondary={`Plan: ${user.plan} | Email: ${user.email}`}
-                                />
-                            </ListItem>
-                        </List>
+            {error && (
+                <div>
+                    <Typography variant="h6" color="error">
+                        Error: {error}
+                    </Typography>
+                </div>
+            )}
+    
+            {!error && (
+                <div>
+                    <Grid
+                        container
+                        spacing={2}
+                        justifyContent={isSmall ? 'center' : 'flex-start'}
+                    >
+                        <UsersFilter onFilter={handleUserFilterChange} />
+                        {pageUsers.map((user) => (
+                            <Grid item xs={isSmall ? 12 : 6} key={user.id}>
+                                <List>
+                                    <ListItem
+                                        sx={{
+                                            textDecoration: 'none',
+                                            color: 'inherit',
+                                            borderRadius: 3,
+                                            backgroundColor: alpha(
+                                                theme.palette.grey[500],
+                                                0.16
+                                            ),
+                                        }}
+                                    >
+                                        <ListItemAvatar>
+                                            <Avatar src={user.photoUrl} />
+                                        </ListItemAvatar>
+                                        <ListItemText
+                                            primary={
+                                                isSmall ? (
+                                                    <Typography noWrap>
+                                                        {user.username}
+                                                    </Typography>
+                                                ) : (
+                                                    <Box
+                                                        display="flex"
+                                                        alignItems="center"
+                                                    >
+                                                        <Typography
+                                                            noWrap
+                                                            sx={{ marginRight: 1 }}
+                                                        >
+                                                            {user.firstName}{' '}
+                                                        </Typography>
+                                                        <Typography
+                                                            noWrap
+                                                            sx={{ marginRight: 0.5 }}
+                                                        >
+                                                            {user.lastName} |{' '}
+                                                        </Typography>
+                                                        <Typography
+                                                            noWrap
+                                                            sx={{ marginRight: 1 }}
+                                                        >
+                                                            {user.username}{' '}
+                                                        </Typography>
+                                                    </Box>
+                                                )
+                                            }
+                                            secondary={`Plan: ${user.plan} | Email: ${user.email}`}
+                                        />
+                                    </ListItem>
+                                </List>
+                            </Grid>
+                        ))}
                     </Grid>
-                ))}
-            </Grid>
-            <Box display="flex" justifyContent="center" mt={4}>
-                <UserListPagination
-                    count={pageCount}
-                    page={page}
-                    onChange={handleChangePage}
-                />
-            </Box>
+                    <Box display="flex" justifyContent="center" mt={4}>
+                        <UserListPagination
+                            count={pageCount}
+                            page={page}
+                            onChange={handleChangePage}
+                        />
+                    </Box>
+                </div>
+            )}
         </div>
     )
 }
+    
 
 export default UserList
