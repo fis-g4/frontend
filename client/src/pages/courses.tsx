@@ -143,7 +143,7 @@ export default function CoursesPage() {
         setSelectedClass(null)
         setSelectedCourse(null)
     }
-
+    console.log(authUser.token)
     return (
         <>
             <Helmet>
