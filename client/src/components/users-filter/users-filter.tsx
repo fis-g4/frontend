@@ -3,8 +3,8 @@ import { TextField, Button, Grid, MenuItem, useTheme, alpha } from '@mui/materia
 
 const plans = [
     { value: 'all', label: 'All' },
-    { value: 'free', label: 'Free' },
-    { value: 'premium', label: 'Premium' },
+    { value: 'basic', label: 'Basic' },
+    { value: 'advanced', label: 'Advanced' },
     { value: 'pro', label: 'Pro' },
 ]
 

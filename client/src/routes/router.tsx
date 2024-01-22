@@ -50,10 +50,6 @@ export default function Router() {
       element: <Page404 />,
     },
     {
-      path: 'me2',
-      element: <ProfilePage />,
-    },
-    {
       path: '*',
       element: <Navigate to="/error" replace />,
     },

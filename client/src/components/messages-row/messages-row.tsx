@@ -168,9 +168,7 @@ export function MessagesRow({ row, columns, usersList, setRefresh } : Readonly<{
                 <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
                 <Collapse in={open} timeout="auto" unmountOnExit>
                     <Box sx={{ margin: 1 }}>
-                        <Typography variant="body2" gutterBottom>
-                            {row.message}
-                        </Typography>
+                        {row.message.split("\n").map((line, i) => (<Typography key={`line-${i}`} variant="body2" gutterBottom>{line}</Typography>))}
                     </Box>
                 </Collapse>
                 </TableCell>

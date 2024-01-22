@@ -71,7 +71,7 @@ export default function Nav({ openNav, onCloseNav } : { openNav: boolean; onClos
   );
 
   const renderUpgrade = (
-    authUser.user?.plan.toLowerCase().trim() !== 'premium' && (
+    authUser.user?.plan.toLowerCase().trim() !== 'pro' && (
     <Box sx={{ px: 2.5, pb: 3, mt: 10 }}>
       <Stack alignItems="center" spacing={3} sx={{ pt: 5, borderRadius: 2, position: 'relative' }}>
         <Box
@@ -84,7 +84,7 @@ export default function Nav({ openNav, onCloseNav } : { openNav: boolean; onClos
           <Typography variant="h6">Want more?</Typography>
 
           <Typography variant="body2" sx={{ color: 'text.secondary', mt: 1 }}>
-            From only {authUser.user?.plan.toLowerCase().trim() === 'free' ? '$4.99/month' : '$29.99/month'}
+            From only {authUser.user?.plan.toLowerCase().trim() === 'basic' ? '9.99€/month' : '19.99€/month'}
           </Typography>
         </Box>
 
@@ -94,7 +94,7 @@ export default function Nav({ openNav, onCloseNav } : { openNav: boolean; onClos
           href='/plans'
           component={RouterLink}
         >
-          Upgrade to {authUser.user?.plan.toLowerCase().trim() === 'free' ? 'Pro' : 'Premium'}
+          Upgrade to {authUser.user?.plan.toLowerCase().trim() === 'basic' ? 'Advanced' : 'Pro'}
         </Button>
       </Stack>
     </Box>
