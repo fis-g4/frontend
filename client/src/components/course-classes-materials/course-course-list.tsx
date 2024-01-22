@@ -14,7 +14,10 @@ import { Download, ShoppingCart, RemoveRedEye } from '@mui/icons-material'
 import { AuthUserContext } from '../../hooks/useAuth'
 import { longWordInTheText } from '../../utils/format-text'
 import { formatCurrency } from '../../utils/format-currency'
-
+import React, { useState } from 'react'
+import TransitionModal from '../transition-modal/transition-modal'
+import Button from '@mui/material/Button'
+import ReviewCoursesOpen from '../review/reviews-courses'
 interface CoursesProps {
     courses: Course[]
     authUser: AuthUserContext
@@ -26,16 +29,32 @@ export default function CourseList({
     authUser,
     handleSelectedCourse,
 }: Readonly<CoursesProps>) {
+    const [reviewOpenMap, setReviewOpenMap] = useState<{ [key: string]: boolean }>({});
+
+    const handleReviewOpen = (courseId: string) => {
+    setReviewOpenMap((prevMap) => ({
+        ...prevMap,
+        [courseId]: true,
+    }));
+    };
+
+    const handleReviewClose = (courseId: string) => {
+    setReviewOpenMap((prevMap) => ({
+        ...prevMap,
+        [courseId]: false,
+    }));
+    };
+
     const accessToCourse = (course: Course) => {
         if (
             course.price === 0 ||
-            course.purchasers.includes(authUser.user?.username as string)
+            course.access.includes(authUser.user?.username as string)
         ) {
             return true
         }
         return false
     }
-
+   
     const theme = useTheme()
 
     return (
@@ -60,15 +79,31 @@ export default function CourseList({
                     >
                         <Box>
                             <Typography variant="body1">
-                                {longWordInTheText(course.title, 20)}
+                                {longWordInTheText(course.name, 20)}
                             </Typography>
                             <Typography variant="body2" color="textSecondary">
                                 {longWordInTheText(course.description, 20)}
                             </Typography>
                             <Typography variant="body2" color="primary">
-                                Price: {formatCurrency(course.currency)}{' '}
+                                Price: 
                                 {course.price}
                             </Typography>
+                            <Button
+                                variant="outlined"
+                                color="secondary"
+                                sx={{ marginRight: '10px' }}
+                                onClick={() => handleReviewOpen(course.id)}
+                                >
+                                Reviews
+                                </Button>
+                                <TransitionModal
+                                key={course.id}
+                                open={reviewOpenMap[course.id] || false}
+                                handleClose={() => handleReviewClose(course.id)}
+                                sx={{ maxWidth: 500, width: '100%' }}
+                                >
+                                <ReviewCoursesOpen handleReviewClose={() => handleReviewClose(course.id)} id={course.id} />
+                                </TransitionModal>
                         </Box>
                         <ListItemIcon>
                             {accessToCourse(course) ? (

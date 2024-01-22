@@ -6,10 +6,12 @@ import { useAuth } from '../hooks/useAuth';
 import DashboardLayout from '../layouts/dashboard';
 import LandingPage from '../pages/landing';
 import LoadingView from '../sections/loading/loading';
+import React from 'react';
 
 export const HomePage = lazy(() => import('../pages/home'));
 export const ProfilePage = lazy(() => import('../pages/profile'));
 export const CoursesPage = lazy(() => import('../pages/courses'));
+export const MaterialsPage = lazy(() => import('../pages/materials'));
 export const PlansPage = lazy(() => import('../pages/plans'));
 export const MailboxPage = lazy(() => import('../pages/mailbox'));
 export const SettingsPage = lazy(() => import('../pages/settings'));
@@ -37,6 +39,7 @@ export default function Router() {
         { element: <HomePage />, index: true },
         { path: 'me', element: <ProfilePage /> },
         { path: 'courses', element: <CoursesPage /> },
+        { path: 'materials', element: <MaterialsPage />},
         { path: 'plans', element: <PlansPage />},
         { path: 'mailbox', element: <MailboxPage />},
         { path: 'settings', element: <SettingsPage /> },
@@ -45,6 +48,10 @@ export default function Router() {
     {
       path: 'error',
       element: <Page404 />,
+    },
+    {
+      path: 'me2',
+      element: <ProfilePage />,
     },
     {
       path: '*',

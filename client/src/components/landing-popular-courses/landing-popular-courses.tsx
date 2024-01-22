@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import {
     Box,
     Typography,
@@ -6,10 +7,43 @@ import {
     alpha,
 } from '@mui/material'
 import CourseCard from './course-card'
-import { courses } from '../../_mocks/courses'
+import { Course } from '../../_mocks/courses'
+
+import { useCoursesApi } from '../../api/useCoursesApi'
 
 export default function LandingPopularCourses({ handleRegisterOpen } : { handleRegisterOpen: () => void}) {
+    const [openSnackbar, setOpenSnackbar] = useState(false);
+    const [errorData, setErrorData] = useState('');
     const theme = useTheme()
+    const [courses, setCourses] = useState<Course[]>([]);
+
+    const { getBestCourses } = useCoursesApi();
+    
+    const handleOpenSnackbar = (error?: string) => {
+        setOpenSnackbar(true);
+        setErrorData(error || 'There was an error retrieving the courses. Please try later.');
+    }
+
+    useEffect(() => {
+        getBestCourses().then((response) => {
+            if(response.ok) {
+                response.json().then((responseData) => {
+                    setCourses(responseData);
+                }).catch((_error) => {
+                    handleOpenSnackbar();
+                });
+                } else {
+                response.json().then((responseData) => {
+                    handleOpenSnackbar(responseData.error);
+                }).catch((_error) => {
+                    handleOpenSnackbar();
+                });
+                }
+        }).catch((_error) => {
+            handleOpenSnackbar();
+        });
+    }, [])
+
 
     return (
         <Box sx={{ marginBottom: '100px' }}>
@@ -19,6 +53,7 @@ export default function LandingPopularCourses({ handleRegisterOpen } : { handleR
                 mb={2}
                 sx={{
                     color: theme.palette.primary.main,
+                    fontSize: 'clamp(20px, 1vw, 25px)',
                     fontFamily: 'Verdana',
                 }}
             >
@@ -30,7 +65,7 @@ export default function LandingPopularCourses({ handleRegisterOpen } : { handleR
                 mb={4}
                 sx={{
                     color: theme.palette.grey[700],
-                    fontSize: '2vw',
+                    fontSize: 'clamp(25px, 2vw, 40px)',
                     fontWeight: 900,
                     fontFamily: 'Verdana',
                 }}
@@ -54,7 +89,9 @@ export default function LandingPopularCourses({ handleRegisterOpen } : { handleR
             <Box display="flex" justifyContent="center">
                 <Box
                     width="8vw"
+                    minWidth={250}
                     height="2.5vw"
+                    minHeight={50}
                     borderRadius="25px 25px 25px 0"
                     bgcolor={theme.palette.primary.main}
                     display="flex"
@@ -73,7 +110,8 @@ export default function LandingPopularCourses({ handleRegisterOpen } : { handleR
                         sx={{
                             color: theme.palette.common.white,
                             fontWeight: 400,
-                            fontSize: '0.9vw',
+                            fontSize: 'clamp(20px, 0.9vw, 22px)',
+                            
                             fontFamily: "Verdana",
                         }}
                     >

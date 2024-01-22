@@ -4,19 +4,27 @@ import { ArrowBack } from '@mui/icons-material'
 import { Helmet } from 'react-helmet-async'
 import VideoComponent from '../components/course-lesson-details/course-lesson-details'
 import { useResponsive } from '../hooks/useResponsive'
+
+import { useCoursesApi } from '../api/useCoursesApi'
+
 import { Material, materials } from '../_mocks/materials'
 import CourseClassesMaterials from '../components/course-classes-materials/course-classes-materials'
 import CourseList from '../components/course-classes-materials/course-course-list'
 import { useAuth } from '../hooks/useAuth'
 import { Class, classes } from '../_mocks/classes'
-import { Course, courses } from '../_mocks/courses'
+import { Course } from '../_mocks/courses'
+import React from 'react'
 
 export default function CoursesPage() {
+    const [openSnackbar, setOpenSnackbar] = useState(false);
+    const [errorData, setErrorData] = useState('');
     const [courseMaterials, setCourseMaterials] = useState([] as Material[])
     const [courseClasses, setCourseClasses] = useState([] as Class[])
-    const [_courses, setCourses] = useState([] as Course[])
+    const [courses, setCourses] = useState([] as Course[])
     const [selectedClass, setSelectedClass] = useState<Class | null>()
     const [selectedCourse, setSelectedCourse] = useState<Course | null>()
+
+    const { getCourses } = useCoursesApi();
 
     const COURSE_ID = '1'
     const { authUser } = useAuth()
@@ -27,6 +35,11 @@ export default function CoursesPage() {
 
     const handleSelectedCourse = (course: Course) => {
         setSelectedCourse(course)
+    }
+    
+    const handleOpenSnackbar = (error?: string) => {
+        setOpenSnackbar(true);
+        setErrorData(error || 'There was an error retrieving the courses. Please try later.');
     }
 
     useEffect(() => {
@@ -42,13 +55,26 @@ export default function CoursesPage() {
             )
             setCourseClasses(getUserClasses)
         }
-        const getCourses = async () => {
-            const getAllCourses = courses
-            setCourses(getAllCourses)
-        }
+
+        getCourses().then((response) => {
+            if(response.ok) {
+                response.json().then((responseData) => {
+                    setCourses(responseData);
+                }).catch((_error) => {
+                    handleOpenSnackbar();
+                });
+                } else {
+                response.json().then((responseData) => {
+                    handleOpenSnackbar(responseData.error);
+                }).catch((_error) => {
+                    handleOpenSnackbar();
+                });
+                }
+        }).catch((_error) => {
+            handleOpenSnackbar();
+        });
         getMaterials()
         getClasses()
-        getCourses()
     }, [authUser])
 
     const isSmallScreen = useResponsive('down', 'md')
@@ -90,7 +116,7 @@ export default function CoursesPage() {
                         <Grid item xs={isSmallScreen ? 12 : 7}>
                             {selectedClass?.file ? (
                                 <VideoComponent
-                                    playlistTitle={selectedCourse?.title ??  'Loading...'}
+                                    playlistTitle={selectedCourse?.name ??  'Loading...'}
                                     videoTitle={selectedClass?.title ?? 'Loading...'}
                                     videoUrl={selectedClass?.file ?? ''}
                                     description={
@@ -109,6 +135,7 @@ export default function CoursesPage() {
                                 classes={courseClasses}
                                 materials={courseMaterials}
                                 authUser={authUser}
+                                course= {selectedCourse}
                                 handleSelectedClass={handleSelectedClass}
                             />
                         </Grid>
