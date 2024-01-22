@@ -48,7 +48,8 @@ export default function CourseList({
     const accessToCourse = (course: Course) => {
         if (
             course.price === 0 ||
-            course.access.includes(authUser.user?.username as string)
+            course.access.includes(authUser.user?.username as string) ||
+            course.creator === authUser.user?.username as string
         ) {
             return true
         }
