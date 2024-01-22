@@ -36,7 +36,7 @@ interface User {
     coins: number
 }
 
-type planEnum = 'Basic' | 'Advanced' | 'Pro'
+type planEnum = 'BASIC' | 'ADVANCED' | 'PRO'
 
 function UserList({ materialId }: Readonly<ListProps>) {
     const { getMaterialPurchasers } = useMaterialsApi()
