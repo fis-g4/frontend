@@ -42,7 +42,7 @@ export const useCoursesApi = () => {
     };
 
     const addCourse = async (name: string, description: string, price: number, categories: string[], language: string) => {
-        const response = await fetch(`${process.env.REACT_APP_API_URL}${COURSES_BASE_PATH}/new`, 
+        const response = await fetchWithInterceptor(`${process.env.REACT_APP_API_URL}${COURSES_BASE_PATH}/new`, 
             { 
                 method: "POST",
                 headers: basicHeaders,
@@ -53,7 +53,7 @@ export const useCoursesApi = () => {
     }
 
     const updateCourse = async (name: string, description: string, price: number, categories: string[], language: string, id: string) => {
-        const response = await fetch(`${process.env.REACT_APP_API_URL}${COURSES_BASE_PATH}/${id}`, 
+        const response = await fetchWithInterceptor(`${process.env.REACT_APP_API_URL}${COURSES_BASE_PATH}/${id}`, 
             { 
                 method: "PUT",
                 headers: basicHeaders,
