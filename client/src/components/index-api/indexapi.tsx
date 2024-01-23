@@ -17,24 +17,25 @@ export default function IndexApiOpen({ handleIndexApiClose }: { handleIndexApiCl
     };
 
     const openDocument = (documentType: string) => {
+        // Corregir las URLs de acuerdo a tus necesidades
         switch (documentType) {
             case 'Review':
-                window.open('url_del_documento_review.pdf', '_blank');
+                window.open('https://api.javiercavlop.com/v1/reviews/docs/', '_blank');
                 break;
             case 'Course':
-                window.open('url_del_documento_course.pdf', '_blank');
+                window.open('https://api.javiercavlop.com/v1/courses/docs/', '_blank');
                 break;
-            case 'Material':
-                window.open('url_del_documento_material.pdf', '_blank');
+            case 'Learning':
+                window.open('https://app.swaggerhub.com/apis-docs/mrarjona/learning-microservice/1.0.0', '_blank');
                 break;
             case 'User':
-                window.open('url_del_documento_user.pdf', '_blank');
+                window.open('https://api.javiercavlop.com/v1/users/docs/', '_blank');
                 break;
             case 'Payment':
-                window.open('url_del_documento_payment.pdf', '_blank');
+                window.open('https://api.javiercavlop.com/v1/payments/docs', '_blank');
                 break;
             case 'Communication':
-                window.open('url_del_documento_communication.pdf', '_blank');
+                window.open('https://app.swaggerhub.com/apis-docs/mrarjona/communication-microservice/1.0.0', '_blank');
                 break;
             default:
                 break;
@@ -55,7 +56,7 @@ export default function IndexApiOpen({ handleIndexApiClose }: { handleIndexApiCl
                 }}
             >
                 <Typography variant="h5" component="div" sx={{ mb: 5 }}>
-                    Select Documentation
+                    Selecciona Documentación
                 </Typography>
                 <Box
                     sx={{
@@ -83,7 +84,7 @@ export default function IndexApiOpen({ handleIndexApiClose }: { handleIndexApiCl
                     <Button
                         variant="outlined"
                         color="info"
-                        onClick={() => openDocument('Material')}
+                        onClick={() => openDocument('Learning')}
                     >
                         Learning's api
                     </Button>
@@ -104,13 +105,14 @@ export default function IndexApiOpen({ handleIndexApiClose }: { handleIndexApiCl
                     <Button
                         variant="outlined"
                         color="info"
-                        onClick={() => openDocument('Payment')}
+                        onClick={() => openDocument('Communication')}
                     >
                         Communication's api
                     </Button>
                 </Box>
             </Card>
 
+            {/* Asegúrate de que los props de TransitionSnackbar estén configurados correctamente */}
             <TransitionSnackbar open={openSnackbar} onClose={handleCloseSnackbar} message={errorData} autoHideDuration={6000} />
         </>
     );
