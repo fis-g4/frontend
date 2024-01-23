@@ -1,15 +1,49 @@
+import { useEffect, useState } from 'react'
 import {
     Box,
     Typography,
     Grid,
     useTheme,
     alpha,
+    Chip,
 } from '@mui/material'
 import CourseCard from './course-card'
-import { courses } from '../../_mocks/courses'
+
+import { useCoursesApi } from '../../api/useCoursesApi'
 
 export default function LandingPopularCourses({ handleRegisterOpen } : { handleRegisterOpen: () => void}) {
+    const [openSnackbar, setOpenSnackbar] = useState(false);
+    const [errorData, setErrorData] = useState('');
     const theme = useTheme()
+    const [courses, setCourses] = useState<any[]>([]);
+
+    const { getBestCourses } = useCoursesApi();
+    
+    const handleOpenSnackbar = (error?: string) => {
+        setOpenSnackbar(true);
+        setErrorData(error || 'There was an error retrieving the courses. Please try later.');
+    }
+
+    useEffect(() => {
+        getBestCourses().then((response) => {
+            if(response.ok) {
+                response.json().then((responseData) => {
+                    setCourses(responseData);
+                }).catch((_error) => {
+                    handleOpenSnackbar();
+                });
+                } else {
+                response.json().then((responseData) => {
+                    handleOpenSnackbar(responseData.error);
+                }).catch((_error) => {
+                    handleOpenSnackbar();
+                });
+                }
+        }).catch((_error) => {
+            handleOpenSnackbar();
+        });
+    }, [])
+
 
     return (
         <Box sx={{ marginBottom: '100px' }}>

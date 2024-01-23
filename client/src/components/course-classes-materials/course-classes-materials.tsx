@@ -16,14 +16,13 @@ import {
 
 import { Class } from '../../_mocks/classes';
 import CourseClasses from './course-classes';
-import { Course } from '../../_mocks/courses';
 
 interface CourseClassesMaterialsProps {
   classes: Class[];
   materials: Material[];
   authUser: AuthUserContext;
   handleSelectedClass: (class_: Class) => void;
-  course:Course;
+  course:any;
 }
 
 export default function CourseClassesMaterials({
@@ -95,7 +94,7 @@ export default function CourseClassesMaterials({
     } else if (reviewType === 'course') {
       dataToSend = {
         ...dataToSend,
-        course: course.id ,
+        course: course._id ,
       };
     } else if (reviewType === 'material' && selectedMaterial) {
       dataToSend = {
