@@ -1,52 +1,48 @@
-import { Box, Typography, Card, CardContent, CardMedia, Rating } from '@mui/material';
+import { Box, Typography, Card, CardContent, CardMedia, Rating, Chip, } from '@mui/material';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
 
 
 type Course = {
-    instructor: string;
-    title: string;
+    name: string;
     description: string;
-    image: string;
-    rating: number;
-    length: string;
-    videoCount: string;
-    // Agrega aquí más propiedades si es necesario
+    price: number;
+    categories: string[];
+    language: string;
+    creator: string;
+    score: number;
   };
 
-export default function CourseCard({ instructor, title, description, image, rating, length, videoCount } : Course) {
+  
+    
+  const categoriesLine = (categories: string[]) => {
+    return (
+      categories.map((category:string, index:number) => (
+        <Chip key={index} label={category} size="small" style={{ marginRight: '5px' }} />
+      ))
+    );
+  }
+
+export default function CourseCard({ creator, name, description, score, categories, language } : Course) {
   return (
     <Card raised>
-      <CardMedia
-        component="img"
-        image={image}
-        sx={{
-          height: "200px",
-          objectFit: 'cover',
-        }}
-        alt="Course Image"
-      />
       <CardContent>
         <Typography gutterBottom variant="subtitle1" component="div">
-          {instructor}
+          {creator}
         </Typography>
-        <Rating name="read-only" value={rating} readOnly precision={0.1}/>
+        <Rating name="read-only" value={score} readOnly precision={0.1}/>
         <Typography variant="h6" component="h2">
-          {title}
+          {name}
         </Typography>
         <Typography variant="body2" color="text.secondary">
           {description}
         </Typography>
-        <Box display="flex" alignItems="center" mt={2}>
-          <AccessTimeIcon fontSize="small" />
-          <Typography variant="body2" marginLeft={0.5}>
-            {length}
-          </Typography>
-          <PlayCircleOutlineIcon fontSize="small" sx={{ marginLeft: 2 }} />
-          <Typography variant="body2" marginLeft={0.5}>
-            {videoCount}
-          </Typography>
-        </Box>
+        <Typography variant="body2" color="textPrimary">
+            {categoriesLine(categories)}
+        </Typography>
+        <Typography variant="body2" color="textSecondary">
+            Language: {language}
+        </Typography>
       </CardContent>
     </Card>
   );

@@ -16,15 +16,15 @@ import {
 
 import { Class } from '../../_mocks/classes';
 import CourseClasses from './course-classes';
-import { Course } from '../../_mocks/courses';
 import { useReviewsApi } from '../../api/useReviewsApi';
+
 
 interface CourseClassesMaterialsProps {
   classes: Class[];
   materials: Material[];
   authUser: AuthUserContext;
   handleSelectedClass: (class_: Class) => void;
-  course:Course;
+  course:any;
 }
 
 export default function CourseClassesMaterials({
@@ -131,6 +131,7 @@ const handleReviewSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
       if (response.status === 200 || response.status === 201) {
         console.log('Reseña enviada exitosamente');
 
+
       } else {
         console.error('Error al enviar la reseña:', response.statusText);
       }
@@ -138,6 +139,31 @@ const handleReviewSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     } catch (error) {
       console.error('Error al procesar la reseña:', error);
       // Realizar acciones adicionales si es necesario, por ejemplo, mostrar un mensaje de error al usuario
+
+    let dataToSend: any = {
+      type: reviewType,
+      title: reviewFormData.title,
+      description: reviewFormData.description,
+      rating: reviewFormData.rating,
+      creator: reviewFormData.creator,
+    };
+
+    if (reviewType === 'user') {
+      dataToSend = {
+        ...dataToSend,
+        user: authUser.user?.id || '',
+      };
+    } else if (reviewType === 'course') {
+      dataToSend = {
+        ...dataToSend,
+        course: course._id ,
+      };
+    } else if (reviewType === 'material' && selectedMaterial) {
+      dataToSend = {
+        ...dataToSend,
+        material: selectedMaterial.id,
+      };
+
     }
   };
   
@@ -256,4 +282,5 @@ const handleReviewSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
       </form>
     </>
   );
+}
 }
