@@ -16,8 +16,6 @@ import {
 
 import { Class } from '../../_mocks/classes';
 import CourseClasses from './course-classes';
-import CourseMaterials from './course-materials';
-import { Course } from '../../_mocks/courses';
 
 interface CourseClassesMaterialsProps {
   classes: Class[];

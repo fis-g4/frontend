@@ -13,9 +13,6 @@ import { Material, materials } from '../_mocks/materials'
 import CourseClassesMaterials from '../components/course-classes-materials/course-classes-materials'
 import CourseList from '../components/course-classes-materials/course-course-list'
 import { useAuth } from '../hooks/useAuth'
-import { Class, classes } from '../_mocks/classes'
-//import { Class, classes } from '../_mocks/classes'
-import { Course, courses } from '../_mocks/courses'
 import React from 'react'
 import { useClassesApi } from '../api/useClassesApi'
 import { useMaterialsApi } from '../api/useMaterialsApi'
@@ -124,17 +121,7 @@ export default function CoursesPage() {
                 console.error('An error occurred while fetching materials:', error); //TODO: A MODIFICAR POR EL MICROSERVICIO DE CURSOS
             }
         };
-
         const getClasses = async () => {
-            const getUserClasses = classes.filter(
-                (class_) => class_.course === COURSE_ID
-            )
-            setCourseClasses(getUserClasses)
-        }
-
-        getMaterials()
-        getClasses()
-    }, [authUser])
             try {
                 const response = await getAllClasses();
         
@@ -153,10 +140,6 @@ export default function CoursesPage() {
             }
         };
 
-        const getCourses = async () => {
-            const getAllCourses = courses
-            setCourses(getAllCourses)
-        }
         getMaterials()
         getClasses()
         updateCourseList()
