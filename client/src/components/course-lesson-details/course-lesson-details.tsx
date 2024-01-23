@@ -1,5 +1,5 @@
-import Card from '@mui/material/Card'
-import CardContent from '@mui/material/CardContent'
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
 import { Divider, Typography, alpha, useTheme } from '@mui/material'
 import { useEffect, useState } from 'react'
 

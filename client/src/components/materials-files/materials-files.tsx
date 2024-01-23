@@ -3,6 +3,8 @@ import { Box, Grid, Button, Typography } from '@mui/material'
 import MaterialCard from './material-card'
 import { Material } from '../../_mocks/materials'
 import { UploadFile } from '@mui/icons-material'
+import { useMaterialsApi } from '../../api/useMaterialsApi'
+import { useState } from 'react'
 
 export default function MaterialsFiles({
     materials,
@@ -10,28 +12,43 @@ export default function MaterialsFiles({
     handleNewMaterialOpen,
     handleUpdateMaterialOpen,
     handleMaterial,
+    handleRefresh,
 }: Readonly<{
     materials: Material[]
     setUserMaterials: (materials: Material[]) => void
     handleNewMaterialOpen: () => void
     handleUpdateMaterialOpen: (material: Material) => void
     handleMaterial: (id: string, title: string) => void
+    handleRefresh: () => void
 }>) {
     const smUp = useResponsive('up', 'sm')
 
     const responsiveAlignItems = smUp ? 'flex-end' : 'center'
+    const { deleteMaterial } = useMaterialsApi()
+    const [errorData, setErrorData] = useState('')
+    const [openSnackbar, setOpenSnackbar] = useState(false)
 
     const handleEdit = (id: string) => {
         const material = materials.find((material) => material.id === id)
         if (!material) return //TODO: REVIEW
         handleUpdateMaterialOpen(material)
-        console.log('Edit material')
     }
 
     const handleDelete = (id: string) => {
-        const newMaterials = materials.filter((material) => material.id !== id)
-        setUserMaterials(newMaterials)
-        console.log('Delete material')
+        deleteMaterial(id)
+            .then((response) => {
+                if (response.ok) {
+                    setErrorData('Material deleted successfully.')
+                    setOpenSnackbar(true)
+                } else {
+                    setErrorData('Error deleting material.')
+                    setOpenSnackbar(true)
+                }
+            })
+            .catch((error) => {
+                setErrorData('Error deleting material.')
+                setOpenSnackbar(true)
+            })
     }
 
     return (
@@ -98,5 +115,3 @@ export default function MaterialsFiles({
         </Box>
     )
 }
-
-

@@ -1,3 +1,4 @@
+// material-details.tsx
 import React, { useEffect, useState } from 'react';
 import { Card, CardContent, Grid, Typography, Divider, Button,useTheme, alpha  } from '@mui/material';
 import { useParams } from 'react-router-dom';
@@ -5,39 +6,35 @@ import FileComponent from '../components/course-material-details/course-material
 import { Material } from '../_mocks/materials';
 import { useResponsive } from '../hooks/useResponsive';
 import { useAuth } from '../hooks/useAuth'
-import { useMaterialsApi } from '../api/useMaterialsApi';
-
+import { useMaterialsApi } from '../api/useMaterialsApi'
 const MaterialDetailsPage = () => {
-  const { id }  = useParams();
+  const { id } = useParams();
   const [materialDetails, setMaterialDetails] = useState<Material | null>(null);
   const { authUser } = useAuth()
   const { getMaterialsId } = useMaterialsApi()
-
   useEffect(() => {
+    
     const getMaterialDetails = async () => {
-        try {
-            if (id){
-              
-            const materialResponse = await getMaterialsId(id);
-
-            if (materialResponse.ok) {
-                const materialDetails = await materialResponse.json();
-                setMaterialDetails(materialDetails);
-            } else {
-                console.error('Error fetching material details:', materialResponse.status, materialResponse.statusText);
-            }
-          }
-        } catch (error) {
-            console.error('An error occurred while fetching material details:', error);
+      try{
+        const response = await getMaterialsId(id ?? '');
+        if (response.ok) {
+          const foundMaterial: Material = await response.json();
+          setMaterialDetails(foundMaterial);
+        }else{
+          console.error('Error fetching material by id:', response.status, response.statusText);
         }
+      }catch(error){
+        console.error('An error occurred while fetching material details:', error);
+      }  
     };
 
     getMaterialDetails();
-}, [authUser,id]);
+  }, [authUser, id]);
 
     const isSmallScreen = useResponsive('down', 'sm')
     const handleDownload = () => {
       const link = document.createElement('a');
+      link.target = '_blank';
       link.href = materialDetails?.file ?? '';
       link.download = materialDetails?.title ?? 'file';
       document.body.appendChild(link);

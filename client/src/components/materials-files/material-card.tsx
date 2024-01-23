@@ -66,7 +66,10 @@ export default function MaterialCard({
                     width: responsiveWidthCard,
                 }}
             >
-                <Typography variant="h6" onClick={() => handleMaterial(id, title)}>
+                <Typography
+                    variant="h6"
+                    onClick={() => handleMaterial(id, title)}
+                >
                     {title}
                 </Typography>
                 <Typography color="textSecondary" variant="body2">
@@ -106,4 +109,3 @@ export default function MaterialCard({
         </Card>
     )
 }
-

@@ -10,8 +10,11 @@ import usePagination from '../components/pagination/pagination'
 import MaterialFilter from '../components/materials-filter/materials-filter'
 import UserList from '../components/users-list/user-list'
 import CloseIcon from '@mui/icons-material/Close'
-import UsersFilter from '../components/users-filter/users-filter'
 import { useMaterialsApi } from '../api/useMaterialsApi'
+import LoadingView from '../sections/loading/loading'
+import TransitionSnackbar from '../components/transition-snackbar/transition-snackbar'
+import UsersFilter from '../components/users-filter/users-filter'
+
 interface User {
     id: string
     photoUrl: string
@@ -23,9 +26,13 @@ interface User {
     coins: number
 }
 
-type planEnum = 'Free' | 'Pro' | 'Premium'
+type planEnum = 'BASIC' | 'ADVANCED' | 'PRO'
 
 export default function MaterialsPage() {
+    const { getMaterialsMe } = useMaterialsApi()
+    const [refreshKey, setRefreshKey] = useState(true)
+    const [loading, setLoading] = useState(true)
+
     const [material, setMaterial] = useState({} as Material)
     const [userMaterials, setUserMaterials] = useState([] as Material[])
 
@@ -33,6 +40,21 @@ export default function MaterialsPage() {
 
     const handleMaterial = (id: string, title: string) =>
         setMaterialDetails([id, title])
+
+    const [error, setError] = useState('')
+    const [errorData, setErrorData] = useState('')
+    const [openSnackbar, setOpenSnackbar] = useState(false)
+
+    const handleCloseSnackbar = () => {
+        setOpenSnackbar(false)
+    }
+
+    const handleOpenSnackbar = (errorData: string) => {
+        setErrorData(errorData)
+        setOpenSnackbar(true)
+    }
+
+    const { authUser } = useAuth()
 
     const [newMaterialOpen, setNewMaterialOpen] = useState(false)
     const [updateMaterialOpen, setUpdateMaterialOpen] = useState(false)
@@ -53,9 +75,31 @@ export default function MaterialsPage() {
 
     const handleMaterialFilterChange = (newFilter: any) => {
         setMaterialFilter(newFilter)
+        setRefreshKey(true)
     }
 
-    const { getMaterialsMe } = useMaterialsApi()
+    useEffect(() => {
+        const getMyMaterials = async () => {
+            try {
+                const response = await getMaterialsMe()
+                if (response.ok) {
+                    const myMaterials = await response.json()
+                    setUserMaterials(myMaterials)
+                    setError('')
+                } else {
+                    setError('Error fetching your materials')
+                }
+            } catch (error) {
+                setError('An error occurred while fetching your materials')
+            } finally {
+                setLoading(false)
+            }
+        }
+        if (authUser.user && refreshKey) {
+            getMyMaterials()
+            setRefreshKey(false)
+        }
+    }, [authUser.user, getMaterialsMe, refreshKey])
 
     useEffect(() => {
         const filtered = userMaterials.filter((material) => {
@@ -65,10 +109,16 @@ export default function MaterialsPage() {
             if (materialFilter.lowerPrice && !materialFilter.upperPrice) {
                 const priceMatch = material.price >= materialFilter.lowerPrice
                 return titleMatch && priceMatch
-            } else if (!materialFilter.lowerPrice && materialFilter.upperPrice) {
+            } else if (
+                !materialFilter.lowerPrice &&
+                materialFilter.upperPrice
+            ) {
                 const priceMatch = material.price <= materialFilter.upperPrice
                 return titleMatch && priceMatch
-            } else if (!materialFilter.lowerPrice && !materialFilter.upperPrice) {
+            } else if (
+                !materialFilter.lowerPrice &&
+                !materialFilter.upperPrice
+            ) {
                 return titleMatch
             } else {
                 const priceMatch =
@@ -80,8 +130,6 @@ export default function MaterialsPage() {
 
         setFilteredMaterials(filtered)
     }, [userMaterials, materialFilter])
-
-    const { authUser } = useAuth()
 
     useEffect(() => {
         const getMaterials = async () => {
@@ -113,6 +161,14 @@ export default function MaterialsPage() {
         _DATA.jump(p)
     }
 
+    const handleRefresh = () => {
+        setRefreshKey(true)
+    }
+
+    if (loading) {
+        return <LoadingView />
+    }
+
     return (
         <>
             <Helmet>
@@ -124,7 +180,7 @@ export default function MaterialsPage() {
                         variant="h3"
                         sx={{ marginLeft: '25px', marginTop: '10px' }}
                     >
-                        My Materials
+                        My Materials {loading && 'Loading...'}
                     </Typography>
                 ) : (
                     <Box display={'flex'} flexDirection={'column'}>
@@ -153,7 +209,6 @@ export default function MaterialsPage() {
                                 <CloseIcon />
                             </IconButton>
                         </Box>
-
                     </Box>
                 )}
             </Box>
@@ -166,20 +221,34 @@ export default function MaterialsPage() {
                         handleNewMaterialOpen={handleNewMaterialOpen}
                         handleUpdateMaterialOpen={handleUpdateMaterialOpen}
                         handleMaterial={handleMaterial}
+                        handleRefresh={handleRefresh}
                     />
                     <TransitionModal
                         open={newMaterialOpen}
                         handleClose={handleNewMaterialClose}
                         sx={{ maxWidth: 500, width: '100%' }}
                     >
-                        <MaterialView operation="create" />
+                        <MaterialView
+                            operation="create"
+                            handleRefresh={handleRefresh}
+                            handleNewMaterialClose={handleNewMaterialClose}
+                            handleFullyOpenSnackbar={handleOpenSnackbar}
+                        />
                     </TransitionModal>
                     <TransitionModal
                         open={updateMaterialOpen}
                         handleClose={handleUpdateMaterialClose}
                         sx={{ maxWidth: 500, width: '100%' }}
                     >
-                        <MaterialView material={material} operation="update" />
+                        <MaterialView
+                            material={material}
+                            operation="update"
+                            handleRefresh={handleRefresh}
+                            handleUpdateMaterialClose={
+                                handleUpdateMaterialClose
+                            }
+                            handleFullyOpenSnackbar={handleOpenSnackbar}
+                        />
                     </TransitionModal>
                     {userMaterials.length > 0 && (
                         <Pagination
@@ -200,6 +269,12 @@ export default function MaterialsPage() {
             ) : (
                 <UserList materialId={materialDetails[0]} />
             )}
+            <TransitionSnackbar
+                open={openSnackbar}
+                onClose={handleCloseSnackbar}
+                message={errorData}
+                autoHideDuration={6000}
+            />
         </>
     )
 }

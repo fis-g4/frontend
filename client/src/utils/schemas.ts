@@ -166,7 +166,8 @@ export function createMessageValidationSchema(
     senderValue: string,
     subjectValue: string | undefined,
     messageValue: string | undefined,
-    messageReal: string
+    messageReal: string,
+    capacity: number
 ) {
     return Yup.object().shape({
         subject: Yup.string()
@@ -191,6 +192,7 @@ export function createMessageValidationSchema(
         receivers: Yup.array()
             .required('You must select at least one receiver')
             .min(1, 'You must select at least one receiver')
+            .max(capacity, `You can select at most ${capacity} receivers`)
             .test(
                 'noDuplicates',
                 'You cannot select the same user more than once',
