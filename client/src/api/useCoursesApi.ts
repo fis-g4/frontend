@@ -56,6 +56,16 @@ export const useCoursesApi = () => {
         );
         return response;
     }
+
+    const deleteCourse = async (courseId: string) => {
+        const response = await fetchWithInterceptor(`${process.env.REACT_APP_API_URL}${COURSES_BASE_PATH}/${courseId}`, 
+            { 
+                method: "DELETE",
+                headers: basicHeaders
+            }
+        );
+        return response;
+    }
     
-    return { getCourses, getBestCourses, addCourse, updateCourse };
+    return { getCourses, getBestCourses, addCourse, updateCourse, deleteCourse };
 };

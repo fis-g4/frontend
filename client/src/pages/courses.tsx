@@ -39,7 +39,6 @@ export default function CoursesPage() {
     }
 
     const handleSelectedCourse = (course: Course) => {
-        console.log(selectedCourse)
         setSelectedCourse(course)
     }
     

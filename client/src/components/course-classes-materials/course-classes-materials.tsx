@@ -94,7 +94,7 @@ export default function CourseClassesMaterials({
     } else if (reviewType === 'course') {
       dataToSend = {
         ...dataToSend,
-        course: course.id ,
+        course: course._id ,
       };
     } else if (reviewType === 'material' && selectedMaterial) {
       dataToSend = {
