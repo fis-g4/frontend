@@ -12,7 +12,7 @@ export const usePaymentApi = () => {
 
     const getPlans = async () => {
         const response = await fetchWithInterceptor(
-            `http://localhost:8000${PAYMENT_BASE_PATH}/plans`,
+            `${process.env.REACT_APP_API_URL}${PAYMENT_BASE_PATH}/plans`,
             {
                 method: 'GET',
                 headers: basicHeaders,
@@ -25,20 +25,19 @@ export const usePaymentApi = () => {
     const createPaymentPlan = async (planId: string) => {
         console.log('Creating payment plan')
         const response = await fetchWithInterceptor(
-            `http://localhost:8000${PAYMENT_BASE_PATH}/plans/${planId}/users/${authUser?.user?.username}`,
+            `${process.env.REACT_APP_API_URL}${PAYMENT_BASE_PATH}/plans/${planId}/users/${authUser?.user?.username}`,
             {
                 method: 'POST',
                 headers: basicHeaders,
             }
         )
         const data = await response.json()
-        console.log(data)
         return data as CreatePaymentPlanResponse
     }
 
     const getPaymentHistory = async () => {
         const response = await fetchWithInterceptor(
-            `http://localhost:8000${PAYMENT_BASE_PATH}/history/users/${authUser?.user?.username}`,
+            `${process.env.REACT_APP_API_URL}${PAYMENT_BASE_PATH}/history/users/${authUser?.user?.username}`,
             {
                 method: 'GET',
                 headers: basicHeaders,
@@ -46,7 +45,6 @@ export const usePaymentApi = () => {
         )
 
         const data = await response.json()
-        console.log('data', data)
         return data as PaymentHistory
     }
 
