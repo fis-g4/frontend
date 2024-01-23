@@ -1,7 +1,23 @@
 import { useAuth } from '../hooks/useAuth'
 
 export const REVIEWS_BASE_PATH = '/v1/reviews'
-
+const BASE_LOCAL = 'http://localhost:8000'
+enum TypeReview{
+    USER = 'USER',
+    COURSE = 'COURSE',
+    MATERIAL = 'MATERIAL'
+}
+export interface Review {
+    _id: string
+    type: TypeReview
+    user: string
+    creator: string
+    title: string
+    description: string
+    rating: number
+    course: string
+    material: string
+}
 export const useReviewsApi = () => {
     const { fetchWithInterceptor, authUser } = useAuth()
 
@@ -46,10 +62,10 @@ export const useReviewsApi = () => {
         return response
     } 
 
-    const getReviewByCreator= async (user_id: string) => {
+    const getReviewByCreator= async (username: string) => {
         console.log(basicHeaders)
         const response = await fetchWithInterceptor(
-            `${process.env.REACT_APP_API_URL}${REVIEWS_BASE_PATH}/creator/${user_id}`,
+            `${BASE_LOCAL}${REVIEWS_BASE_PATH}/creator/${username}`,
             {
                 method: 'GET',
                 headers: basicHeaders,
@@ -58,10 +74,10 @@ export const useReviewsApi = () => {
         return response
     }
 
-    const getReviewByUser= async (user_id: string) => {
+    const getReviewByUser= async (username: string) => {
         console.log(basicHeaders)
         const response = await fetchWithInterceptor(
-            `${process.env.REACT_APP_API_URL}${REVIEWS_BASE_PATH}/user/${user_id}`,
+            `${BASE_LOCAL}${REVIEWS_BASE_PATH}/user/${username}`,
             {
                 method: 'GET',
                 headers: basicHeaders,

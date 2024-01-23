@@ -17,6 +17,7 @@ import {
 import { Class } from '../../_mocks/classes';
 import CourseClasses from './course-classes';
 import { useReviewsApi } from '../../api/useReviewsApi';
+import { Course } from '../../api/useCoursesApi';
 
 
 interface CourseClassesMaterialsProps {
@@ -24,7 +25,7 @@ interface CourseClassesMaterialsProps {
   materials: Material[];
   authUser: AuthUserContext;
   handleSelectedClass: (class_: Class) => void;
-  course:any;
+  course:Course;
 }
 
 export default function CourseClassesMaterials({
@@ -78,9 +79,9 @@ export default function CourseClassesMaterials({
     }));
   };
 
-const handleReviewSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleReviewSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-  
+
     try {
       let dataToSend: any = {
         type: reviewType,
@@ -89,18 +90,19 @@ const handleReviewSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         rating: reviewFormData.rating,
         creator: authUser.user?.username || '',
       };
-  
+
       if (reviewType === 'USER') {
-        dataToSend = {
+        dataToSend = { 
           ...dataToSend,
-          user: course.instructor,
+          user: course.creator,
           course: '',
           material: ''
         };
       } else if (reviewType === 'COURSE') {
+        console.log("El id de curso es: "+course._id);
         dataToSend = {
           ...dataToSend,
-          course: course.id,
+          course: course._id,
           user: '',
           material: ''
         };
@@ -112,9 +114,9 @@ const handleReviewSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
           course: ''
         };
       }
-  
+
       console.log('Formulario enviado:', dataToSend);
-  
+
       // Llamar a la función postReview de la API
       const response = await addReview(
         dataToSend.type,
@@ -126,44 +128,17 @@ const handleReviewSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         dataToSend.course,
         dataToSend.material
       );
-  
+
       // Verificar la respuesta y realizar acciones adicionales si es necesario
       if (response.status === 200 || response.status === 201) {
         console.log('Reseña enviada exitosamente');
-
-
       } else {
         console.error('Error al enviar la reseña:', response.statusText);
       }
-  
+
     } catch (error) {
       console.error('Error al procesar la reseña:', error);
       // Realizar acciones adicionales si es necesario, por ejemplo, mostrar un mensaje de error al usuario
-
-    let dataToSend: any = {
-      type: reviewType,
-      title: reviewFormData.title,
-      description: reviewFormData.description,
-      rating: reviewFormData.rating,
-      creator: reviewFormData.creator,
-    };
-
-    if (reviewType === 'user') {
-      dataToSend = {
-        ...dataToSend,
-        user: authUser.user?.id || '',
-      };
-    } else if (reviewType === 'course') {
-      dataToSend = {
-        ...dataToSend,
-        course: course._id ,
-      };
-    } else if (reviewType === 'material' && selectedMaterial) {
-      dataToSend = {
-        ...dataToSend,
-        material: selectedMaterial.id,
-      };
-
     }
   };
   
@@ -175,6 +150,7 @@ const handleReviewSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
           marginBottom: '20px',
         }}
       >
+        
         <CardContent sx={{ height: '55vh' }}>
           <ToggleButtonGroup
             value={contentType}
@@ -216,9 +192,6 @@ const handleReviewSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         <ToggleButton value="COURSE" aria-label="course">
           Curso
         </ToggleButton>
-        <ToggleButton value="MATERIAL" aria-label="material">
-          Material
-        </ToggleButton>
       </ToggleButtonGroup>
 
       {reviewType === 'MATERIAL' && (
@@ -254,7 +227,7 @@ const handleReviewSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
           value={reviewFormData.title}
           onChange={handleReviewFormChange}
           margin="normal"
-        />
+        /> 
 
         <TextField
           fullWidth
@@ -282,5 +255,4 @@ const handleReviewSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
       </form>
     </>
   );
-}
 }

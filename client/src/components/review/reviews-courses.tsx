@@ -6,8 +6,7 @@ import Divider from '@mui/material/Divider';
 import Typography from '@mui/material/Typography';
 import { useTheme } from '@mui/material/styles';
 import TransitionSnackbar from '../transition-snackbar/transition-snackbar';
-import { Review, reviews } from '../../_mocks/reviews';
-import { useReviewsApi } from '../../api/useReviewsApi';
+import { Review, useReviewsApi } from '../../api/useReviewsApi';
 
 export default function ReviewCoursesOpen({ handleReviewClose, id }: { handleReviewClose: () => void; id: string }) {
     const theme = useTheme();
