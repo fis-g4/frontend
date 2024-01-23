@@ -6,9 +6,11 @@ import { Class } from '../../_mocks/classes'
 import { longWordInTheText } from '../../utils/format-text'
 import { useState } from 'react'
 import { useClassesApi } from '../../api/useClassesApi'
+import { AuthUserContext } from '../../hooks/useAuth'
 
 interface CourseClassesProps {
     classes: Class[]
+    authUser: AuthUserContext
     handleSelectedClass: (class_: Class) => void
     handleUpdateClassOpen: (class_: Class) => void
     handleUpdateClassClose: () => void
@@ -18,6 +20,7 @@ interface CourseClassesProps {
 
 export default function CourseClasses({
     classes,
+    authUser,
     handleSelectedClass,
     handleUpdateClassOpen,
     handleUpdateClassClose,
@@ -84,6 +87,7 @@ export default function CourseClasses({
                                     {longWordInTheText(_class.description, 20)}
                                 </Typography>
                             </Box>
+                            {authUser.user?.username === _class.creator && (
                             <Box sx={{ display: 'flex', alignItems: 'center' }}>
                                 <IconButton color="warning" onClick={() => onEdit(_class.id)}>
                                     <Edit />
@@ -92,6 +96,7 @@ export default function CourseClasses({
                                     <Delete />
                                 </IconButton>
                             </Box>
+                        )}
                         </Box>
                     </CardContent>
                 </Card>

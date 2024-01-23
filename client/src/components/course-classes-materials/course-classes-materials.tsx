@@ -143,7 +143,7 @@ export default function CourseClassesMaterials({
 
           <Divider sx={{ my: 1 }} />
           {contentType === 'classes' && (
-            <CourseClasses classes={classes} handleSelectedClass={handleSelectedClass} handleUpdateClassOpen={handleUpdateClassOpen} handleUpdateClassClose={handleUpdateClassClose} handleRefresh={handleRefresh} handleFullyOpenSnackbar={handleFullyOpenSnackbar} />
+            <CourseClasses classes={classes} authUser={authUser} handleSelectedClass={handleSelectedClass} handleUpdateClassOpen={handleUpdateClassOpen} handleUpdateClassClose={handleUpdateClassClose} handleRefresh={handleRefresh} handleFullyOpenSnackbar={handleFullyOpenSnackbar} />
           )}
           {contentType === 'materials' && (
             <CourseMaterials materials={materials} authUser={authUser} />

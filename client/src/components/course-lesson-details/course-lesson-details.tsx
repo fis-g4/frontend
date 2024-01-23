@@ -8,6 +8,7 @@ interface VideoComponentProps {
     videoTitle: string
     videoUrl: string
     description: string
+    review?: string
     videoImage: string
 }
 
@@ -16,6 +17,7 @@ export default function VideoComponent({
     videoTitle,
     videoUrl,
     description,
+    review,
     videoImage,
 }: Readonly<VideoComponentProps>) {
     const theme = useTheme()
