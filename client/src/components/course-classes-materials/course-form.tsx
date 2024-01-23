@@ -25,10 +25,11 @@ import { FormControlLabel } from '@mui/material';
 
 import * as Yup from 'yup';
 
-export default function NewCourseView({ handleNewCourseClose } : { handleNewCourseClose: () => void }) {
+export default function NewCourseView({ handleNewCourseClose, course } : { handleNewCourseClose: () => void, course:any }) {
   const theme = useTheme();
 
   const { addCourse } = useCoursesApi();
+  const { updateCourse } = useCoursesApi();
 
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [errorData, setErrorData] = useState('');
@@ -60,23 +61,26 @@ export default function NewCourseView({ handleNewCourseClose } : { handleNewCour
 
   const formik = useFormik<CourseTypes>({
     initialValues: {
-      name: '',
-      description: '',
-      price: 5,
-      categories: [],
-      language: '',
+      name: course ? course.name : '',
+      description: course ? course.description : '',
+      price: course ? course.price : 5,
+      categories: course ? course.categories : [],
+      language: course ? course.language : '',
     },
     validationSchema: registerValidationSchema,
     onSubmit: (values) => {
-      addCourse(
+      const courseAction = course ? updateCourse : addCourse;
+      courseAction(
         values.name,
         values.description,
         values.price,
         values.categories,
-        values.language
+        values.language,
+        course ? course._id : undefined
         ).then((response: any) => {
         if (response.status === 201) {
           response.json().then((responseData: any) => {
+            handleNewCourseClose();
           }).catch((_error: any) => {
             handleNewCourseClose();
           });
@@ -213,14 +217,29 @@ export default function NewCourseView({ handleNewCourseClose } : { handleNewCour
           required 
         />
 
-        <Button
-            fullWidth
-            size="large"
-            type="submit"
-            variant="contained"
-            color="inherit"
-            disabled={!formik.isValid}
-        > Create Course </Button>
+        {course ? (
+            <Button
+                fullWidth
+                size="large"
+                type="submit"
+                variant="contained"
+                color="inherit"
+                disabled={!formik.isValid}
+            > 
+                Edit Course 
+            </Button>
+            ) : (
+            <Button
+                fullWidth
+                size="large"
+                type="submit"
+                variant="contained"
+                color="inherit"
+                disabled={!formik.isValid}
+            > 
+                Create Course 
+            </Button>
+        )}
         </Stack>
     </form>
   );
@@ -253,7 +272,11 @@ export default function NewCourseView({ handleNewCourseClose } : { handleNewCour
               maxWidth: 840,
             }}
           >
-            <Typography variant="h4">Create a new course</Typography>
+            {course ? (
+                <Typography variant="h4">Edit course</Typography>
+            ) : (
+                <Typography variant="h4">Create a new course</Typography>
+            )}
 
             {renderForm}
           </Card>

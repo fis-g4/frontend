@@ -42,7 +42,6 @@ export const useCoursesApi = () => {
     };
 
     const addCourse = async (name: string, description: string, price: number, categories: string[], language: string) => {
-        console.log(name + " " + description + " " + price.toString() + " " + categories[0] + " " + language)
         const response = await fetch(`${process.env.REACT_APP_API_URL}${COURSES_BASE_PATH}/new`, 
             { 
                 method: "POST",
@@ -52,20 +51,13 @@ export const useCoursesApi = () => {
         );
         return response;
     }
-    
 
-    const updateCourse = async (course: any) => {
-        
-        let formData = new FormData()
-        for(let key in course){
-            formData.append(key, course[key])
-        }
-        
-        const response = await fetchWithInterceptor(`${process.env.REACT_APP_API_URL}${COURSES_BASE_PATH}/${course._id}`, 
+    const updateCourse = async (name: string, description: string, price: number, categories: string[], language: string, id: string) => {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}${COURSES_BASE_PATH}/${id}`, 
             { 
                 method: "PUT",
-                headers: { Authorization: `Bearer ${authUser.token}`},
-                body: formData
+                headers: basicHeaders,
+                body: JSON.stringify({ name: name, description: description, price: price, categories: categories, language: language })
             }
         );
         return response;

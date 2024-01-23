@@ -17,9 +17,8 @@ import { Class, classes } from '../_mocks/classes'
 import React from 'react'
 
 export default function CoursesPage() {
+    const [editCourseOpen, setEditCourseOpen] = useState(false);
     const [newCourseOpen, setNewCourseOpen] = useState(false);
-    const handleNewCourseOpen = () => setNewCourseOpen(true);
-    const handleNewCourseClose = () => setNewCourseOpen(false);
     const [openSnackbar, setOpenSnackbar] = useState(false);
     const [errorData, setErrorData] = useState('');
     const [courseMaterials, setCourseMaterials] = useState([] as Material[])
@@ -29,9 +28,53 @@ export default function CoursesPage() {
     const [selectedCourse, setSelectedCourse] = useState<any | null>()
 
     const { getCourses } = useCoursesApi();
+    const { deleteCourse } = useCoursesApi();
 
     const COURSE_ID = '1'
     const { authUser } = useAuth()
+
+    const updateCourseList = () => {
+        getCourses().then((response) => {
+            if(response.ok) {
+                response.json().then((responseData) => {
+                    setCourses(responseData);
+                }).catch((_error) => {
+                    handleOpenSnackbar();
+                });
+                } else {
+                response.json().then((responseData) => {
+                    handleOpenSnackbar(responseData.error);
+                }).catch((_error) => {
+                    handleOpenSnackbar();
+                });
+                }
+        }).catch((_error) => {
+            handleOpenSnackbar();
+        });
+    }
+
+    const handleDeleteCourse = async (course_: any) => {
+        await deleteCourse(course_._id);
+        updateCourseList();
+    }
+
+    const handleEditCourseOpen = (course_: any) => {
+        setEditCourseOpen(course_);
+    }
+
+    const handleEditCourseClose = () => {
+        setEditCourseOpen(false);
+        updateCourseList();
+    }
+
+    const handleNewCourseOpen = () => {
+        setNewCourseOpen(true); 
+    }
+
+    const handleNewCourseClose = () => {
+        setNewCourseOpen(false);
+        updateCourseList();
+    }
 
     const handleSelectedClass = (class_: Class) => {
         setSelectedClass(class_)
@@ -60,23 +103,7 @@ export default function CoursesPage() {
             setCourseClasses(getUserClasses)
         }
 
-        getCourses().then((response) => {
-            if(response.ok) {
-                response.json().then((responseData) => {
-                    setCourses(responseData);
-                }).catch((_error) => {
-                    handleOpenSnackbar();
-                });
-                } else {
-                response.json().then((responseData) => {
-                    handleOpenSnackbar(responseData.error);
-                }).catch((_error) => {
-                    handleOpenSnackbar();
-                });
-                }
-        }).catch((_error) => {
-            handleOpenSnackbar();
-        });
+        updateCourseList()
         getMaterials()
         getClasses()
     }, [authUser])
@@ -94,7 +121,16 @@ export default function CoursesPage() {
                 <title> Courses | FIS G4 </title>
             </Helmet>
             <TransitionModal open={newCourseOpen} handleClose={handleNewCourseClose} sx={{ maxWidth: 500, width: '100%' }}>
-                <NewCourseView handleNewCourseClose={handleNewCourseClose} />
+                <NewCourseView 
+                handleNewCourseClose={handleNewCourseClose} 
+                course={null}
+                />
+            </TransitionModal>
+            <TransitionModal open={editCourseOpen} handleClose={handleEditCourseClose} sx={{ maxWidth: 500, width: '100%' }}>
+                <NewCourseView 
+                handleNewCourseClose={handleEditCourseClose} 
+                course={editCourseOpen}
+                />
             </TransitionModal>
             {!selectedCourse ? (
                 <div>
@@ -113,6 +149,8 @@ export default function CoursesPage() {
                                 courses={courses}
                                 authUser={authUser}
                                 handleSelectedCourse={handleSelectedCourse}
+                                handleEditCourseOpen={handleEditCourseOpen}
+                                handleDeleteCourse={handleDeleteCourse}
                             />
                         </Grid>
                     </Grid>

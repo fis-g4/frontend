@@ -22,17 +22,18 @@ interface CoursesProps {
     courses: any[]
     authUser: AuthUserContext
     handleSelectedCourse: (class_: any) => void
+    handleEditCourseOpen: (course_: any) => void
+    handleDeleteCourse: (course_: any) => void
 }
 
 export default function CourseList({
     courses,
     authUser,
     handleSelectedCourse,
+    handleEditCourseOpen,
+    handleDeleteCourse,
 }: Readonly<CoursesProps>) {
     const [reviewOpenMap, setReviewOpenMap] = useState<{ [key: string]: boolean }>({});
-
-    const { updateCourse } = useCoursesApi();
-    const { deleteCourse } = useCoursesApi();
 
     const handleReviewOpen = (courseId: string) => {
     setReviewOpenMap((prevMap) => ({
@@ -66,10 +67,6 @@ export default function CourseList({
             return true
         }
         return false
-    }
-
-    const handleDeleteCourse = (course: any) => {
-        deleteCourse(course._id)
     }
    
     const theme = useTheme()
@@ -126,7 +123,7 @@ export default function CourseList({
                             {courseCreator(course) && (
                                 <IconButton
                                     color="primary"
-                                    onClick={() => handleSelectedCourse(course)}
+                                    onClick={() => handleEditCourseOpen(course)}
                                 >
                                     <Edit />
                                 </IconButton>
