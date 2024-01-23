@@ -10,7 +10,6 @@ import IconButton from '@mui/material/IconButton';
 import Searchbar from './common/searchbar';
 import { NAV, HEADER } from './config-layout';
 import AccountPopover from './common/account-popover';
-import NotificationsPopover from './common/notifications-popover';
 import Iconify from '../../components/iconify/iconify';
 import { useResponsive } from '../../hooks/useResponsive';
 import { bgBlur } from '../../theme/css';
@@ -34,7 +33,6 @@ export default function Header({ onOpenNav } : { onOpenNav: () => void }) {
       <Box sx={{ flexGrow: 1 }} />
 
       <Stack direction="row" alignItems="center" spacing={1}>
-        {/* <NotificationsPopover /> */ /* This component is not fully ready. It will be finished by the time the mailbox is done*/}
         <AccountPopover />
       </Stack>
     </>

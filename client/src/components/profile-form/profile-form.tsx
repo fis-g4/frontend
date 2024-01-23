@@ -7,40 +7,116 @@ import { updateUserValidationSchema } from '../../utils/schemas';
 import TransitionSnackbar from '../transition-snackbar/transition-snackbar';
 import { StyledBadge } from "./styles";
 import { useResponsive } from "../../hooks/useResponsive";
+import { useUsersApi } from "../../api/useUsersApi";
+import React from "react";
+import TransitionModal from "../transition-modal/transition-modal";
+import ReviewUsersOpen from "../review/reviews-users-from";
+import ReviewUsersAboutOpen from "../review/reviews-users-about";
+import ReviewUsersFromOpen from "../review/reviews-users-from";
 
 export default function ProfileForm() {
-    const { authUser } = useAuth();
+    const { authUser, login } = useAuth();
+    const { updateUser } = useUsersApi();
     const smUp = useResponsive('up', 'sm');
-
+    
     const fileInput = useRef<HTMLInputElement>(null);
 
     const [showCurrentPassword, setShowCurrentPassword] = useState(false);
     const [showNewPassword, setShowNewPassword] = useState(false);
     const [showConfirmNewPassword, setShowConfirmNewPassword] = useState(false);
-    const [profilePic, setProfilePic] = useState(authUser.user?.photoURL || 'assets/images/broken-avatar.svg');
+    const [profilePic, setProfilePic] = useState(authUser.user?.profilePicture || 'assets/images/broken-avatar.svg');
     const [openSnackbar, setOpenSnackbar] = useState(false);
     const [errorData, setErrorData] = useState('');
     const responsiveDirection = smUp ? 'row' : 'column';
     const responsiveAlign = smUp ? 'flex-start' : 'center';
 
-
+    function noChanges(userUpdated: any){
+        return userUpdated.firstName === authUser.user?.firstName && userUpdated.lastName === authUser.user?.lastName && userUpdated.email === authUser.user?.email && userUpdated.profilePicture === authUser.user?.profilePicture && userUpdated.currentPassword === '' && userUpdated.newPassword === '';
+    }
+    const [reviewOpenMapFrom, setReviewOpenMapFrom] = useState<{ [key: string]: boolean }>({});
+    const [reviewOpenMapAbout, setReviewOpenMapAbout] = useState<{ [key: string]: boolean }>({});
+    const handleReviewOpenFrom = (user: string) => {
+        setReviewOpenMapFrom((prevMap) => ({
+            ...prevMap,
+            [user]: true,
+        }));
+        };
+    
+    const handleReviewCloseFrom = (user: string) => {
+        setReviewOpenMapFrom((prevMap) => ({
+        ...prevMap,
+        [user]: false,
+    }));
+    };
+    const handleReviewOpenAbout = (user: string) => {
+        setReviewOpenMapAbout((prevMap) => ({
+            ...prevMap,
+            [user]: true,
+        }));
+        };
+    
+    const handleReviewCloseAbout = (user: string) => {
+        setReviewOpenMapAbout((prevMap) => ({
+            ...prevMap,
+            [user]: false,
+        }));
+    };
     const formik = useFormik({
         initialValues: {
-          firstName: authUser.user?.firstName,
-          lastName: authUser.user?.lastName,
-          email: authUser.user?.email,
-          photoURL: authUser.user?.photoURL,
+          firstName: authUser.user?.firstName || '',
+          lastName: authUser.user?.lastName || '',
+          email: authUser.user?.email || '',
+          profilePicture: authUser.user?.profilePicture || '',
           currentPassword: '',
           newPassword: '',
           confirmNewPassword: '',
         },
         validationSchema: updateUserValidationSchema,
         onSubmit: (values) => {
-            alert(JSON.stringify(values, null, 2));
+            let userUpdated = {
+                firstName: values.firstName,
+                lastName: values.lastName,
+                email: values.email,
+                profilePicture: values.profilePicture,
+                currentPassword: values.currentPassword,
+                newPassword: values.newPassword,
+            }
+            if (noChanges(userUpdated)){
+                setErrorData('You have not made any changes.');
+                setOpenSnackbar(true);
+            } else{
+                updateUser(userUpdated).then((response: any) => {
+                    if (response.status === 200) {
+                        if (authUser.user){
+                            const finalUser = {
+                                ...authUser.user,
+                                firstName: values.firstName,
+                                lastName: values.lastName,
+                                email: values.email,
+                                profilePicture: profilePic,
+                            }
+                            login(finalUser, authUser.token);
+                            setErrorData('Your profile has been updated successfully.');
+                            setOpenSnackbar(true);
+                        }
+                    } else{
+                        response.json().then((responseData: any) => {
+                            setErrorData(responseData.error);
+                            setOpenSnackbar(true);
+                        }).catch((_error: any) => {
+                            setErrorData('There was an error updating your profile. Please try again.');
+                            setOpenSnackbar(true);
+                        });
+                    }
+                }).catch((error) => {
+                    setErrorData('There was an error updating your profile. Please try again.');
+                    setOpenSnackbar(true);
+                });
+            }
         },
         onReset: () => {
-            formik.setFieldValue('photoURL', authUser.user?.photoURL);
-            setProfilePic(authUser.user?.photoURL || 'assets/images/broken-avatar.svg');
+            formik.setFieldValue('profilePicture', authUser.user?.profilePicture);
+            setProfilePic(authUser.user?.profilePicture || 'assets/images/broken-avatar.svg');
             if (fileInput.current) {
                 fileInput.current.value = '';
             }
@@ -57,15 +133,15 @@ export default function ProfileForm() {
     }
 
     useEffect(()=>{
-        if (formik.errors.photoURL){
-            formik.setFieldValue('photoURL', authUser.user?.photoURL);
-            setProfilePic(authUser.user?.photoURL || 'assets/images/broken-avatar.svg');
+        if (formik.errors.profilePicture){
+            formik.setFieldValue('profilePicture', authUser.user?.profilePicture);
+            setProfilePic(authUser.user?.profilePicture || 'assets/images/broken-avatar.svg');
             if (fileInput.current) {
                 fileInput.current.value = '';
             }
-            handleOpenSnackbar(formik.errors.photoURL);
+            handleOpenSnackbar(formik.errors.profilePicture);
         }
-    }, [formik.errors.photoURL])
+    }, [formik.errors.profilePicture])
 
     return (
         <form onSubmit={formik.handleSubmit} onReset={formik.handleReset} style={{ justifySelf: 'center', alignSelf: 'center', width: '100%', paddingLeft: '10%', paddingRight: '10%', marginTop: '50px' }}>
@@ -79,7 +155,7 @@ export default function ProfileForm() {
                     <input 
                         type="file"
                         id="contained-button-file"
-                        name='photoURL'
+                        name='profilePicture'
                         style={{ display: 'none' }}
                         accept='image/*'
                         onChange={(e) => {
@@ -88,7 +164,7 @@ export default function ProfileForm() {
                                 let blob = file.slice(0, file.size, file.type);
                                 let newFile = new File([blob], file.name, {type: file.type});
                                 setProfilePic(URL.createObjectURL(newFile));
-                                formik.setFieldValue('photoURL', newFile);
+                                formik.setFieldValue('profilePicture', newFile);
                             }
                           }}
                         ref={fileInput}
@@ -114,8 +190,55 @@ export default function ProfileForm() {
                                     @{authUser.user?.username}
                                 </Typography>
                                 <Typography variant="h6" sx={{ color: 'text.secondary' }}>
-                                    {authUser.user?.plan} account | {authUser.user?.coins} coins
+                                    {authUser.user?.plan} account | {authUser.user?.coinsAmount} coins
                                 </Typography>
+                            </Box>
+                        </Box>
+                        <Box
+                            sx={{
+                                my: 3,
+                                mx: 2.5,
+                                py: 2,
+                                px: 2.5,
+                                display: 'flex',
+                                borderRadius: 1.5,
+                                alignItems: 'center',
+                                bgcolor: (theme) => alpha(theme.palette.grey[500], 0.12),
+                            }}
+                            >
+                            <Box sx={{ mx: 2 }}>
+                            <Button
+                                variant="outlined"
+                                color="secondary"
+                                sx={{ marginRight: '10px' }}
+                                onClick={() => handleReviewOpenAbout(authUser.user?.username || '')}
+                                >
+                                Reviews about me
+                                </Button>
+                                <TransitionModal
+                                key={authUser.user?.username }
+                                open={reviewOpenMapAbout[authUser.user?.username ||''] || false}
+                                handleClose={() => handleReviewCloseAbout(authUser.user?.username ||'')}
+                                sx={{ maxWidth: 500, width: '100%' }}
+                                >
+                                <ReviewUsersAboutOpen user={authUser.user?.username ||''}/>
+                                </TransitionModal>
+                            <Button
+                                variant="outlined"
+                                color="secondary"
+                                sx={{ marginRight: '10px' }}
+                                onClick={() => handleReviewOpenFrom(authUser.user?.username || '')}
+                                >
+                                Reviews from me
+                                </Button>
+                                <TransitionModal
+                                key={authUser.user?.username }
+                                open={reviewOpenMapFrom[authUser.user?.username ||''] || false}
+                                handleClose={() => handleReviewCloseFrom(authUser.user?.username ||'')}
+                                sx={{ maxWidth: 500, width: '100%' }}
+                                >
+                                <ReviewUsersFromOpen  user={authUser.user?.username ||''} />
+                                </TransitionModal>
                             </Box>
                         </Box>
                     </Stack>
