@@ -1,7 +1,6 @@
 import { useAuth } from '../hooks/useAuth'
 
 export const REVIEWS_BASE_PATH = '/v1/reviews'
-const BASE_LOCAL = "http://localhost:8000"
 
 export const useReviewsApi = () => {
     const { fetchWithInterceptor, authUser } = useAuth()
@@ -38,7 +37,7 @@ export const useReviewsApi = () => {
     const getReviewByCourses= async (course_id: string) => {
         console.log(basicHeaders)
         const response = await fetchWithInterceptor(
-            `${BASE_LOCAL}${REVIEWS_BASE_PATH}//course/${course_id}`,
+            `${process.env.REACT_APP_API_URL}${REVIEWS_BASE_PATH}/course/${course_id}`,
             {
                 method: 'GET',
                 headers: basicHeaders,
@@ -84,7 +83,30 @@ export const useReviewsApi = () => {
     }
 
     // ------------------------ POST ROUTES ------------------------
-
+    const addReview = async ( type: string,
+        user: string,
+        creator: string,
+        title: string,
+        description: string,
+        rating: string,
+        course: string,
+        material: string) => {
+        const response = await fetchWithInterceptor(`${process.env.REACT_APP_API_URL}${REVIEWS_BASE_PATH}/new`, 
+            { 
+                method: "POST",
+                headers: basicHeaders,
+                body: JSON.stringify({ user: user,
+                    creator: creator,
+                    title: title,
+                    description: description,
+                    rating: rating,
+                    course: course,
+                    material: material })
+            }
+        );
+        return response;
+    }
+    /*
     const postReview = async (
         type: string,
         user: string,
@@ -111,15 +133,16 @@ export const useReviewsApi = () => {
           });
           console.log("El cuerpo es:"+body);
         const response = await fetchWithInterceptor(
-            `${BASE_LOCAL}${REVIEWS_BASE_PATH}/new`,
+            `${process.env.REACT_APP_API_URL}${REVIEWS_BASE_PATH}/new`,
             {
                 method: 'POST',
-                headers: postHeaders,
+                headers: { Authorization: `Bearer ${authUser.token}` },
                 body: body,
             }
         )
+        
         return response
-    }
+    }*/
 
     const associateMaterial = async (materialId: string, courseId: string) => {
         const response = await fetchWithInterceptor(
@@ -189,7 +212,7 @@ export const useReviewsApi = () => {
         getReviewById,
         getReviewByUser,
         getReviewByMaterial,
-        postReview,
+        addReview,
         associateMaterial,
         disassociateMaterial,
         updateMaterial,

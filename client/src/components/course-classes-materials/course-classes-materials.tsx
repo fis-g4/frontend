@@ -37,7 +37,7 @@ export default function CourseClassesMaterials({
   const [contentType, setContentType] = useState('classes');
   const [reviewType, setReviewType] = useState('user');
   const [selectedMaterial, setSelectedMaterial] = useState<Material | null>(null);
-  const { postReview } = useReviewsApi()
+  const { addReview } = useReviewsApi()
   const [reviewFormData, setReviewFormData] = useState({
     type: reviewType,
     title: '',
@@ -116,7 +116,7 @@ const handleReviewSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
       console.log('Formulario enviado:', dataToSend);
   
       // Llamar a la función postReview de la API
-      const response = await postReview(
+      const response = await addReview(
         dataToSend.type,
         dataToSend.user,
         dataToSend.creator,
