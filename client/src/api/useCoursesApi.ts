@@ -2,6 +2,20 @@ import { useAuth } from "../hooks/useAuth";
 
 export const COURSES_BASE_PATH = "/v1/courses";
 
+export interface Course {
+    _id: string
+    name: string;
+    description: string;
+    price: number;
+    categories: string[];
+    language: string;
+    creator: string;
+    score: number;
+    access: string[];
+    classes: string[];
+    materials: string[];
+}
+
 export const useCoursesApi = () => {
     const { fetchWithInterceptor, authUser } = useAuth();
 
@@ -47,7 +61,7 @@ export const useCoursesApi = () => {
             formData.append(key, course[key])
         }
         
-        const response = await fetchWithInterceptor(`${process.env.REACT_APP_API_URL}${COURSES_BASE_PATH}/${course.id}`, 
+        const response = await fetchWithInterceptor(`${process.env.REACT_APP_API_URL}${COURSES_BASE_PATH}/${course._id}`, 
             { 
                 method: "PUT",
                 headers: { Authorization: `Bearer ${authUser.token}`},

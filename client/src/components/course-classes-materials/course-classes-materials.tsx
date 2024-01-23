@@ -15,14 +15,13 @@ import { Class } from '../../_mocks/classes';
 import { Material } from '../../_mocks/materials';
 import CourseClasses from './course-classes';
 import CourseMaterials from './course-materials';
-import { Course } from '../../_mocks/courses';
 
 interface CourseClassesMaterialsProps {
   classes: Class[];
   materials: Material[];
   authUser: AuthUserContext;
   handleSelectedClass: (class_: Class) => void;
-  course:Course;
+  course:any;
 }
 
 export default function CourseClassesMaterials({

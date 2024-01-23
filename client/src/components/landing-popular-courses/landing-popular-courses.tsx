@@ -7,7 +7,6 @@ import {
     alpha,
 } from '@mui/material'
 import CourseCard from './course-card'
-import { Course } from '../../_mocks/courses'
 
 import { useCoursesApi } from '../../api/useCoursesApi'
 
@@ -15,7 +14,7 @@ export default function LandingPopularCourses({ handleRegisterOpen } : { handleR
     const [openSnackbar, setOpenSnackbar] = useState(false);
     const [errorData, setErrorData] = useState('');
     const theme = useTheme()
-    const [courses, setCourses] = useState<Course[]>([]);
+    const [courses, setCourses] = useState<any[]>([]);
 
     const { getBestCourses } = useCoursesApi();
     

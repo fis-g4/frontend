@@ -9,7 +9,6 @@ import {
     alpha,
 } from '@mui/material'
 
-import { Course } from '../../_mocks/courses'
 import { Download, ShoppingCart, RemoveRedEye, Edit, Delete } from '@mui/icons-material'
 import { AuthUserContext } from '../../hooks/useAuth'
 import { longWordInTheText } from '../../utils/format-text'
@@ -20,9 +19,9 @@ import Button from '@mui/material/Button'
 import ReviewCoursesOpen from '../review/reviews-courses'
 import { useCoursesApi } from '../../api/useCoursesApi'
 interface CoursesProps {
-    courses: Course[]
+    courses: any[]
     authUser: AuthUserContext
-    handleSelectedCourse: (class_: Course) => void
+    handleSelectedCourse: (class_: any) => void
 }
 
 export default function CourseList({
@@ -49,7 +48,7 @@ export default function CourseList({
     }));
     };
 
-    const accessToCourse = (course: Course) => {
+    const accessToCourse = (course: any) => {
         if (
             course.price === 0 ||
             course.access.includes(authUser.user?.username as string) ||
@@ -60,7 +59,7 @@ export default function CourseList({
         return false
     }
 
-    const courseCreator = (course: Course) => {
+    const courseCreator = (course: any) => {
         if (
             course.creator === authUser.user?.username as string
         ) {
@@ -69,7 +68,7 @@ export default function CourseList({
         return false
     }
 
-    const handleDeleteCourse = (course: Course) => {
+    const handleDeleteCourse = (course: any) => {
         deleteCourse(course._id)
     }
    
