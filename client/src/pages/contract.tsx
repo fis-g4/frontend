@@ -1,4 +1,15 @@
-import { Container, ButtonGroup, Button, Typography, Grid, FormControl, InputLabel, Select, SelectChangeEvent, MenuItem } from '@mui/material'
+import {
+    Container,
+    ButtonGroup,
+    Button,
+    Typography,
+    Grid,
+    FormControl,
+    InputLabel,
+    Select,
+    SelectChangeEvent,
+    MenuItem,
+} from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { useRouter } from '../routes/hooks/useRouter'
 import Footer from '../components/footer/footer'
@@ -12,15 +23,8 @@ const cssAppliedContent = (body: any) => `
 
 const ContractPage: React.FC = () => {
     const [html, setHtml] = useState<string>('')
-    const [version, setVersion] = useState<string>('v0.9')
-    const versions = [
-        'v0.9',
-        'v0.8',
-        'v0.7',
-        'v0.6',
-        'v0.5',
-        'v0.4',
-    ]
+    const [version, setVersion] = useState<string>('v1.0')
+    const versions = ['v1.0', 'v0.9', 'v0.8', 'v0.7', 'v0.6', 'v0.5', 'v0.4']
     const router = useRouter()
 
     useEffect(() => {
