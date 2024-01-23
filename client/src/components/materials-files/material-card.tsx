@@ -23,6 +23,7 @@ interface MaterialCardProps extends Material {
     onEdit: (id: string) => void
     onDelete: (id: string) => void
     smUp: boolean
+    handleMaterial: (id: string, title: string) => void
 }
 
 export default function MaterialCard({
@@ -36,6 +37,7 @@ export default function MaterialCard({
     onEdit,
     onDelete,
     smUp,
+    handleMaterial,
 }: Readonly<MaterialCardProps>) {
     const theme = useTheme()
     const currencySymbol = currency === 'USD' ? '$' : '€'
@@ -64,7 +66,12 @@ export default function MaterialCard({
                     width: responsiveWidthCard,
                 }}
             >
-                <Typography variant="h6">{title}</Typography>
+                <Typography
+                    variant="h6"
+                    onClick={() => handleMaterial(id, title)}
+                >
+                    {title}
+                </Typography>
                 <Typography color="textSecondary" variant="body2">
                     {description}
                 </Typography>

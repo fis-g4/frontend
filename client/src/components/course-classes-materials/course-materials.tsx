@@ -1,5 +1,6 @@
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
+import { Link } from 'react-router-dom'
 import {
     Typography,
     ListItemIcon,
@@ -58,9 +59,12 @@ export default function CourseMaterials({
                         }}
                     >
                         <Box>
+                        <Link to={`/material/${material.id}`}>
                             <Typography variant="body1">
                                 {longWordInTheText(material.title, 20)}
+                               
                             </Typography>
+                        </Link>
                             <Typography variant="body2" color="textSecondary">
                                 {longWordInTheText(material.description, 20)}
                             </Typography>
@@ -89,5 +93,5 @@ export default function CourseMaterials({
                 </Card>
             ))}
         </Box>
-    )
-}
+      );
+    }
