@@ -128,7 +128,7 @@ export default function LoginView({ handleLoginClose, handleRegisterOpen, handle
           variant="contained"
           color="inherit"
           disabled={!formik.isValid}
-        >Iniciar sesión</Button>
+        >Login</Button>
       </form>
     )
 
@@ -169,7 +169,7 @@ export default function LoginView({ handleLoginClose, handleRegisterOpen, handle
               </Link>
             </Typography>
 
-            <Stack direction="row" spacing={2}>
+            {/* <Stack direction="row" spacing={2}>
               <Button
                 fullWidth
                 size="large"
@@ -205,7 +205,7 @@ export default function LoginView({ handleLoginClose, handleRegisterOpen, handle
               <Typography variant="body2" sx={{ color: 'text.secondary' }}>
                 OR
               </Typography>
-            </Divider>
+            </Divider> */}
 
             {renderForm}
           </Card>
