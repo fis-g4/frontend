@@ -7,7 +7,7 @@ import ThemeProvider from '../../theme'
 import { alpha, useScrollTrigger, useTheme } from '@mui/material'
 import LandingLogo from '../landing-logo/landing-logo'
 
-function LandingHeader({handleLoginOpen, handleRegisterOpen} : {handleLoginOpen: () => void, handleRegisterOpen: () => void}) {
+function LandingHeader({handleLoginOpen, handleRegisterOpen, handleIndexApiOpen} : {handleLoginOpen: () => void, handleRegisterOpen: () => void, handleIndexApiOpen: () => void}) {
 
     const theme = useTheme();
 
@@ -23,7 +23,9 @@ function LandingHeader({handleLoginOpen, handleRegisterOpen} : {handleLoginOpen:
     function registerClickEvent() {
         handleRegisterOpen();
     }
-    
+    function indexApisClickEvent() {
+        handleIndexApiOpen();
+    }
     return (
         <ThemeProvider>
             <AppBar position="fixed" sx={{backdropFilter: "blur(5px)", backgroundColor: `${trigger ? theme.palette.primary.light : alpha(theme.palette.common.white, 0.3)}`}}>
@@ -32,7 +34,14 @@ function LandingHeader({handleLoginOpen, handleRegisterOpen} : {handleLoginOpen:
                         <LandingLogo sx={{width: '30%'}} />
 
                         <Box sx={{ flexGrow: 1 }} />
-
+                        <Button
+                            variant="outlined"
+                            color="info"
+                            sx={{ marginRight: '10px' }}
+                            onClick={indexApisClickEvent}
+                        >
+                            Api Documentation
+                        </Button>
                         <Button
                             variant="outlined"
                             sx={{ marginRight: '10px', color: '#000000', borderColor: '#000000' , '&:hover': { backgroundColor: '#000000', color: '#FFFFFF' }}}
