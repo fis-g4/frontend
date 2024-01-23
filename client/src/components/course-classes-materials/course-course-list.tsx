@@ -7,6 +7,8 @@ import {
     Box,
     useTheme,
     alpha,
+    Chip,
+    Rating,
 } from '@mui/material'
 
 import { Download, ShoppingCart, RemoveRedEye, Edit, Delete } from '@mui/icons-material'
@@ -70,6 +72,14 @@ export default function CourseList({
     }
    
     const theme = useTheme()
+    
+    const categoriesLine = (course: any) => {
+        return (
+        course.categories.map((category:string, index:number) => (
+        <Chip key={index} label={category} size="small" style={{ marginRight: '5px' }} />
+      ))
+      );
+    }
 
     return (
         <Box sx={{ height: '70vh', overflowY: 'auto' }}>
@@ -98,11 +108,14 @@ export default function CourseList({
                             <Typography variant="body2" color="textSecondary">
                                 {longWordInTheText(course.description, 20)}
                             </Typography>
-                            <Typography variant="body2" color="primary">
-                                Price: 
-                                {course.price}
+                            <Typography variant="body2" color="textPrimary">
+                                {categoriesLine(course)}
                             </Typography>
-                            <Button
+                            <Typography variant="body2" color="textSecondary">
+                                Language: {longWordInTheText(course.language, 20)}
+                            </Typography>
+                            <div>
+                                <Button
                                 variant="outlined"
                                 color="secondary"
                                 sx={{ marginRight: '10px' }}
@@ -118,8 +131,13 @@ export default function CourseList({
                                 >
                                 <ReviewCoursesOpen handleReviewClose={() => handleReviewClose(course._id)} id={course._id} />
                                 </TransitionModal>
+                            </div>
+                            <Rating name="read-only" value={course.score} readOnly precision={0.1}/>
                         </Box>
                         <ListItemIcon>
+                            <Typography variant="body2" color="secondary" style={{ fontSize: '24px', display: 'flex', alignItems: 'center' }}>
+                                {course.price + "€"}
+                            </Typography>
                             {courseCreator(course) && (
                                 <IconButton
                                     color="primary"

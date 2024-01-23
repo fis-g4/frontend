@@ -1,4 +1,4 @@
-import { Box, Typography, Card, CardContent, CardMedia, Rating } from '@mui/material';
+import { Box, Typography, Card, CardContent, CardMedia, Rating, Chip, } from '@mui/material';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
 
@@ -13,7 +13,17 @@ type Course = {
     score: number;
   };
 
-export default function CourseCard({ creator, name, description, score } : Course) {
+  
+    
+  const categoriesLine = (categories: string[]) => {
+    return (
+      categories.map((category:string, index:number) => (
+        <Chip key={index} label={category} size="small" style={{ marginRight: '5px' }} />
+      ))
+    );
+  }
+
+export default function CourseCard({ creator, name, description, score, categories, language } : Course) {
   return (
     <Card raised>
       <CardContent>
@@ -27,10 +37,12 @@ export default function CourseCard({ creator, name, description, score } : Cours
         <Typography variant="body2" color="text.secondary">
           {description}
         </Typography>
-        <Box display="flex" alignItems="center" mt={2}>
-          <AccessTimeIcon fontSize="small" />
-          <PlayCircleOutlineIcon fontSize="small" sx={{ marginLeft: 2 }} />
-        </Box>
+        <Typography variant="body2" color="textPrimary">
+            {categoriesLine(categories)}
+        </Typography>
+        <Typography variant="body2" color="textSecondary">
+            Language: {language}
+        </Typography>
       </CardContent>
     </Card>
   );

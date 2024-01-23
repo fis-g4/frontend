@@ -5,6 +5,7 @@ import {
     Grid,
     useTheme,
     alpha,
+    Chip,
 } from '@mui/material'
 import CourseCard from './course-card'
 
