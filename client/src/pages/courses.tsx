@@ -4,6 +4,7 @@ import { ArrowBack } from '@mui/icons-material'
 import { Helmet } from 'react-helmet-async'
 import VideoComponent from '../components/course-lesson-details/course-lesson-details'
 import { useResponsive } from '../hooks/useResponsive'
+import { materials, materials as mockMaterialsData } from '../_mocks/materials';
 import { Material } from '../_mocks/materials'
 import CourseClassesMaterials from '../components/course-classes-materials/course-classes-materials'
 import CourseList from '../components/course-classes-materials/course-course-list'
@@ -30,7 +31,6 @@ export default function CoursesPage() {
     const [selectedClass, setSelectedClass] = useState<Class | null>()
     const [selectedCourse, setSelectedCourse] = useState<Course | null>()
 
-
     const [newClassOpen, setNewClassOpen] = useState(false)
     const [updateClassOpen, setUpdateClassOpen] = useState(false)
     const handleNewClassOpen = () => setNewClassOpen(true)
@@ -50,6 +50,7 @@ export default function CoursesPage() {
         setSelectedCourse(course)
     }
 
+    
     const [error, setError] = useState('')
     const [errorData, setErrorData] = useState('')
     const [openSnackbar, setOpenSnackbar] = useState(false)
@@ -69,14 +70,6 @@ export default function CoursesPage() {
 
     const CourseId = "615e2f3b1d9f9b2b4c9e9b1a"
 
-    //TODO: AÑADIR FUNCIÓN PARA OBTENER UN CURSO (MICROSERVICIO DE CURSOS)
-    /*TODO: AÑADIR CHECK DE SI EL USUARIO ES EL INSTRUCTOR DEL CURSO*/
-    /*
-    if(authUser.user?.username === course.instructor){
-        setModalVisible(true)
-    }
-    */
-
 
     useEffect(() => {
         const getMaterials = async () => {
@@ -84,7 +77,10 @@ export default function CoursesPage() {
                 const response = await getCourseMaterials(CourseId);
         
                 if (response.ok) {
-                    const allMaterials: Material[] = await response.json();
+                    const allMaterialsByApi: Material[] = await response.json();
+                    const allMaterials2: Material[] = mockMaterialsData;
+                    //concatenar los materiales de la base de datos con los mock
+                    const allMaterials: Material[] = allMaterials2.concat(allMaterialsByApi);
                     setCourseMaterials(allMaterials);
                 } else {
                     console.error('Error fetching materials:', response.status, response.statusText); //TODO: A MODIFICAR POR EL MICROSERVICIO DE CURSOS

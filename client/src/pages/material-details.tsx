@@ -5,6 +5,7 @@ import { useParams } from 'react-router-dom';
 import FileComponent from '../components/course-material-details/course-material-details';
 import { Material } from '../_mocks/materials';
 import { useResponsive } from '../hooks/useResponsive';
+import { materials, materials as mockMaterialsData } from '../_mocks/materials';
 import { useAuth } from '../hooks/useAuth'
 import { useMaterialsApi } from '../api/useMaterialsApi'
 const MaterialDetailsPage = () => {
@@ -12,6 +13,7 @@ const MaterialDetailsPage = () => {
   const [materialDetails, setMaterialDetails] = useState<Material | null>(null);
   const { authUser } = useAuth()
   const { getMaterialsId } = useMaterialsApi()
+
   useEffect(() => {
     
     const getMaterialDetails = async () => {
@@ -21,8 +23,17 @@ const MaterialDetailsPage = () => {
           const foundMaterial: Material = await response.json();
           setMaterialDetails(foundMaterial);
         }else{
+          if(response.status === 404){
+            //Obtener el material por mock
+            const foundMaterial = mockMaterialsData.find((material) => material.id === id);
+          if (foundMaterial) {
+            setMaterialDetails(foundMaterial);
+          }else{
+            console.error('Material not found');
+          }
           console.error('Error fetching material by id:', response.status, response.statusText);
         }
+      } 
       }catch(error){
         console.error('An error occurred while fetching material details:', error);
       }  
@@ -61,6 +72,7 @@ const MaterialDetailsPage = () => {
             <Typography sx={{ marginBottom: 2 }}>Price: {materialDetails?.currency ?? ''} {materialDetails?.price ?? 0}</Typography>
             <Typography sx={{ marginBottom: 2 }}>Author: {materialDetails?.author ?? ''}</Typography>
             <Typography sx={{ marginBottom: 2 }}>Type: {materialDetails?.type ?? ''}</Typography>
+            <Typography sx={{ marginBottom: 2 }}>Review: {materialDetails?.review ?? 'It does not exist review for this material'}</Typography>
             <Button variant="contained" color="primary" onClick={handleDownload}>
               Download
             </Button>

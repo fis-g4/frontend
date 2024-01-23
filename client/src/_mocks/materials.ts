@@ -9,21 +9,23 @@ export interface Material {
     courses: string[]
     file: string
     type: 'book' | 'article' | 'presentation' | 'exercises'
+    review?: string
 }
 
-// export const materials: Material[] = [
-//     {
-//         id: '615e2f3b1d9f9b2b4c9e9b20',
-//         title: 'Introducción a Tidyverse',
-//         description: 'Breve introducción a la librería Tidyverse de R',
-//         price: 19.99,
-//         currency: 'EUR',
-//         author: 'Amekit',
-//         purchasers: ['Amekit2'],
-//         courses: ['1'],
-//         file: 'https://cran.r-project.org/web/packages/tidyverse/tidyverse.pdf',
-//         type: 'presentation',
-//     },
+ export const materials: Material[] = [
+    {
+        id: '615e2f3b1d9f9b2b4c9e9b20',
+        title: 'Introducción a Tidyverse',
+        description: 'Breve introducción a la librería Tidyverse de R',
+        price: 19.99,
+        currency: 'EUR',
+        author: 'Amekit',
+        purchasers: ['Amekit2'],
+        courses: ['1'],
+        file: 'https://cran.r-project.org/web/packages/tidyverse/tidyverse.pdf',
+        type: 'presentation',
+        review: '5.0'
+     }]
 //     {
 //         id: '615e2f3b1d9f9b2b4c9e9b21',
 //         title: 'Tarea clustering',
