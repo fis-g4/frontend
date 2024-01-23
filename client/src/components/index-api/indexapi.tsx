@@ -32,7 +32,7 @@ export default function IndexApiOpen({ handleIndexApiClose }: { handleIndexApiCl
                 window.open('https://api.javiercavlop.com/v1/users/docs/', '_blank');
                 break;
             case 'Payment':
-                window.open('https://api.javiercavlop.com/v1/payments/docs', '_blank');
+                window.open('https://api.javiercavlop.com/v1/payments/docs/', '_blank');
                 break;
             case 'Communication':
                 window.open('https://app.swaggerhub.com/apis-docs/mrarjona/communication-microservice/1.0.0', '_blank');
