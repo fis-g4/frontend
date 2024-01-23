@@ -14,7 +14,6 @@ import CourseClassesMaterials from '../components/course-classes-materials/cours
 import CourseList from '../components/course-classes-materials/course-course-list'
 import { useAuth } from '../hooks/useAuth'
 import { Class, classes } from '../_mocks/classes'
-import { Course } from '../_mocks/courses'
 import React from 'react'
 
 export default function CoursesPage() {
@@ -25,9 +24,9 @@ export default function CoursesPage() {
     const [errorData, setErrorData] = useState('');
     const [courseMaterials, setCourseMaterials] = useState([] as Material[])
     const [courseClasses, setCourseClasses] = useState([] as Class[])
-    const [courses, setCourses] = useState([] as Course[])
+    const [courses, setCourses] = useState([] as any[])
     const [selectedClass, setSelectedClass] = useState<Class | null>()
-    const [selectedCourse, setSelectedCourse] = useState<Course | null>()
+    const [selectedCourse, setSelectedCourse] = useState<any | null>()
 
     const { getCourses } = useCoursesApi();
 
@@ -38,7 +37,7 @@ export default function CoursesPage() {
         setSelectedClass(class_)
     }
 
-    const handleSelectedCourse = (course: Course) => {
+    const handleSelectedCourse = (course: any) => {
         setSelectedCourse(course)
     }
     
