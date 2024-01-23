@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import {
     Box,
     Typography,
@@ -5,10 +6,42 @@ import {
     useTheme,
 } from '@mui/material'
 import CategoryCard from './category-card'
-import { categories } from '../../_mocks/categories'
+
+import { useCoursesApi } from '../../api/useCoursesApi'
 
 export default function CategorySection() {
+    const [openSnackbar, setOpenSnackbar] = useState(false);
+    const [errorData, setErrorData] = useState('');
     const theme = useTheme()
+
+    const [categories, setCategories] = useState<any[]>([]);
+
+    const { getCategories } = useCoursesApi();
+    
+    const handleOpenSnackbar = (error?: string) => {
+        setOpenSnackbar(true);
+        setErrorData(error || 'There was an error retrieving the courses. Please try later.');
+    }
+
+    useEffect(() => {
+        getCategories().then((response) => {
+            if(response.ok) {
+                response.json().then((responseData) => {
+                    setCategories(responseData);
+                }).catch((_error) => {
+                    handleOpenSnackbar();
+                });
+                } else {
+                response.json().then((responseData) => {
+                    handleOpenSnackbar(responseData.error);
+                }).catch((_error) => {
+                    handleOpenSnackbar();
+                });
+                }
+        }).catch((_error) => {
+            handleOpenSnackbar();
+        });
+    }, [])
 
     return (
         <Box sx={{marginBottom: "100px"}}>
@@ -47,9 +80,9 @@ export default function CategorySection() {
                     justifyContent="center"
                     maxWidth="75%"
                 >
-                    {categories.map((category, index) => (
+                    {Object.keys(categories).map((category:string, index:number) => (
                         <Grid item key={index} width="100%" maxWidth="500px">
-                            <CategoryCard {...category} />
+                            <CategoryCard title={category} coursesCount={Object.values(categories)[index]} />
                         </Grid>
                     ))}
                 </Grid>

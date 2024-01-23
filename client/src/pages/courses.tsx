@@ -152,6 +152,17 @@ export default function CoursesPage() {
         setSelectedCourse(null)
     }
 
+    const accessToCourse = (course: any) => {
+        if (
+            course.price === 0 ||
+            course.access.includes(authUser.user?.username as string) ||
+            course.creator === authUser.user?.username as string
+        ) {
+            return true
+        }
+        return false
+    }
+
     return (
         <>
             <Helmet>
@@ -178,12 +189,12 @@ export default function CoursesPage() {
                         <Add />
                     </IconButton>
                     <Typography variant="h4" align="center">
-                        Select a course to start
+                        Your courses
                     </Typography>
                     <Grid container spacing={0}>
                         <Grid item xs={isSmallScreen ? 12 : 12}>
                             <CourseList
-                                courses={courses}
+                                courses={courses.filter((obj) => accessToCourse(obj))}
                                 authUser={authUser}
                                 handleSelectedCourse={handleSelectedCourse}
                                 handleEditCourseOpen={handleEditCourseOpen}

@@ -41,6 +41,16 @@ export const useCoursesApi = () => {
         return response;
     };
 
+    const getCategories = async() => {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}${COURSES_BASE_PATH}/categories`, 
+            { 
+                method: "GET",
+                headers: { "Content-Type": "application/json" },
+            }
+        );
+        return response;
+    };
+
     const addCourse = async (name: string, description: string, price: number, categories: string[], language: string) => {
         const response = await fetchWithInterceptor(`${process.env.REACT_APP_API_URL}${COURSES_BASE_PATH}/new`, 
             { 
@@ -73,5 +83,5 @@ export const useCoursesApi = () => {
         return response;
     }
     
-    return { getCourses, getBestCourses, addCourse, updateCourse, deleteCourse };
+    return { getCourses, getBestCourses, getCategories, addCourse, updateCourse, deleteCourse };
 };
