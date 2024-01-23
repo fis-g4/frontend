@@ -24,6 +24,10 @@ interface CourseClassesMaterialsProps {
   authUser: AuthUserContext;
   handleSelectedClass: (class_: Class) => void;
   course:Course;
+  handleUpdateClassOpen: (class_: Class) => void;
+  handleUpdateClassClose: () => void;
+  handleRefresh: () => void;
+  handleFullyOpenSnackbar: (message: string) => void;
 }
 
 export default function CourseClassesMaterials({
@@ -31,7 +35,11 @@ export default function CourseClassesMaterials({
   materials,
   authUser,
   handleSelectedClass, 
-  course
+  course,
+  handleUpdateClassOpen,
+  handleUpdateClassClose,
+  handleRefresh,
+  handleFullyOpenSnackbar,
 }: Readonly<CourseClassesMaterialsProps>) {
   const [contentType, setContentType] = useState('classes');
   const [reviewType, setReviewType] = useState('user');
@@ -105,7 +113,7 @@ export default function CourseClassesMaterials({
     }
 
     console.log('Formulario enviado:', dataToSend);
-    // Puedes enviar los datos a tu API o realizar otras acciones aquí
+
   };
 
   return (
@@ -135,7 +143,7 @@ export default function CourseClassesMaterials({
 
           <Divider sx={{ my: 1 }} />
           {contentType === 'classes' && (
-            <CourseClasses classes={classes} handleSelectedClass={handleSelectedClass} />
+            <CourseClasses classes={classes} handleSelectedClass={handleSelectedClass} handleUpdateClassOpen={handleUpdateClassOpen} handleUpdateClassClose={handleUpdateClassClose} handleRefresh={handleRefresh} handleFullyOpenSnackbar={handleFullyOpenSnackbar} />
           )}
           {contentType === 'materials' && (
             <CourseMaterials materials={materials} authUser={authUser} />

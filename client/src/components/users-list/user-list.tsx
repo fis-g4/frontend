@@ -98,8 +98,9 @@ function UserList({ materialId }: Readonly<ListProps>) {
             try {
                 const response = await getMaterialPurchasers(materialId);
                 if (response.ok) {
+                    console.log('Entro')
                     const usersWhoPurchasedMyMaterial = await response.json();
-                    setMaterialPurchases(usersWhoPurchasedMyMaterial);
+                    setMaterialPurchases(usersWhoPurchasedMyMaterial.purchasers);
                     setError('');
                 } else {
                     const errorResponse = await response.json();
@@ -115,7 +116,7 @@ function UserList({ materialId }: Readonly<ListProps>) {
         }
     
         getUsersWhoPurchasedMyMaterial();
-    }, [authUser, materialId, getMaterialPurchasers]);
+    }, [materialId]);
 
     const pageCount = Math.ceil(filteredUsers.length / USERS_PER_PAGE)
 

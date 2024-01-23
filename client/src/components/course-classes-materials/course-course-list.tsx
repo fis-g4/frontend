@@ -10,7 +10,7 @@ import {
 } from '@mui/material'
 
 import { Course } from '../../_mocks/courses'
-import { Download, ShoppingCart, RemoveRedEye } from '@mui/icons-material'
+import { ShoppingCart, RemoveRedEye } from '@mui/icons-material'
 import { AuthUserContext } from '../../hooks/useAuth'
 import { longWordInTheText } from '../../utils/format-text'
 import { formatCurrency } from '../../utils/format-currency'

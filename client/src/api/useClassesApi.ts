@@ -81,7 +81,8 @@ export const useClassesApi = () => {
             `${process.env.REACT_APP_API_URL}${CLASSES_BASE_PATH}/${classId}`,
             {
                 method: 'PUT',
-                headers: basicHeaders,
+                headers: { Authorization: `Bearer ${authUser.token}` },
+                body: formData,
             }
         )
         return response

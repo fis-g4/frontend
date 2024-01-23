@@ -58,8 +58,11 @@ export default function ClassView({
     const [fileUploadedName, setFileUploadedName] = useState(fileName)
     const responsiveDirection = smUp ? 'row' : 'column'
 
-    const uploadButtonColor = fileUploaded !== '' ? 'secondary' : 'primary'
-    const uploadButtonText = fileUploaded !== '' ? fileUploaded : 'Upload file'
+    const uploadButtonColor = fileUploadedName !== '' ? 'secondary' : 'primary'
+    const uploadButtonText = fileUploaded !== '' ? fileUploadedName : 'Upload file'
+
+    const updateButtonText =
+        fileUploadedName !== '' ? 'Change file' : 'Upload file'
 
     const formik = useFormik({
         initialValues: {
@@ -103,8 +106,6 @@ export default function ClassView({
                             } else {
                                 setErrorData('Error uploading class.')
                                 setOpenSnackbar(true)
-                                console.log(response.json())
-
                             }
                         })
                         .catch((error) => {
@@ -142,6 +143,9 @@ export default function ClassView({
             formik.setFieldValue('file', _class?.file ?? '')
             setFileUploaded(_class?.file ?? '')
             setFileUploadedName(fileName)
+            if (fileInput.current) {
+                fileInput.current.value = ''
+            }
         },
     })
 
@@ -263,7 +267,9 @@ export default function ClassView({
                             component="span"
                             startIcon={<CloudUpload />}
                         >
-                            {uploadButtonText}
+                            {operation === 'create'
+                                ? uploadButtonText
+                                : updateButtonText}
                         </Button>
                     </label>
                     <input

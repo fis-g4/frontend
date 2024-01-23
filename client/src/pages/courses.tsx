@@ -14,7 +14,7 @@ import { useClassesApi } from '../api/useClassesApi'
 import { useMaterialsApi } from '../api/useMaterialsApi'
 import TransitionModal from '../components/transition-modal/transition-modal'
 import ClassView from '../components/classes-form/classes-form'
-import { text } from 'stream/consumers'
+import TransitionSnackbar from '../components/transition-snackbar/transition-snackbar'
 
 
 export default function CoursesPage() {
@@ -30,6 +30,7 @@ export default function CoursesPage() {
     const [selectedClass, setSelectedClass] = useState<Class | null>()
     const [selectedCourse, setSelectedCourse] = useState<Course | null>()
 
+
     const [newClassOpen, setNewClassOpen] = useState(false)
     const [updateClassOpen, setUpdateClassOpen] = useState(false)
     const handleNewClassOpen = () => setNewClassOpen(true)
@@ -39,7 +40,6 @@ export default function CoursesPage() {
         setUpdateClassOpen(true)
     }
     const handleUpdateClassClose = () => setUpdateClassOpen(false)
-    const COURSE_ID = '1'
     const { authUser } = useAuth()
 
     const handleSelectedClass = (class_: Class) => {
@@ -87,10 +87,10 @@ export default function CoursesPage() {
                     const allMaterials: Material[] = await response.json();
                     setCourseMaterials(allMaterials);
                 } else {
-                    //console.error('Error fetching materials:', response.status, response.statusText); //TODO: A MODIFICAR POR EL MICROSERVICIO DE CURSOS
+                    console.error('Error fetching materials:', response.status, response.statusText); //TODO: A MODIFICAR POR EL MICROSERVICIO DE CURSOS
                 }
             } catch (error) {
-                //console.error('An error occurred while fetching materials:', error); //TODO: A MODIFICAR POR EL MICROSERVICIO DE CURSOS
+                console.error('An error occurred while fetching materials:', error); //TODO: A MODIFICAR POR EL MICROSERVICIO DE CURSOS
             }
         };
 
@@ -101,6 +101,7 @@ export default function CoursesPage() {
                 if (response.ok) {
                     const allClasses: Class[] = await response.json();
                     setCourseClasses(allClasses);
+                    console.log(allClasses)
                 } else {
                     console.error('Error fetching classes:', response.status, response.statusText); //TODO: PONER UN ERROR POR PANTALLA A LO MEJOR
                 }
@@ -114,7 +115,9 @@ export default function CoursesPage() {
             const getAllCourses = courses
             setCourses(getAllCourses)
         }
+        
         if (authUser.user && refreshKey) {
+            console.log("AAA")
             getMaterials()
             getClasses()
             getCourses()
@@ -148,7 +151,25 @@ export default function CoursesPage() {
                         </Grid>
                     </Grid>
                 </div>
-            ) : (
+            ) : (<>
+                    {class_ && <TransitionModal
+                        open={updateClassOpen}
+                        handleClose={handleUpdateClassClose}
+                        sx={{ maxWidth: 500, width: '100%' }}
+                    >
+                        <ClassView
+                            _class={class_}
+                            operation="update"
+                            creator = {authUser.user?.username ?? ''}
+                            course={CourseId}
+                            handleRefresh={handleRefresh}
+                            handleUpdateClassClose={
+                                handleUpdateClassClose
+                            }
+                            handleFullyOpenSnackbar={handleOpenSnackbar}
+                        />
+                    </TransitionModal>
+                    } 
                 <div>
                     <IconButton
                         color="primary"
@@ -175,12 +196,13 @@ export default function CoursesPage() {
                             )}
                         </Grid>
                         
-                        <Grid item xs={isSmallScreen ? 12 : 5}>
+                        <Grid item xs={isSmallScreen ? 12 : 5} >
                             <Button
                                 color= "primary"
                                 variant="contained"
                                 type="submit"
                                 onClick={() => handleNewClassOpen()}
+                                sx={{ display: 'block', mx: 'auto', marginBottom: 2}}
                             >
                                 Add new class
                             </Button>
@@ -189,15 +211,14 @@ export default function CoursesPage() {
                                 handleClose={handleNewClassClose}
                                 sx={{ maxWidth: 500, width: '100%' }}
                                 > 
-                            
-                            <ClassView
-                            operation="create"
-                            course={CourseId}
-                            creator= {authUser.user?.username ?? ''}
-                            handleRefresh={handleRefresh}
-                            handleNewClassClose={handleNewClassClose}
-                            handleFullyOpenSnackbar={handleOpenSnackbar}
-                            />
+                                <ClassView
+                                operation="create"
+                                course={CourseId}
+                                creator= {authUser.user?.username ?? ''}
+                                handleRefresh={handleRefresh}
+                                handleNewClassClose={handleNewClassClose}
+                                handleFullyOpenSnackbar={handleOpenSnackbar}
+                                />
                             </TransitionModal>
                             <CourseClassesMaterials
                                 classes={courseClasses}
@@ -205,10 +226,21 @@ export default function CoursesPage() {
                                 authUser={authUser}
                                 course= {selectedCourse}
                                 handleSelectedClass={handleSelectedClass}
+                                handleUpdateClassOpen={handleUpdateClassOpen}
+                                handleUpdateClassClose={handleUpdateClassClose}
+                                handleRefresh={handleRefresh}
+                                handleFullyOpenSnackbar={handleOpenSnackbar}
                             />
                         </Grid>
                     </Grid>
                 </div>
+                <TransitionSnackbar
+                    open={openSnackbar}
+                    onClose={handleCloseSnackbar}
+                    message={errorData}
+                    autoHideDuration={6000}
+                />
+                </>
             )}
         </>
     )

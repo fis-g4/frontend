@@ -39,7 +39,7 @@ export default function CourseMaterials({
     const theme = useTheme()
 
     return (
-        <Box sx={{ height: '70vh', overflowY: 'auto' }}>
+        <Box sx={{ height: '40vh', overflowY: 'auto' }}>
             {materials.map((material) => (
                 <Card
                     key={material.id}

@@ -18,7 +18,6 @@ import { useTheme } from '@mui/material/styles'
 import { CloudUpload } from '@mui/icons-material'
 import { Material } from '../../_mocks/materials'
 import { useMaterialsApi } from '../../api/useMaterialsApi'
-import { useMaterialsApi } from '../../api/useMaterialsApi'
 
 const currencies = [
     {
@@ -71,7 +70,6 @@ export default function MaterialView({
     if (material) {
         fileName = material.file?.split('/').pop() ?? ''
     }
-    const { uploadMaterial } = useMaterialsApi()
     const theme = useTheme()
     const smUp = useResponsive('up', 'sm')
 

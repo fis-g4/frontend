@@ -180,7 +180,7 @@ export default function MaterialsPage() {
                         variant="h3"
                         sx={{ marginLeft: '25px', marginTop: '10px' }}
                     >
-                        My Materials {loading && 'Loading...'}
+                        My Materials
                     </Typography>
                 ) : (
                     <Box display={'flex'} flexDirection={'column'}>

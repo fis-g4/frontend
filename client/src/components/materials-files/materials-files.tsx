@@ -40,6 +40,7 @@ export default function MaterialsFiles({
                 if (response.ok) {
                     setErrorData('Material deleted successfully.')
                     setOpenSnackbar(true)
+                    handleRefresh()
                 } else {
                     setErrorData('Error deleting material.')
                     setOpenSnackbar(true)
