@@ -35,13 +35,12 @@ function LandingHeader({handleLoginOpen, handleRegisterOpen} : {handleLoginOpen:
 
                         <Button
                             variant="outlined"
-                            color="secondary"
-                            sx={{ marginRight: '10px' }}
+                            sx={{ marginRight: '10px', color: '#000000', borderColor: '#000000' , '&:hover': { backgroundColor: '#000000', color: '#FFFFFF' }}}
                             onClick={loginClickEvent}
                         >
                             Login
                         </Button>
-                        <Button variant="contained" color="secondary" onClick={registerClickEvent}>
+                        <Button variant="contained" sx={{color: '#FFFFFF', backgroundColor: '#000000', '&:hover': { backgroundColor: '#FFFFFF', color: '#000000'}}} onClick={registerClickEvent}>
                             Register
                         </Button>
                     </Toolbar>
