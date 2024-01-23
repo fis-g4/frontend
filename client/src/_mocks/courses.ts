@@ -1,35 +1,34 @@
 export interface Course {
     id: string
-    instructor: string
-    title: string
-    title2: string
+    name: string
     description: string
-    image: string
-    rating: number
-    length: string
-    videoCount: string
-    videoUrl: string
     price: number
-    currency: 'USD' | 'EUR'
-    purchasers: string[]
+    categories: string[]
+    languaje: string
+    creator: string
+    score: number
+    access: string[]
+    classes: string[]
+    materials: string[]
+    currency: string
+    image: string
 }
 
 export const courses: Course[] = [
     {
         id: '615e2f3b1d9f9b2b4c9e9b1a',
-        instructor: 'ivan',
-        title: 'Cloud Computing Mastery',
-        title2: 'Cloud Computing Mastery',
+        creator: 'ivan',
+        name: 'Cloud Computing Mastery',
         description:
             'Cloud computing is a transformative paradigm in the world of information.',
         image: '/assets/prueba.jpg',
-        rating: 4.8,
-        length: '15hr 30m',
-        videoCount: '60+ Video',
-        videoUrl:
-            'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4',
+        score: 4.8,
         price: 0,
-        currency: 'EUR',
-        purchasers: [],
+        categories: ['Cloud Computing', 'AWS'],
+        languaje: 'English',
+        access: ['Amekit'],
+        classes: [],
+        materials: [],
+        currency: 'USD',
     },
 ]

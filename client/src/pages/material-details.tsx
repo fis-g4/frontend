@@ -2,27 +2,38 @@ import React, { useEffect, useState } from 'react';
 import { Card, CardContent, Grid, Typography, Divider, Button,useTheme, alpha  } from '@mui/material';
 import { useParams } from 'react-router-dom';
 import FileComponent from '../components/course-material-details/course-material-details';
-import { Material, materials } from '../_mocks/materials';
+import { Material } from '../_mocks/materials';
 import { useResponsive } from '../hooks/useResponsive';
 import { useAuth } from '../hooks/useAuth'
+import { useMaterialsApi } from '../api/useMaterialsApi';
+
 const MaterialDetailsPage = () => {
-  const { id } = useParams();
+  const { id }  = useParams();
   const [materialDetails, setMaterialDetails] = useState<Material | null>(null);
   const { authUser } = useAuth()
+  const { getMaterialsId } = useMaterialsApi()
 
   useEffect(() => {
-    // Obtener los detalles del material usando el ID
     const getMaterialDetails = async () => {
-      // Buscar el material por ID
-      const foundMaterial = materials.find((material) => material.id === id);
+        try {
+            if (id){
+              
+            const materialResponse = await getMaterialsId(id);
 
-      if (foundMaterial) {
-        setMaterialDetails(foundMaterial);
-      }
+            if (materialResponse.ok) {
+                const materialDetails = await materialResponse.json();
+                setMaterialDetails(materialDetails);
+            } else {
+                console.error('Error fetching material details:', materialResponse.status, materialResponse.statusText);
+            }
+          }
+        } catch (error) {
+            console.error('An error occurred while fetching material details:', error);
+        }
     };
 
     getMaterialDetails();
-  }, [authUser, id]);
+}, [authUser,id]);
 
     const isSmallScreen = useResponsive('down', 'sm')
     const handleDownload = () => {

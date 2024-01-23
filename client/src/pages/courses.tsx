@@ -4,11 +4,11 @@ import { ArrowBack } from '@mui/icons-material'
 import { Helmet } from 'react-helmet-async'
 import VideoComponent from '../components/course-lesson-details/course-lesson-details'
 import { useResponsive } from '../hooks/useResponsive'
-import { Material, materials } from '../_mocks/materials'
+import { Material } from '../_mocks/materials'
 import CourseClassesMaterials from '../components/course-classes-materials/course-classes-materials'
 import CourseList from '../components/course-classes-materials/course-course-list'
 import { useAuth } from '../hooks/useAuth'
-//import { Class, classes } from '../_mocks/classes'
+import { Class} from '../_mocks/classes'
 import { Course, courses } from '../_mocks/courses'
 import { useClassesApi } from '../api/useClassesApi'
 import { useMaterialsApi } from '../api/useMaterialsApi'
@@ -16,20 +16,11 @@ import TransitionModal from '../components/transition-modal/transition-modal'
 import ClassView from '../components/classes-form/classes-form'
 import { text } from 'stream/consumers'
 
-interface Class {
-    id: string
-    title: string
-    description: string
-    order: number
-    file: string
-    course: string
-    creator: string
-}
 
 export default function CoursesPage() {
 
-    const { getAllClasses } = useClassesApi()
-    const { getAllMaterials } = useMaterialsApi()
+    const { getCourseClasses } = useClassesApi()
+    const { getCourseMaterials } = useMaterialsApi()
     const [refreshKey, setRefreshKey] = useState(true)
     const [modalVisible, setModalVisible] = useState(false)
     const [class_, setClass] = useState<Class | null>(null)
@@ -90,14 +81,11 @@ export default function CoursesPage() {
     useEffect(() => {
         const getMaterials = async () => {
             try {
-                const response = await getAllMaterials();
+                const response = await getCourseMaterials(CourseId);
         
                 if (response.ok) {
                     const allMaterials: Material[] = await response.json();
-                    const getUserMaterials = allMaterials.filter(
-                        (material) => material.courses.includes(CourseId)
-                    );
-                    setCourseMaterials(getUserMaterials);
+                    setCourseMaterials(allMaterials);
                 } else {
                     //console.error('Error fetching materials:', response.status, response.statusText); //TODO: A MODIFICAR POR EL MICROSERVICIO DE CURSOS
                 }
@@ -108,14 +96,11 @@ export default function CoursesPage() {
 
         const getClasses = async () => {
             try {
-                const response = await getAllClasses();
+                const response = await getCourseClasses(CourseId);
         
                 if (response.ok) {
                     const allClasses: Class[] = await response.json();
-                    const getUserClasses = allClasses.filter(
-                        (class_) => class_.course === CourseId //TODO: A MODIFICAR POR EL MICROSERVICIO DE CURSOS
-                    );
-                    setCourseClasses(getUserClasses);
+                    setCourseClasses(allClasses);
                 } else {
                     console.error('Error fetching classes:', response.status, response.statusText); //TODO: PONER UN ERROR POR PANTALLA A LO MEJOR
                 }
@@ -135,7 +120,7 @@ export default function CoursesPage() {
             getCourses()
             setRefreshKey(false)
         }
-    }, [authUser, getAllClasses, getAllMaterials, refreshKey])
+    }, [authUser, getCourseMaterials, getCourseClasses, refreshKey])
 
     const isSmallScreen = useResponsive('down', 'md')
 
@@ -143,7 +128,6 @@ export default function CoursesPage() {
         setSelectedClass(null)
         setSelectedCourse(null)
     }
-    console.log(authUser.token)
     return (
         <>
             <Helmet>
@@ -176,7 +160,7 @@ export default function CoursesPage() {
                         <Grid item xs={isSmallScreen ? 12 : 7}>
                             {selectedClass?.file ? (
                                 <VideoComponent
-                                    playlistTitle={selectedCourse?.title ??  'Loading...'}
+                                    playlistTitle={selectedCourse?.name ??  'Loading...'}
                                     videoTitle={selectedClass?.title ?? 'Loading...'}
                                     videoUrl={selectedClass?.file ?? ''}
                                     description={

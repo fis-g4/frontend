@@ -256,6 +256,7 @@ export const uploadMaterialValidationSchema = Yup.object({
             ['book', 'article', 'presentation', 'exercises'],
             'The type must be book, article, presentation or exercises'
         ),
+    courses: Yup.array(),
     file: Yup.lazy((value) =>
         typeof value === 'object'
             ? Yup.mixed()
@@ -276,42 +277,42 @@ export const uploadMaterialValidationSchema = Yup.object({
                       return true
                   })
             : Yup.string().trim()
-    )
+    ),
 })
-    export const uploadClassValidationSchema = Yup.object({
-        title: Yup.string()
-            .trim()
-            .required('The title is required')
-            .min(3, 'The title must be at least 3 characters long')
-            .max(32, 'The title must be at most 32 characters long'),
-        description: Yup.string()
-            .trim()
-            .required('The description is required')
-            .min(3, 'The description must be at least 3 characters long')
-            .max(64, 'The description must be at most 64 characters long'),
-        order: Yup.number()
-            .required('The order is required')
-            .min(0, 'The order must be greater than or equal to 0')
-            .max(1000, 'The order must be less than or equal to 1000'),
-        file: Yup.lazy((value) =>
-            typeof value === 'object'
-                ? Yup.mixed()
-                    .test(
-                        'fileSize',
-                        'The file must be less than 1GB',
-                        (value) => {
-                            if (value) {
-                                return (value as File).size <= 1073741824
-                            }
-                            return true
-                        }
-                    )
-                    .test('fileType', 'The file must be a MP4', (value) => {
-                        if (value) {
-                            return (value as File).type === 'video/mp4'
-                        }
-                        return true
-                    })
-                : Yup.string().trim()
-        )
+export const uploadClassValidationSchema = Yup.object({
+    title: Yup.string()
+        .trim()
+        .required('The title is required')
+        .min(3, 'The title must be at least 3 characters long')
+        .max(32, 'The title must be at most 32 characters long'),
+    description: Yup.string()
+        .trim()
+        .required('The description is required')
+        .min(3, 'The description must be at least 3 characters long')
+        .max(64, 'The description must be at most 64 characters long'),
+    order: Yup.number()
+        .required('The order is required')
+        .min(0, 'The order must be greater than or equal to 0')
+        .max(1000, 'The order must be less than or equal to 1000'),
+    file: Yup.lazy((value) =>
+        typeof value === 'object'
+            ? Yup.mixed()
+                  .test(
+                      'fileSize',
+                      'The file must be less than 1GB',
+                      (value) => {
+                          if (value) {
+                              return (value as File).size <= 1073741824
+                          }
+                          return true
+                      }
+                  )
+                  .test('fileType', 'The file must be a MP4', (value) => {
+                      if (value) {
+                          return (value as File).type === 'video/mp4'
+                      }
+                      return true
+                  })
+            : Yup.string().trim()
+    ),
 })

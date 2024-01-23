@@ -12,17 +12,6 @@ export const useMaterialsApi = () => {
 
     // ------------------------ GET ROUTES ------------------------
 
-    const getAllMaterials = async () => {
-        const response = await fetchWithInterceptor(
-            `${process.env.REACT_APP_API_URL}${MATERIALS_BASE_PATH}/`,
-            {
-                method: 'GET',
-                headers: basicHeaders,
-            }
-        )
-        return response
-    }
-
     const getMaterialsMe = async () => {
         const response = await fetchWithInterceptor(
             `${process.env.REACT_APP_API_URL}${MATERIALS_BASE_PATH}/me`,
@@ -56,6 +45,17 @@ export const useMaterialsApi = () => {
         return response
     }
 
+    const getCourseMaterials = async (id: string) => {
+        const response = await fetchWithInterceptor(
+            `${process.env.REACT_APP_API_URL}${MATERIALS_BASE_PATH}/course/${id}`,
+            {
+                method: 'GET',
+                headers: basicHeaders,
+            }
+        )
+        return response
+    }
+
     // ------------------------ POST ROUTES ------------------------
 
     const uploadMaterial = async (
@@ -66,10 +66,11 @@ export const useMaterialsApi = () => {
         author: string,
         purchasers: string[],
         file: string,
-        type: string
+        type: string,
+        courses: string[]
     ) => {
         const response = await fetchWithInterceptor(
-            `${process.env.REACT_APP_API_URL}${MATERIALS_BASE_PATH}/`,
+            `${process.env.REACT_APP_API_URL}${MATERIALS_BASE_PATH}`,
             {
                 method: 'POST',
                 headers: basicHeaders,
@@ -82,6 +83,7 @@ export const useMaterialsApi = () => {
                     purchasers: purchasers,
                     file: file,
                     type: type,
+                    courses: courses,
                 }),
             }
         )
@@ -150,7 +152,7 @@ export const useMaterialsApi = () => {
     }
 
     return {
-        getAllMaterials,
+        getCourseMaterials,
         getMaterialsMe,
         getMaterialsId,
         getMaterialPurchasers,

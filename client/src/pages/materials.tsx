@@ -4,13 +4,14 @@ import { Box, IconButton, Pagination, Typography } from '@mui/material'
 import MaterialsFiles from '../components/materials-files/materials-files'
 import TransitionModal from '../components/transition-modal/transition-modal'
 import MaterialView from '../components/materials-form/materials-form'
-import { Material, materials } from '../_mocks/materials'
+import { Material } from '../_mocks/materials'
 import { useAuth } from '../hooks/useAuth'
 import usePagination from '../components/pagination/pagination'
 import MaterialFilter from '../components/materials-filter/materials-filter'
 import UserList from '../components/users-list/user-list'
 import CloseIcon from '@mui/icons-material/Close'
 import UsersFilter from '../components/users-filter/users-filter'
+import { useMaterialsApi } from '../api/useMaterialsApi'
 interface User {
     id: string
     photoUrl: string
@@ -54,6 +55,8 @@ export default function MaterialsPage() {
         setMaterialFilter(newFilter)
     }
 
+    const { getMaterialsMe } = useMaterialsApi()
+
     useEffect(() => {
         const filtered = userMaterials.filter((material) => {
             const titleMatch = material.title
@@ -82,13 +85,22 @@ export default function MaterialsPage() {
 
     useEffect(() => {
         const getMaterials = async () => {
-            const getUserMaterials = materials.filter(
-                (material) => material.author === authUser.user?.username
-            )
-            setUserMaterials(getUserMaterials)
-        }
-        getMaterials()
-    }, [authUser.user?.username])
+            try {
+                const response = await getMaterialsMe();
+    
+                if (response.ok) {
+                    const userMaterials = await response.json();
+                    setUserMaterials(userMaterials);
+                } else {
+                    console.error('Error fetching user materials:', response.status, response.statusText);
+                }
+            } catch (error) {
+                console.error('An error occurred while fetching user materials:', error);
+            }
+        };
+    
+        getMaterials();
+    }, [authUser]);
 
     const [page, setPage] = useState(1)
     const PER_PAGE = 5

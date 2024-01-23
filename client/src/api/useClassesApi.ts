@@ -12,9 +12,9 @@ export const useClassesApi = () => {
 
     // ------------------------ GET ROUTES ------------------------
 
-    const getAllClasses = async () => {
+    const getCourseClasses = async (id: string) => {
         const response = await fetchWithInterceptor(
-            `${process.env.REACT_APP_API_URL}${CLASSES_BASE_PATH}/`,
+            `${process.env.REACT_APP_API_URL}${CLASSES_BASE_PATH}/course/${id}`,
             {
                 method: 'GET',
                 headers: basicHeaders,
@@ -42,7 +42,7 @@ export const useClassesApi = () => {
         order: string,
         creator: string,
         courseId: string,
-        file: string,
+        file: string
     ) => {
         const postHeaders = {
             Authorization: `Bearer ${authUser.token}`,
@@ -101,7 +101,7 @@ export const useClassesApi = () => {
     }
 
     return {
-        getAllClasses,
+        getCourseClasses,
         getClass,
         uploadClass,
         updateClass,

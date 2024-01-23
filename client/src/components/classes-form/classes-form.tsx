@@ -160,7 +160,7 @@ export default function ClassView({
             classUpdated.description === _class?.description &&
             classUpdated.order === _class?.order &&
             classUpdated.creator === _class?.creator &&
-            classUpdated.course === _class?.course &&
+            classUpdated.course === _class?.courseId &&
             classUpdated.file === _class?.file
         )
     }

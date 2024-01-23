@@ -18,6 +18,7 @@ import { bgGradient } from '../../theme/css'
 import { useTheme } from '@mui/material/styles'
 import { CloudUpload } from '@mui/icons-material'
 import { Material } from '../../_mocks/materials'
+import { useMaterialsApi } from '../../api/useMaterialsApi'
 
 const currencies = [
     {
@@ -62,7 +63,7 @@ export default function MaterialView({
     if (material) {
         fileName = material.file?.split('/').pop() ?? ''
     }
-
+    const { uploadMaterial } = useMaterialsApi()
     const theme = useTheme()
     const { authUser } = useAuth()
     const smUp = useResponsive('up', 'sm')
@@ -83,12 +84,39 @@ export default function MaterialView({
             price: material?.price ?? '',
             currency: material?.currency ?? '',
             author: authUser.user?.username,
-            file: material?.file ?? '',
+            purchasers: material?.purchasers ?? [],
+            file: null,
             type: material?.type ?? '',
+            courses: material?.courses ?? [],
         },
         validationSchema: uploadMaterialValidationSchema,
         onSubmit: (values) => {
-            alert(JSON.stringify(values, null, 2))
+            const author = values.author ?? '';
+            uploadMaterial(
+                values.title,
+                values.description,
+                Number(values.price),
+                values.currency,
+                author,
+                values.file,
+                values.type,
+                values.purchasers,
+                values.courses
+            )
+                .then((response: any) => {
+                    if (response.status === 201) {
+                        response.json().then((responseData: any) => {
+                            console.log(responseData)
+                        })
+                    } else {
+                        response.json().then((responseData: any) => {
+                            handleOpenSnackbar(responseData.error)
+                        })
+                    }
+                })
+                .catch((_error) => {
+                    handleCloseSnackbar()
+                })
         },
         onReset: () => {
             formik.setFieldValue('file', material?.file ?? '')
