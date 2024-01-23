@@ -18,7 +18,7 @@ export default function ProfileForm() {
     const { authUser, login } = useAuth();
     const { updateUser } = useUsersApi();
     const smUp = useResponsive('up', 'sm');
-
+    
     const fileInput = useRef<HTMLInputElement>(null);
 
     const [showCurrentPassword, setShowCurrentPassword] = useState(false);

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Button from '@mui/material/Button';
@@ -6,35 +6,52 @@ import Divider from '@mui/material/Divider';
 import Typography from '@mui/material/Typography';
 import { useTheme } from '@mui/material/styles';
 import TransitionSnackbar from '../transition-snackbar/transition-snackbar';
-import { reviews } from '../../_mocks/reviews';
+import { Review, useReviewsApi } from '../../api/useReviewsApi';
+import { useAuth } from '../../hooks/useAuth';
+
 
 export default function ReviewUsersAboutOpen({  user}: { user: string}) {
     const theme = useTheme();
     const [openSnackbar, setOpenSnackbar] = useState(false);
     const [errorData, setErrorData] = useState('');
     const [selectedReviewIndex, setSelectedReviewIndex] = useState(0);
-
+    const [userReviews, setUserReviews] = useState([] as Review[]);
+    const api = useReviewsApi();
+    const { authUser, login } = useAuth();
     const handleNextReview = () => {
-        setSelectedReviewIndex((prevIndex) => (prevIndex + 1) % courseReviews.length);
+        setSelectedReviewIndex((prevIndex) => (prevIndex + 1) % userReviews.length);
     };
 
     const handlePreviousReview = () => {
-        setSelectedReviewIndex((prevIndex) => (prevIndex - 1 + courseReviews.length) % courseReviews.length);
+        setSelectedReviewIndex((prevIndex) => (prevIndex - 1 + userReviews.length) % userReviews.length);
     };
 
 
     const handleCloseSnackbar = () => {
         setOpenSnackbar(false);
     };
-    let courseReviews = [];
+    function setError(errorMessage: string) {
+        setErrorData(errorMessage);
+      }
 
-       // console.log('Es sobre mi');
-        //courseReviews = reviews.filter((review) => review.user.toString() === user);
-
-        console.log('Es de mi');
-        courseReviews = reviews.filter((review) => review.user.toString() === user && review.course === 0 && review.material === 0);
-
-
+        useEffect(() => {
+            const getReviewByUser = async () => {
+                try {
+                    const response = await api.getReviewByUser(authUser.user?.username || '')
+                    if (response.ok) {
+                        const reviews = await response.json()
+                        setUserReviews(reviews)
+                        setError('')
+                    } else {
+                        setError('Error fetching the reviews')
+                    }
+                } catch (error) {
+                    setError('An error occurred while fetching the reviews')
+                }
+            }
+    
+            getReviewByUser()
+        })
 
     return (
         <>
@@ -49,14 +66,14 @@ export default function ReviewUsersAboutOpen({  user}: { user: string}) {
                     alignItems: 'center',
                 }}
             >
-                {courseReviews.length > 0 ? (
+                {userReviews.length > 0 ? (
                     <>
-                        <Typography variant="h6">{courseReviews[selectedReviewIndex].title}</Typography>
-                        <Typography variant="body1">{courseReviews[selectedReviewIndex].description}</Typography>
-                        <Typography variant="body2">Rating: {courseReviews[selectedReviewIndex].rating}</Typography>
+                        <Typography variant="h6">{userReviews[selectedReviewIndex].title}</Typography>
+                        <Typography variant="body1">{userReviews[selectedReviewIndex].description}</Typography>
+                        <Typography variant="body2">Rating: {userReviews[selectedReviewIndex].rating}</Typography>
                         <Divider />
 
-                        {courseReviews.length > 1 && (
+                        {userReviews.length > 1 && (
                             <div style={{ marginTop: '1rem' }}>
                                 <Button variant="outlined" color="secondary" onClick={handlePreviousReview}>
                                     Anterior
@@ -68,7 +85,7 @@ export default function ReviewUsersAboutOpen({  user}: { user: string}) {
                         )}
                     </>
                 ) : (
-                    <Typography variant="body1">No hay reseñas disponibles para este curso.</Typography>
+                    <Typography variant="body1">No reviews have been made about you</Typography>
                 )}
             </Card>
 
@@ -76,3 +93,5 @@ export default function ReviewUsersAboutOpen({  user}: { user: string}) {
         </>
     );
 }
+
+

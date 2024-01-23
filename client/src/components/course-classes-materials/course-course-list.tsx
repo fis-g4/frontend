@@ -36,7 +36,6 @@ export default function CourseList({
     handleDeleteCourse,
 }: Readonly<CoursesProps>) {
     const [reviewOpenMap, setReviewOpenMap] = useState<{ [key: string]: boolean }>({});
-
     const handleReviewOpen = (courseId: string) => {
     setReviewOpenMap((prevMap) => ({
         ...prevMap,
