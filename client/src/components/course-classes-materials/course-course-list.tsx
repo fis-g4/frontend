@@ -30,7 +30,6 @@ export default function CourseList({
     handleSelectedCourse,
 }: Readonly<CoursesProps>) {
     const [reviewOpenMap, setReviewOpenMap] = useState<{ [key: string]: boolean }>({});
-
     const handleReviewOpen = (courseId: string) => {
     setReviewOpenMap((prevMap) => ({
         ...prevMap,

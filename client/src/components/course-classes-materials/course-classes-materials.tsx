@@ -17,6 +17,7 @@ import {
 import { Class } from '../../_mocks/classes';
 import CourseClasses from './course-classes';
 import { Course } from '../../_mocks/courses';
+import { useReviewsApi } from '../../api/useReviewsApi';
 
 interface CourseClassesMaterialsProps {
   classes: Class[];
@@ -36,6 +37,7 @@ export default function CourseClassesMaterials({
   const [contentType, setContentType] = useState('classes');
   const [reviewType, setReviewType] = useState('user');
   const [selectedMaterial, setSelectedMaterial] = useState<Material | null>(null);
+  const { postReview } = useReviewsApi()
   const [reviewFormData, setReviewFormData] = useState({
     type: reviewType,
     title: '',
@@ -76,38 +78,69 @@ export default function CourseClassesMaterials({
     }));
   };
 
-  const handleReviewSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+const handleReviewSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+  
+    try {
+      let dataToSend: any = {
+        type: reviewType,
+        title: reviewFormData.title,
+        description: reviewFormData.description,
+        rating: reviewFormData.rating,
+        creator: authUser.user?.username || '',
+      };
+  
+      if (reviewType === 'USER') {
+        dataToSend = {
+          ...dataToSend,
+          user: course.instructor,
+          course: '',
+          material: ''
+        };
+      } else if (reviewType === 'COURSE') {
+        dataToSend = {
+          ...dataToSend,
+          course: course.id,
+          user: '',
+          material: ''
+        };
+      } else if (reviewType === 'MATERIAL' && selectedMaterial) {
+        dataToSend = {
+          ...dataToSend,
+          material: selectedMaterial.id,
+          user: '',
+          course: ''
+        };
+      }
+  
+      console.log('Formulario enviado:', dataToSend);
+  
+      // Llamar a la función postReview de la API
+      const response = await postReview(
+        dataToSend.type,
+        dataToSend.user,
+        dataToSend.creator,
+        dataToSend.title,
+        dataToSend.description,
+        dataToSend.rating,
+        dataToSend.course,
+        dataToSend.material
+      );
+  
+      // Verificar la respuesta y realizar acciones adicionales si es necesario
+      if (response.status === 200 || response.status === 201) {
+        console.log('Reseña enviada exitosamente');
 
-    let dataToSend: any = {
-      type: reviewType,
-      title: reviewFormData.title,
-      description: reviewFormData.description,
-      rating: reviewFormData.rating,
-      creator: reviewFormData.creator,
-    };
-
-    if (reviewType === 'user') {
-      dataToSend = {
-        ...dataToSend,
-        user: authUser.user?.id || '',
-      };
-    } else if (reviewType === 'course') {
-      dataToSend = {
-        ...dataToSend,
-        course: course.id ,
-      };
-    } else if (reviewType === 'material' && selectedMaterial) {
-      dataToSend = {
-        ...dataToSend,
-        material: selectedMaterial.id,
-      };
+      } else {
+        console.error('Error al enviar la reseña:', response.statusText);
+      }
+  
+    } catch (error) {
+      console.error('Error al procesar la reseña:', error);
+      // Realizar acciones adicionales si es necesario, por ejemplo, mostrar un mensaje de error al usuario
     }
-
-    console.log('Formulario enviado:', dataToSend);
-    // Puedes enviar los datos a tu API o realizar otras acciones aquí
   };
-
+  
   return (
     <>
       <Card
@@ -151,18 +184,18 @@ export default function CourseClassesMaterials({
         fullWidth
         color="primary"
       >
-        <ToggleButton value="user" aria-label="user">
+        <ToggleButton value="USER" aria-label="user">
           Usuario
         </ToggleButton>
-        <ToggleButton value="course" aria-label="course">
+        <ToggleButton value="COURSE" aria-label="course">
           Curso
         </ToggleButton>
-        <ToggleButton value="material" aria-label="material">
+        <ToggleButton value="MATERIAL" aria-label="material">
           Material
         </ToggleButton>
       </ToggleButtonGroup>
 
-      {reviewType === 'material' && (
+      {reviewType === 'MATERIAL' && (
         <TextField
           fullWidth
           select
@@ -186,9 +219,9 @@ export default function CourseClassesMaterials({
           label="Title"
           name="title"
           placeholder={
-            reviewType === 'user'
+            reviewType === 'USER'
               ? 'Review para usuario'
-              : reviewType === 'course'
+              : reviewType === 'COURSE'
               ? 'Review para curso'
               : 'Review para material'
           }

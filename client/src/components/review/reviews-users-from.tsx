@@ -69,7 +69,7 @@ export default function ReviewUsersFromOpen({ user }: {user: string}) {
                         )}
                     </>
                 ) : (
-                    <Typography variant="body1">No hay reseñas disponibles para este curso.</Typography>
+                    <Typography variant="body1">You haven't written any reviews</Typography>
                 )}
             </Card>
 

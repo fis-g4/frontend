@@ -32,7 +32,7 @@ export default function ReviewUsersAboutOpen({  user}: { user: string}) {
         //courseReviews = reviews.filter((review) => review.user.toString() === user);
 
         console.log('Es de mi');
-        courseReviews = reviews.filter((review) => review.user.toString() === user && review.course === 0 && review.material === 0);
+        courseReviews = reviews.filter((review) => review.user.toString() === user && review.course === '' && review.material === '');
 
 
 
@@ -68,7 +68,7 @@ export default function ReviewUsersAboutOpen({  user}: { user: string}) {
                         )}
                     </>
                 ) : (
-                    <Typography variant="body1">No hay reseñas disponibles para este curso.</Typography>
+                    <Typography variant="body1">No reviews have been made about you</Typography>
                 )}
             </Card>
 

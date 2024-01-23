@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Button from '@mui/material/Button';
@@ -6,14 +6,16 @@ import Divider from '@mui/material/Divider';
 import Typography from '@mui/material/Typography';
 import { useTheme } from '@mui/material/styles';
 import TransitionSnackbar from '../transition-snackbar/transition-snackbar';
-import { reviews } from '../../_mocks/reviews';
+import { Review, reviews } from '../../_mocks/reviews';
+import { useReviewsApi } from '../../api/useReviewsApi';
 
 export default function ReviewCoursesOpen({ handleReviewClose, id }: { handleReviewClose: () => void; id: string }) {
     const theme = useTheme();
     const [openSnackbar, setOpenSnackbar] = useState(false);
     const [errorData, setErrorData] = useState('');
     const [selectedReviewIndex, setSelectedReviewIndex] = useState(0);
-
+    const [courseReviews, setCourseReviews] = useState([] as Review[])
+    const api = useReviewsApi();
     const handleNextReview = () => {
         setSelectedReviewIndex((prevIndex) => (prevIndex + 1) % courseReviews.length);
     };
@@ -33,8 +35,28 @@ export default function ReviewCoursesOpen({ handleReviewClose, id }: { handleRev
     const handleForgotPassword = () => {
         handleReviewClose();
     };
+    function setError(errorMessage: string) {
+        setErrorData(errorMessage);
+      }
+      
+    useEffect(() => {
+        const getReviewByCourses = async () => {
+            try {
+                const response = await api.getReviewByCourses(id)
+                if (response.ok) {
+                    const reviews = await response.json()
+                    setCourseReviews(reviews)
+                    setError('')
+                } else {
+                    setError('Error fetching the reviews')
+                }
+            } catch (error) {
+                setError('An error occurred while fetching the reviews')
+            }
+        }
 
-    const courseReviews = reviews.filter((review) => review.course.toString() === id);
+        getReviewByCourses()
+    })
     console.log(courseReviews.length);
 
     return (
@@ -77,3 +99,7 @@ export default function ReviewCoursesOpen({ handleReviewClose, id }: { handleRev
         </>
     );
 }
+function setError(arg0: string) {
+    throw new Error('Function not implemented.');
+}
+
