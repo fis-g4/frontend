@@ -89,7 +89,7 @@ export default function MessageNewForm({ usersList, messageId, receiversValue, s
       subject: subjectValue || '',
       message: messagesValue || '',
     },
-    validationSchema: createMessageValidationSchema(authUser.user?.username || '', subjectValue, messagesValue, messageReal, RECEIVERS_CAPACITY_LIMIT[authUser.user?.plan || 'BASIC']),
+    validationSchema: createMessageValidationSchema(authUser.user?.username || '', subjectValue, messagesValue, messageReal, messageId ? 10000000 : RECEIVERS_CAPACITY_LIMIT[authUser.user?.plan || 'BASIC']),
     onSubmit: (values) => {
         if (messageId){
           updateMessage(messageId, values.subject, values.message).then((response) => {

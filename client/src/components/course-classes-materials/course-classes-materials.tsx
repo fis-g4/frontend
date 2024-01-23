@@ -16,16 +16,16 @@ import {
 
 import { Class } from '../../_mocks/classes';
 import CourseClasses from './course-classes';
+
 import { useReviewsApi } from '../../api/useReviewsApi';
 import { Course } from '../../api/useCoursesApi';
-
 
 interface CourseClassesMaterialsProps {
   classes: Class[];
   materials: Material[];
   authUser: AuthUserContext;
   handleSelectedClass: (class_: Class) => void;
-  course:Course;
+  course:any;
 }
 
 export default function CourseClassesMaterials({
@@ -82,6 +82,7 @@ export default function CourseClassesMaterials({
   const handleReviewSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
+
     try {
       let dataToSend: any = {
         type: reviewType,
@@ -89,6 +90,7 @@ export default function CourseClassesMaterials({
         description: reviewFormData.description,
         rating: reviewFormData.rating,
         creator: authUser.user?.username || '',
+
       };
 
       if (reviewType === 'USER') {
