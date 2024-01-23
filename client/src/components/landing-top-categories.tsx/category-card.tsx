@@ -1,21 +1,14 @@
 import { Box, Typography, Card, CardContent, useTheme, alpha } from '@mui/material';
 import MobileIcon from '@mui/icons-material/Smartphone'; // Ejemplo de íconos, reemplaza con los adecuados
 
-// Definición de la estructura de datos de la categoría
-interface Category {
-  title: string;
-  coursesCount: number;
-  Icon: typeof MobileIcon; // Utiliza el tipo de tus íconos aquí
-}
-
 // Componente para una tarjeta de categoría individual
-export default function CategoryCard({ title, coursesCount, Icon }: Category) {
+const CategoryCard = ({ title, coursesCount }: { title: string; coursesCount: number }) => {
   const theme = useTheme();
 
   return (
     <Card sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-evenly', padding: theme.spacing(2), border: "solid 2px", borderColor: alpha(theme.palette.common.black, 0.1) }}>
       <Box sx={{ backgroundColor: theme.palette.primary.main, borderRadius: '50%', padding: theme.spacing(2), color: 'white' }}>
-        <Icon fontSize="large" />
+        <MobileIcon fontSize="large" />
       </Box>
       <CardContent sx={{ textAlign: 'center' }}>
         <Typography variant="h6" component="h3">
@@ -28,3 +21,5 @@ export default function CategoryCard({ title, coursesCount, Icon }: Category) {
     </Card>
   );
 };
+
+export default CategoryCard
