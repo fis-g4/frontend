@@ -29,7 +29,7 @@ export default function PlansPage() {
     const { getPlans, createPaymentPlan, getPaymentHistory } = usePaymentApi()
     const [newPlans, setPlans] = useState([] as GetPlansResponse['plans'])
     const [paymentHistory, setPaymentHistory] = useState(
-        [] as PaymentHistory['payments']
+        [] as PaymentHistory['data']
     )
 
     const plans = [
@@ -95,7 +95,7 @@ export default function PlansPage() {
         })
 
         getPaymentHistory().then((response) => {
-            if (response) setPaymentHistory(response.payments)
+            if (response) setPaymentHistory(response.data)
         })
     }, [])
 
@@ -202,6 +202,7 @@ export default function PlansPage() {
                         <TableHead>
                             <TableRow>
                                 <TableCell>Type</TableCell>
+                                <TableCell>Name</TableCell>
                                 <TableCell>Amount</TableCell>
                                 <TableCell>Status</TableCell>
                             </TableRow>
@@ -218,6 +219,9 @@ export default function PlansPage() {
                                 >
                                     <TableCell component="th" scope="row">
                                         {payment.referenceType}
+                                    </TableCell>
+                                    <TableCell>
+                                        {payment.referenceName}
                                     </TableCell>
                                     <TableCell>
                                         {payment.amount} {payment.currency}

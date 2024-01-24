@@ -35,6 +35,19 @@ export const usePaymentApi = () => {
         return data as CreatePaymentPlanResponse
     }
 
+    const createPaymentCourse = async (courseId: string) => {
+        console.log('Creating payment course')
+        const response = await fetchWithInterceptor(
+            `${process.env.REACT_APP_API_URL}${PAYMENT_BASE_PATH}/courses/${courseId}/users/${authUser?.user?.username}`,
+            {
+                method: 'POST',
+                headers: basicHeaders,
+            }
+        )
+        const data = await response.json()
+        return data as CreatePaymentCourseResponse
+    }
+
     const getPaymentHistory = async () => {
         const response = await fetchWithInterceptor(
             `${process.env.REACT_APP_API_URL}${PAYMENT_BASE_PATH}/history/users/${authUser?.user?.username}`,
@@ -48,7 +61,12 @@ export const usePaymentApi = () => {
         return data as PaymentHistory
     }
 
-    return { getPlans, createPaymentPlan, getPaymentHistory }
+    return {
+        getPlans,
+        createPaymentPlan,
+        createPaymentCourse,
+        getPaymentHistory,
+    }
 }
 
 export interface GetPlansResponse {
@@ -83,12 +101,17 @@ export interface CreatePaymentPlanResponse {
     url: string
 }
 
+export interface CreatePaymentCourseResponse {
+    url: string
+}
+
 export interface PaymentHistory {
-    payments: {
+    data: {
         _id: string
         userId: string
         referenceType: string
         referenceId: string
+        referenceName: string
         amount: number
         currency: string
         status: string
