@@ -25,6 +25,9 @@ export default function IndexApiOpen({ handleIndexApiClose }: { handleIndexApiCl
             case 'Learning':
                 window.open('https://app.swaggerhub.com/apis-docs/mrarjona/learning-microservice/1.0.0', '_blank');
                 break;
+            case 'Payment':
+                window.open('https://api.javiercavlop.com/v1/payments/docs/', '_blank');
+                break;
             case 'User':
                 window.open('https://api.javiercavlop.com/v1/users/docs/', '_blank');
                 break;

@@ -121,7 +121,6 @@ export const useReviewsApi = () => {
                     material: material })
             }
         );
-        console.log("Se hace review");
         return response;
     }
     /*
