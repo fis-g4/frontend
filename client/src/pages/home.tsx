@@ -143,7 +143,7 @@ export default function CoursesPage() {
         getMaterials()
         getClasses()
         updateCourseList()
-    }, [authUser, getAllClasses, getAllMaterials])
+    }, [])
 
     const isSmallScreen = useResponsive('down', 'md')
 
