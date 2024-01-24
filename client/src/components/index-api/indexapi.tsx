@@ -19,20 +19,17 @@ export default function IndexApiOpen({ handleIndexApiClose }: { handleIndexApiCl
     const openDocument = (documentType: string) => {
         // Corregir las URLs de acuerdo a tus necesidades
         switch (documentType) {
-            case 'Review':
-                window.open('https://api.javiercavlop.com/v1/reviews/docs/', '_blank');
-                break;
             case 'Course':
                 window.open('https://api.javiercavlop.com/v1/courses/docs/', '_blank');
                 break;
             case 'Learning':
                 window.open('https://app.swaggerhub.com/apis-docs/mrarjona/learning-microservice/1.0.0', '_blank');
                 break;
-            case 'User':
-                window.open('https://api.javiercavlop.com/v1/users/docs/', '_blank');
-                break;
             case 'Payment':
                 window.open('https://api.javiercavlop.com/v1/payments/docs/', '_blank');
+                break;
+            case 'User':
+                window.open('https://api.javiercavlop.com/v1/users/docs/', '_blank');
                 break;
             case 'Communication':
                 window.open('https://app.swaggerhub.com/apis-docs/mrarjona/communication-microservice/1.0.0', '_blank');
@@ -56,7 +53,7 @@ export default function IndexApiOpen({ handleIndexApiClose }: { handleIndexApiCl
                 }}
             >
                 <Typography variant="h5" component="div" sx={{ mb: 5 }}>
-                    Selecciona Documentación
+                    Select Documentation
                 </Typography>
                 <Box
                     sx={{
@@ -70,16 +67,9 @@ export default function IndexApiOpen({ handleIndexApiClose }: { handleIndexApiCl
                     <Button
                         variant="outlined"
                         color="info"
-                        onClick={() => openDocument('Review')}
-                    >
-                        Review's api
-                    </Button>
-                    <Button
-                        variant="outlined"
-                        color="info"
                         onClick={() => openDocument('Course')}
                     >
-                        Course's api
+                        Review/Course's api
                     </Button>
                     <Button
                         variant="outlined"

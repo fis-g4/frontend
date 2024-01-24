@@ -1,7 +1,7 @@
 import { useAuth } from '../hooks/useAuth'
 
 export const REVIEWS_BASE_PATH = '/v1/reviews'
-const BASE_LOCAL = 'http://localhost:8000'
+
 enum TypeReview{
     USER = 'USER',
     COURSE = 'COURSE',
@@ -65,7 +65,7 @@ export const useReviewsApi = () => {
     const getReviewByCreator= async (username: string) => {
         console.log(basicHeaders)
         const response = await fetchWithInterceptor(
-            `${BASE_LOCAL}${REVIEWS_BASE_PATH}/creator/${username}`,
+            `${process.env.REACT_APP_API_URL}${REVIEWS_BASE_PATH}/creator/${username}`,
             {
                 method: 'GET',
                 headers: basicHeaders,
@@ -77,7 +77,7 @@ export const useReviewsApi = () => {
     const getReviewByUser= async (username: string) => {
         console.log(basicHeaders)
         const response = await fetchWithInterceptor(
-            `${BASE_LOCAL}${REVIEWS_BASE_PATH}/user/${username}`,
+            `${process.env.REACT_APP_API_URL}${REVIEWS_BASE_PATH}/user/${username}`,
             {
                 method: 'GET',
                 headers: basicHeaders,
@@ -109,6 +109,7 @@ export const useReviewsApi = () => {
         material: string) => {
         const response = await fetchWithInterceptor(`${process.env.REACT_APP_API_URL}${REVIEWS_BASE_PATH}/new`, 
             { 
+                
                 method: "POST",
                 headers: basicHeaders,
                 body: JSON.stringify({ user: user,
