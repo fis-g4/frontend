@@ -97,7 +97,7 @@ export default function PlansPage() {
         getPaymentHistory().then((response) => {
             if (response) setPaymentHistory(response.payments)
         })
-    }, [newPlans])
+    }, [])
 
     const buildPlan = (price: number, currency: string) => {
         if (price === 0) {
