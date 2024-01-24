@@ -1,37 +1,16 @@
 import { Box, Typography, Card, CardContent, useTheme, alpha } from '@mui/material';
 import MobileIcon from '@mui/icons-material/Smartphone'; // Ejemplo de íconos, reemplaza con los adecuados
-import DataIcon from '@mui/icons-material/BarChart'
-import AiIcon from '@mui/icons-material/Adb'
-import SoftwareIcon from '@mui/icons-material/Code'
-import NetworkIcon from '@mui/icons-material/DeviceHub'
-import SecurityIcon from '@mui/icons-material/Security'
+
+// Definición de la estructura de datos de la categoría
+interface Category {
+  title: string;
+  coursesCount: number;
+  Icon: typeof MobileIcon; // Utiliza el tipo de tus íconos aquí
+}
 
 // Componente para una tarjeta de categoría individual
-const CategoryCard = ({ title, coursesCount }: { title: string; coursesCount: number }) => {
+export default function CategoryCard({ title, coursesCount, Icon }: Category) {
   const theme = useTheme();
-
-  let Icon = MobileIcon;
-
-  switch (title) {
-    case "Mobile App Development":
-      Icon = MobileIcon;
-      break;
-    case "Data Science & Analytics":
-      Icon = DataIcon;
-      break;
-    case "AI & Machine Learning":
-      Icon = AiIcon;
-      break;
-    case "Software Engineering":
-      Icon = SoftwareIcon;
-      break;
-    case "Network Administration":
-      Icon = NetworkIcon;
-      break;
-    case "Cybersecurity Essentials":
-      Icon = SecurityIcon;
-      break;
-  }
 
   return (
     <Card sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-evenly', padding: theme.spacing(2), border: "solid 2px", borderColor: alpha(theme.palette.common.black, 0.1) }}>
@@ -49,5 +28,3 @@ const CategoryCard = ({ title, coursesCount }: { title: string; coursesCount: nu
     </Card>
   );
 };
-
-export default CategoryCard

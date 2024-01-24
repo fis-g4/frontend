@@ -36,12 +36,12 @@ export default function Router() {
         <LandingPage />
       ),
       children: [
-        { element: <HomePage />, index: true },
+        { element: <></>, index: true },
         { path: 'me', element: <ProfilePage /> },
-        { path: 'courses', element: <CoursesPage /> },
-        { path: 'material/:id', element: <MaterialDetailsPage /> },
-        { path: 'materials', element: <MaterialsPage />},
-        { path: 'plans', element: <PlansPage />},
+        { path: 'courses', element: <></> },
+        { path: 'material/:id', element: <></> },
+        { path: 'materials', element: <></>},
+        { path: 'plans', element: <></>},
         { path: 'mailbox', element: <MailboxPage />},
         { path: 'settings', element: <SettingsPage /> },
       ],

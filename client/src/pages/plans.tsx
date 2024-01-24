@@ -99,6 +99,8 @@ export default function PlansPage() {
         })
     }, [])
 
+    useEffect(() => {}, [newPlans])
+
     const buildPlan = (price: number, currency: string) => {
         if (price === 0) {
             return 'Free'

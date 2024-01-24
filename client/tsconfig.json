@@ -22,5 +22,5 @@
   },
   "include": [
     "src"
-  ]
+, "src/components/landing-popular-courses/.tsx"  ]
 }
